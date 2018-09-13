@@ -8,7 +8,7 @@ This repository provides a managed C# wrapper for [GameNetworkingSockets](https:
 
 Usage
 --------
-Before starting to work, the library should be initialized using `Valve.Sockets.Library.Initialize(ref StringBuilder errorMessage);` function.
+Before starting to work, the library should be initialized using `Valve.Sockets.Library.Initialize(StringBuilder errorMessage);` function.
 
 When the work is done, deinitialize the library using `Valve.Sockets.Library.Deinitialize();` function.
 
@@ -99,3 +99,11 @@ byte[] data = new byte[64];
 sockets.SendMessageToConnection(connection, data);
 ```
 
+##### Set a custom configurations:
+```c#
+sockets.SetConfigurationValue(ConfigurationValue.FakePacketLagSend, 80);
+sockets.SetConfigurationValue(ConfigurationValue.FakePacketLossSend, 25);
+sockets.SetConfigurationValue(ConfigurationValue.FakePacketReorderSend, 25);
+sockets.SetConfigurationValue(ConfigurationValue.TimeoutSecondsInitial, 30);
+sockets.SetConfigurationValue(ConfigurationValue.TimeoutSecondsConnected, 60);
+```
