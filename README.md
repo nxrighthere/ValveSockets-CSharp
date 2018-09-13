@@ -12,6 +12,7 @@ Before starting to work, the library should be initialized using `Valve.Sockets.
 
 When the work is done, deinitialize the library using `Valve.Sockets.Library.Deinitialize();` function.
 
+### .NET environment
 ##### Start a new server:
 ```c#
 NetworkingSockets server = new NetworkingSockets();
@@ -112,3 +113,5 @@ sockets.SetConfigurationValue(ConfigurationValue.TimeoutSecondsInitial, 30);
 sockets.SetConfigurationValue(ConfigurationValue.TimeoutSecondsConnected, 60);
 ```
 
+### Unity
+Usage is almost the same as in the .NET environment, except that the console functions must be replaced with functions provided by Unity. If the `NetworkingSockets.DispatchCallback` will be called in a game loop, then keep Unity run in background by enabling the appropriate option in the player settings.
