@@ -4,11 +4,13 @@
 
 [![PayPal](https://drive.google.com/uc?id=1OQrtNBVJehNVxgPf6T6yX1wIysz1ElLR)](https://www.paypal.me/nxrighthere) [![Bountysource](https://drive.google.com/uc?id=19QRobscL8Ir2RL489IbVjcw3fULfWS_Q)](https://salt.bountysource.com/checkout/amount?team=nxrighthere)
 
+This repository provides a managed C# wrapper for GameNetworkingSockets library which is created and maintained by Valve Software. You will need to build the native library with all required dependencies before you get started.
+
 Usage
 --------
 Before starting to work, the library should be initialized using `Valve.Sockets.Library.Initialize(ref StringBuilder errorMessage);` function.
 
-When the work is done, deinitialize the library using `Valve.Sockets.Deinitialize();` function.
+When the work is done, deinitialize the library using `Valve.Sockets.Library.Deinitialize();` function.
 
 ##### Start a new server:
 ```c#
