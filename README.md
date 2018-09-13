@@ -29,12 +29,12 @@ StatusCallback callback = (info) => {
 			break;
 
 		case ConnectionState.Connected:
-			Console.WriteLine("Client connected - ID: " + info.connection + ", IP: " + info.remoteIP);
+			Console.WriteLine("Client connected - ID: " + info.connection + ", IP: " + info.connectionInfo.remoteIP.ParseIP());
 
 			break;
 
 		case ConnectionState.ClosedByPeer:
-			Console.WriteLine("Client disconnected - ID: " + info.connection + ", IP: " + info.remoteIP);
+			Console.WriteLine("Client disconnected - ID: " + info.connection + ", IP: " + info.connectionInfo.remoteIP.ParseIP());
 
 			break;
 	}
@@ -81,9 +81,9 @@ StatusCallback callback = (info) => {
 };
 
 while (!Console.KeyAvailable) {
-	server.DispatchCallback(callback);
+	client.DispatchCallback(callback);
 
-	if (server.ReceiveMessagesOnConnection(connection, out NetworkingMessage netMessage, 1) > 0) {
+	if (client.ReceiveMessagesOnConnection(connection, out NetworkingMessage netMessage, 1) > 0) {
 		Console.WriteLine("Message received from server - Channel ID: " + netMessage.channel + ", Data length: " + netMessage.length);
 		netMessage.Destroy();
 	}
