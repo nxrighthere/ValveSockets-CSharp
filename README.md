@@ -40,10 +40,12 @@ StatusCallback callback = (info) => {
 	}
 };
 
+NetworkingMessage netMessage = NetworkingMessage();
+
 while (!Console.KeyAvailable) {
 	server.DispatchCallback(callback);
 
-	if (server.ReceiveMessagesOnListenSocket(listenSocket, out NetworkingMessage netMessage, 1) > 0) {
+	if (server.ReceiveMessagesOnListenSocket(listenSocket, ref netMessage, 1) > 0) {
 		Console.WriteLine("Message received from - ID: " + netMessage.connection + ", Channel ID: " + netMessage.channel + ", Data length: " + netMessage.length);
 		netMessage.Destroy();
 	}
@@ -80,10 +82,12 @@ StatusCallback callback = (info) => {
 	}
 };
 
+NetworkingMessage netMessage = NetworkingMessage();
+
 while (!Console.KeyAvailable) {
 	client.DispatchCallback(callback);
 
-	if (client.ReceiveMessagesOnConnection(connection, out NetworkingMessage netMessage, 1) > 0) {
+	if (client.ReceiveMessagesOnConnection(connection, ref netMessage, 1) > 0) {
 		Console.WriteLine("Message received from server - Channel ID: " + netMessage.channel + ", Data length: " + netMessage.length);
 		netMessage.Destroy();
 	}
@@ -99,7 +103,7 @@ byte[] data = new byte[64];
 sockets.SendMessageToConnection(connection, data);
 ```
 
-##### Set a custom configurations:
+##### Set a custom configuration:
 ```c#
 sockets.SetConfigurationValue(ConfigurationValue.FakePacketLagSend, 80);
 sockets.SetConfigurationValue(ConfigurationValue.FakePacketLossSend, 25);
@@ -107,3 +111,4 @@ sockets.SetConfigurationValue(ConfigurationValue.FakePacketReorderSend, 25);
 sockets.SetConfigurationValue(ConfigurationValue.TimeoutSecondsInitial, 30);
 sockets.SetConfigurationValue(ConfigurationValue.TimeoutSecondsConnected, 60);
 ```
+
