@@ -40,7 +40,7 @@ StatusCallback callback = (info) => {
 	}
 };
 
-NetworkingMessage netMessage = NetworkingMessage();
+NetworkingMessage netMessage = new NetworkingMessage();
 
 while (!Console.KeyAvailable) {
 	server.DispatchCallback(callback);
@@ -82,7 +82,7 @@ StatusCallback callback = (info) => {
 	}
 };
 
-NetworkingMessage netMessage = NetworkingMessage();
+NetworkingMessage netMessage = new NetworkingMessage();
 
 while (!Console.KeyAvailable) {
 	client.DispatchCallback(callback);
