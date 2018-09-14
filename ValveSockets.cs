@@ -51,10 +51,10 @@ namespace Valve.Sockets {
 	}
 
 	public enum ConfigurationString {
-		MicrosecondsClientForceRelayCluster = 0,
-		MicrosecondsClientDebugTicketAddress = 1,
-		MicrosecondsClientForceProxyAddr = 2,
-		MicrosecondsCount = 3
+		ClientForceRelayCluster = 0,
+		ClientDebugTicketAddress = 1,
+		ClientForceProxyAddr = 2,
+		ClientForceProxyAddr = 3
 	}
 
 	public enum ConfigurationValue {
