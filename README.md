@@ -26,17 +26,15 @@ StatusCallback callback = (info) => {
 
 		case ConnectionState.Connecting:
 			server.AcceptConnection(info.connection);
-
 			break;
 
 		case ConnectionState.Connected:
 			Console.WriteLine("Client connected - ID: " + info.connection + ", IP: " + info.connectionInfo.remoteIP.ParseIP());
-
 			break;
 
 		case ConnectionState.ClosedByPeer:
+			server.CloseConnection(info.connection);
 			Console.WriteLine("Client disconnected - ID: " + info.connection + ", IP: " + info.connectionInfo.remoteIP.ParseIP());
-
 			break;
 	}
 };
@@ -70,17 +68,15 @@ StatusCallback callback = (info) => {
 
 		case ConnectionState.Connected:
 			Console.WriteLine("Client connected to server - ID: " + connection);
-
 			break;
 
 		case ConnectionState.ClosedByPeer:
 			Console.WriteLine("Client disconnected from server");
-
 			break;
 
 		case ConnectionState.ProblemDetectedLocally:
+			client.CloseConnection(connection);
 			Console.WriteLine("Client unable to connect");
-
 			break;
 	}
 };
@@ -144,3 +140,16 @@ Definitions of a flags for `NetworkingSockets.SendMessageToConnection()` functio
 `SendType.NoDelay` a message will not be buffered if it cannot be sent relatively quickly.
 
 #### ConnectionState
+`ConnectionState.None` dummy state, the connection doesn't exist or has already been closed.
+
+`ConnectionState.Connecting` in-progress of establishing a connection initiated by `NetworkingSockets.Connect()` function.
+
+`ConnectionState.FindingRoute` if the server accepts the connection, then this connection switch into the rendezvous state, but end-to-end route is still have not yet established (through the relay network).
+
+`ConnectionState.Connected` a connection request initiated by `NetworkingSockets.Connect()` function has completed.
+
+`ConnectionState.ClosedByPeer` a connection has been closed by peer, but not closed locally. If there are any messages in the inbound queue, they can be retrieved. Otherwise, nothing may be done with the connection except to close it. The connection still exists from an API perspective and must be closed to free up resources.
+
+`ConnectionState.ProblemDetectedLocally` a disruption in the connection has been detected locally. Attempts to send further messages will fail. Any remaining received messages in the queue are available. The connection still exists from an API perspective and must be closed to free up resources.
+
+#### ConfigurationString
