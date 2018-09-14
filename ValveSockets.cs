@@ -286,6 +286,10 @@ namespace Valve.Sockets {
 			return Native.SteamAPI_ISteamNetworkingSockets_AcceptConnection(nativeSockets, connection);
 		}
 
+		public bool CloseConnection(Connection connection) {
+			return CloseConnection(connection, 0, String.Empty, false);
+		}
+
 		public bool CloseConnection(Connection connection, int reason, string debug, bool enableLinger) {
 			if (reason > Library.maxCloseReasonLength)
 				throw new ArgumentOutOfRangeException("reason");
