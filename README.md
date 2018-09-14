@@ -144,11 +144,11 @@ Definitions of a flags for `NetworkingSockets.SendMessageToConnection()` functio
 
 `ConnectionState.Connecting` in-progress of establishing a connection initiated by `NetworkingSockets.Connect()` function.
 
-`ConnectionState.FindingRoute` if the server accepts the connection, then this connection switch into the rendezvous state, but end-to-end route is still have not yet established (through the relay network).
+`ConnectionState.FindingRoute` if the server accepts the connection, then this connection switch into the rendezvous state, but the end-to-end route is still have not yet established (through the relay network).
 
 `ConnectionState.Connected` a connection request initiated by `NetworkingSockets.Connect()` function has completed.
 
-`ConnectionState.ClosedByPeer` a connection has been closed by peer, but not closed locally. If there are any messages in the inbound queue, they can be retrieved. Otherwise, nothing may be done with the connection except to close it. The connection still exists from an API perspective and must be closed to free up resources.
+`ConnectionState.ClosedByPeer` a connection has been closed by the peer, but not closed locally. If there are any messages in the inbound queue, they can be retrieved. Otherwise, nothing may be done with the connection except to close it. The connection still exists from an API perspective and must be closed to free up resources.
 
 `ConnectionState.ProblemDetectedLocally` a disruption in the connection has been detected locally. Attempts to send further messages will fail. Any remaining received messages in the queue are available. The connection still exists from an API perspective and must be closed to free up resources.
 
