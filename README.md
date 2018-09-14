@@ -45,10 +45,10 @@ NetworkingMessage[] netMessages = new NetworkingMessage[1];
 
 while (!Console.KeyAvailable) {
 	server.DispatchCallback(callback);
-	
+
 	int netMessagesCount = client.ReceiveMessagesOnConnection(connection, ref netMessages, 1);
 
-	if (server.ReceiveMessagesOnListenSocket(listenSocket, ref netMessages, 1) > 0) {
+	if (netMessagesCount > 0) {
 		Console.WriteLine("Message received from - ID: " + netMessages[0].connection + ", Channel ID: " + netMessages[0].channel + ", Data length: " + netMessages[0].length);
 		netMessages[0].Destroy();
 	}
@@ -90,7 +90,9 @@ NetworkingMessage[] netMessages = new NetworkingMessage[1];
 while (!Console.KeyAvailable) {
 	client.DispatchCallback(callback);
 
-	if (client.ReceiveMessagesOnConnection(connection, ref netMessages, 1) > 0) {
+	int netMessagesCount = client.ReceiveMessagesOnConnection(connection, ref netMessages, 1);
+
+	if (netMessagesCount > 0) {
 		Console.WriteLine("Message received from server - Channel ID: " + netMessages[0].channel + ", Data length: " + netMessages[0].length);
 		netMessages[0].Destroy();
 	}
