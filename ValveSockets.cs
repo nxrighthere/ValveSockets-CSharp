@@ -294,6 +294,10 @@ namespace Valve.Sockets {
 			return Native.SteamAPI_ISteamNetworkingSockets_CloseConnection(nativeSockets, connection, reason, debug, enableLinger);
 		}
 
+		public bool CloseListenSocket(ListenSocket socket) {
+			return CloseListenSocket(socket, String.Empty);
+		}
+
 		public bool CloseListenSocket(ListenSocket socket, string remoteReason) {
 			return Native.SteamAPI_ISteamNetworkingSockets_CloseListenSocket(nativeSockets, socket, remoteReason);
 		}
