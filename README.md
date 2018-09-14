@@ -71,6 +71,7 @@ StatusCallback callback = (info) => {
 			break;
 
 		case ConnectionState.ClosedByPeer:
+			client.CloseConnection(connection);
 			Console.WriteLine("Client disconnected from server");
 			break;
 
