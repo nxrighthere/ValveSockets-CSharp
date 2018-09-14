@@ -53,8 +53,7 @@ namespace Valve.Sockets {
 	public enum ConfigurationString {
 		ClientForceRelayCluster = 0,
 		ClientDebugTicketAddress = 1,
-		ClientForceProxyAddr = 2,
-		ClientForceProxyAddr = 3
+		ClientForceProxyAddr = 2
 	}
 
 	public enum ConfigurationValue {
