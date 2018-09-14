@@ -19,7 +19,7 @@ NetworkingSockets server = new NetworkingSockets();
 
 uint listenSocket = server.CreateListenSocket(port);
 
-StatusCallback callback = (info) => {
+StatusCallback status = (info) => {
 	switch (info.connectionInfo.state) {
 		case ConnectionState.None:
 			break;
@@ -42,7 +42,7 @@ StatusCallback callback = (info) => {
 NetworkingMessage[] netMessages = new NetworkingMessage[1];
 
 while (!Console.KeyAvailable) {
-	server.DispatchCallback(callback);
+	server.DispatchCallback(status);
 
 	int netMessagesCount = server.ReceiveMessagesOnListenSocket(listenSocket, ref netMessages, 1);
 
@@ -61,7 +61,7 @@ NetworkingSockets client = new NetworkingSockets();
 
 uint connection = client.Connect(ip, port);
 
-StatusCallback callback = (info) => {
+StatusCallback status = (info) => {
 	switch (info.connectionInfo.state) {
 		case ConnectionState.None:
 			break;
@@ -85,7 +85,7 @@ StatusCallback callback = (info) => {
 NetworkingMessage[] netMessages = new NetworkingMessage[1];
 
 while (!Console.KeyAvailable) {
-	client.DispatchCallback(callback);
+	client.DispatchCallback(status);
 
 	int netMessagesCount = client.ReceiveMessagesOnConnection(connection, ref netMessages, 1);
 
@@ -141,6 +141,8 @@ Definitions of a flags for `NetworkingSockets.SendMessageToConnection()` functio
 `SendType.NoDelay` a message will not be buffered if it cannot be sent relatively quickly.
 
 #### ConnectionState
+Definitions of connection states for `ConnectionInfo.state` field:
+
 `ConnectionState.None` dummy state, the connection doesn't exist or has already been closed.
 
 `ConnectionState.Connecting` in-progress of establishing a connection initiated by `NetworkingSockets.Connect()` function.
@@ -154,3 +156,12 @@ Definitions of a flags for `NetworkingSockets.SendMessageToConnection()` functio
 `ConnectionState.ProblemDetectedLocally` a disruption in the connection has been detected locally. Attempts to send further messages will fail. Any remaining received messages in the queue are available. The connection still exists from an API perspective and must be closed to free up resources.
 
 #### ConfigurationString
+Definitions of configuration strings for appropriate configuration functions: 
+
+`ConfigurationString.ClientForceRelayCluster` code of relay cluster to use. If not empty, only relays in that cluster will be used.
+
+`ConfigurationString.ClientDebugTicketAddress` generate (unsigned) ticket for debugging, using the specified gameserver address. Router must be configured to accept unsigned tickets.
+
+`ConfigurationString.ClientForceProxyAddr` comma-separated list for debugging, to override relays from the config with this set. 
+
+#### ConfigurationValue
