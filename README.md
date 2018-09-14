@@ -117,6 +117,15 @@ sockets.SetConfigurationValue(ConfigurationValue.TimeoutSecondsInitial, 30);
 sockets.SetConfigurationValue(ConfigurationValue.TimeoutSecondsConnected, 60);
 ```
 
+##### Set a hook for debug information:
+```c#
+DebugCallback debug = (type, message) => {
+	Console.WriteLine("Debug - Type: " + type + ", Message: " + message);
+};
+
+Library.SetDebugCallback(10, debug);
+```
+
 ### Unity
 Usage is almost the same as in the .NET environment, except that the console functions must be replaced with functions provided by Unity. If the `NetworkingSockets.DispatchCallback()` will be called in a game loop, then keep Unity run in background by enabling the appropriate option in the player settings.
 
