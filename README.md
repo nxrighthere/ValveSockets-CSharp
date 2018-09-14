@@ -67,7 +67,7 @@ StatusCallback callback = (info) => {
 			break;
 
 		case ConnectionState.Connected:
-			Console.WriteLine("Client connected - ID: " + connection);
+			Console.WriteLine("Client connected to server - ID: " + connection);
 
 			break;
 
