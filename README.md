@@ -163,7 +163,7 @@ Definitions of connection states for `ConnectionInfo.state` field:
 `ConnectionState.ProblemDetectedLocally` a disruption in the connection has been detected locally. Attempts to send further messages will fail. Any remaining received messages in the queue are available. The connection still exists from an API perspective and must be closed to free up resources.
 
 #### ConfigurationString
-Definitions of configuration strings for appropriate configuration functions: 
+Definitions of configuration strings for appropriate functions: 
 
 `ConfigurationString.ClientForceRelayCluster` code of relay cluster to use. If not empty, only relays in that cluster will be used.
 
@@ -172,7 +172,7 @@ Definitions of configuration strings for appropriate configuration functions:
 `ConfigurationString.ClientForceProxyAddr` comma-separated list for debugging, to override relays from the config with this set. 
 
 #### ConfigurationValue
-Definitions of configuration values for appropriate configuration functions: 
+Definitions of configuration values for appropriate functions: 
 
 `ConfigurationValue.FakeMessageLossSend` randomly discard unreliable messages instead of sending. Expected value 0-100.
 
@@ -200,32 +200,45 @@ Definitions of configuration values for appropriate configuration functions:
 
 `ConfigurationValue.NagleTime` set the nagle timer in microseconds.  When `NetworkingSockets.SendMessageToConnection()` is called, if the outgoing message is less than the size of the MTU, it will be queued for a delay equal to the Nagle timer value. This is to ensure that if the application sends several small messages rapidly, they have coalesced into a single packet. See historical RFC 896. Default is 5000 microseconds.
 
-`ConfigurationValue.LogLevelAckRTT` 
+`ConfigurationValue.LogLevelAckRTT` set to true (non-zero) to enable logging of RTT based on acks. This doesn't track all sources of RTT, just the inline ones based on acks, but those are the most common.
 
-`ConfigurationValue.LogLevelPacket` 
+`ConfigurationValue.LogLevelPacket` log level of SNP packet decoding.
 
-`ConfigurationValue.LogLevelMessage` 
+`ConfigurationValue.LogLevelMessage` log when messages are sent/received.
 
-`ConfigurationValue.LogLevelPacketGaps` 
+`ConfigurationValue.LogLevelPacketGaps` log level when individual packets drop.
 
-`ConfigurationValue.LogLevelP2PRendezvous` 
+`ConfigurationValue.LogLevelP2PRendezvous` log level for P2P rendezvous.
 
-`ConfigurationValue.LogLevelRelayPings` 
+`ConfigurationValue.LogLevelRelayPings` log level for sending and receiving pings to relays.
 
-`ConfigurationValue.ClientConsecutitivePingTimeoutsFailInitial` 
+`ConfigurationValue.ClientConsecutitivePingTimeoutsFailInitial` if the first N pings to a port fail, mark that port as unavailable for a while, and try a different one. Some ISPs and routers may drop the first packet, so setting this to 1 may greatly disrupt communications.
 
-`ConfigurationValue.ClientConsecutitivePingTimeoutsFail` 
+`ConfigurationValue.ClientConsecutitivePingTimeoutsFail` if N consecutive pings to a port fail, after having received successful communication, mark that port as unavailable for a while, and try a different one.
 
-`ConfigurationValue.ClientMinPingsBeforePingAccurate` 
+`ConfigurationValue.ClientMinPingsBeforePingAccurate` minimum number of lifetime pings that need to send, before think that estimate is solid. The first ping to each cluster is very often delayed because of NAT, routers not having the best route, etc. Until a sufficient number of pings is sent, our estimate is often inaccurate.
 
-`ConfigurationValue.ClientSingleSocket` 
+`ConfigurationValue.ClientSingleSocket` set all datagram traffic to originate from the same local port. By default, we open up a new UDP socket (on a different local port) for each relay. This is not optimal, but it works around some routers that don't implement NAT properly. If you have intermittent problems talking to relays that might be NAT related, try toggling this flag.
 
-`ConfigurationValue.IPAllowWithoutAuth` 
+`ConfigurationValue.IPAllowWithoutAuth` set all datagram traffic to originate from the same local port. By default, a new UDP socket is open up (on a different local port) for each relay. This is not optimal, but it works around some routers that don't implement NAT properly. If intermittent problems occur talking to relays that might be NAT related, try toggling this flag.
 
-`ConfigurationValue.TimeoutSecondsInitial` 
+`ConfigurationValue.TimeoutSecondsInitial` timeout value in seconds, to use when first connecting.
 
-`ConfigurationValue.TimeoutSecondsConnected` 
+`ConfigurationValue.TimeoutSecondsConnected` timeout value in seconds, to use after connection is established.
 
 #### Result
 Definitions of operation result for appropriate functions: 
 
+`Result.OK` success.
+
+`Result.Fail` generic failure.
+
+`Result.NoConnection` failed network connection.
+
+`Result.InvalidParam` a parameter is incorrect.
+
+`Result.InvalidState` called object was in an invalid state.
+
+`Result.Ignored` target is ignoring sender.
+
+### Structures
