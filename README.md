@@ -105,6 +105,13 @@ byte[] data = new byte[64];
 sockets.SendMessageToConnection(connection, data);
 ```
 
+##### Copy payload from a message:
+```c#
+byte[] buffer = new byte[1024];
+
+netMessages[0].CopyTo(buffer);
+```
+
 ##### Set a custom configuration:
 ```c#
 sockets.SetConfigurationValue(ConfigurationValue.FakePacketLagSend, 80);
@@ -160,8 +167,10 @@ Definitions of configuration strings for appropriate configuration functions:
 
 `ConfigurationString.ClientForceRelayCluster` code of relay cluster to use. If not empty, only relays in that cluster will be used.
 
-`ConfigurationString.ClientDebugTicketAddress` generate (unsigned) ticket for debugging, using the specified gameserver address. Router must be configured to accept unsigned tickets.
+`ConfigurationString.ClientDebugTicketAddress` generate unsigned ticket for debugging, using the specified gameserver address. Router must be configured to accept unsigned tickets.
 
 `ConfigurationString.ClientForceProxyAddr` comma-separated list for debugging, to override relays from the config with this set. 
 
 #### ConfigurationValue
+Definitions of configuration values for appropriate configuration functions: 
+
