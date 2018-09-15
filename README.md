@@ -218,7 +218,7 @@ Definitions of configuration values for appropriate functions:
 
 `ConfigurationValue.ClientMinPingsBeforePingAccurate` minimum number of lifetime pings that need to send, before think that estimate is solid. The first ping to each cluster is very often delayed because of NAT, routers not having the best route, etc. Until a sufficient number of pings is sent, our estimate is often inaccurate.
 
-`ConfigurationValue.ClientSingleSocket` set all datagram traffic to originate from the same local port. By default, we open up a new UDP socket (on a different local port) for each relay. This is not optimal, but it works around some routers that don't implement NAT properly. If you have intermittent problems talking to relays that might be NAT related, try toggling this flag.
+`ConfigurationValue.ClientSingleSocket` set all datagram traffic to originate from the same local port. By default, we open up a new UDP socket (on a different local port) for each relay. This is not optimal, but it works around some routers that don't implement NAT properly. If intermittent problems occur talking to relays that might be NAT related, try toggling this flag.
 
 `ConfigurationValue.IPAllowWithoutAuth` set all datagram traffic to originate from the same local port. By default, a new UDP socket is open up (on a different local port) for each relay. This is not optimal, but it works around some routers that don't implement NAT properly. If intermittent problems occur talking to relays that might be NAT related, try toggling this flag.
 
@@ -242,3 +242,6 @@ Definitions of operation result for appropriate functions:
 `Result.Ignored` target is ignoring sender.
 
 ### Structures
+#### StatusInfo
+Contains marshalled data used to notify when a connection state has changed:
+
