@@ -241,7 +241,156 @@ Definitions of operation result for appropriate functions:
 
 `Result.Ignored` target is ignoring sender.
 
+### Delegates
+#### Socket callbacks
+Provides per socket events.
+
+`StatusCallback(StatusInfo info)` 
+
+#### Library callbacks
+Provides per application events.
+
+`DebugCallback(int type, string message)` 
+
 ### Structures
 #### StatusInfo
-Contains marshalled data used to notify when a connection state has changed:
+Contains marshalled data used to notify when a connection state has changed.
+
+`StatusInfo.connection` 
+
+`StatusInfo.connectionInfo` 
+
+`StatusInfo.socketState` 
+
+#### ConnectionInfo
+Contains marshalled data with connection info.
+
+`ConnectionInfo.userData` 
+
+`ConnectionInfo.listenSocket` 
+
+`ConnectionInfo.remoteIP` 
+
+`ConnectionInfo.remotePort` 
+
+`ConnectionInfo.state` 
+
+`ConnectionInfo.endReason` 
+
+`ConnectionInfo.endDebug` 
+
+#### ConnectionStatus
+Contains marshalled data with connection status.
+
+`ConnectionStatus.state` 
+
+`ConnectionStatus.ping` 
+
+`ConnectionStatus.connectionQualityLocal` 
+
+`ConnectionStatus.connectionQualityRemote` 
+
+`ConnectionStatus.outPacketsPerSecond` 
+
+`ConnectionStatus.outBytesPerSecond` 
+
+`ConnectionStatus.inPacketsPerSecond` 
+
+`ConnectionStatus.inBytesPerSecond` 
+
+`ConnectionStatus.sendRateBytesPerSecond` 
+
+`ConnectionStatus.pendingUnreliable` 
+
+`ConnectionStatus.pendingReliable` 
+
+`ConnectionStatus.sentUnackedReliable` 
+
+`ConnectionStatus.queueTime` 
+
+#### NetworkingMessage
+Contains marshalled data of networking message.
+
+`NetworkingMessage.userData` 
+
+`NetworkingMessage.timeReceived` 
+
+`NetworkingMessage.messageNumber` 
+
+`NetworkingMessage.data` 
+
+`NetworkingMessage.length` 
+
+`NetworkingMessage.connection` 
+
+`NetworkingMessage.channel` 
+
+### Classes
+#### NetworkingSockets
+Contains a managed pointer to the sockets.
+
+`NetworkingSockets.CreateListenSocket(string ip, ushort port)` 
+
+`NetworkingSockets.Connect(string ip, ushort port)` 
+
+`NetworkingSockets.AcceptConnection(Connection connection)` 
+
+`NetworkingSockets.CloseConnection(Connection connection, int reason, string debug, bool enableLinger)` 
+
+`NetworkingSockets.CloseListenSocket(ListenSocket socket, string remoteReason)` 
+
+`NetworkingSockets.SetConnectionUserData(Connection peer, long userData)` 
+
+`NetworkingSockets.GetConnectionUserData(Connection peer)` 
+
+`NetworkingSockets.SetConnectionName(Connection peer, string name)` 
+
+`NetworkingSockets.GetConnectionName(Connection peer, StringBuilder name, int maxLength)` 
+
+`NetworkingSockets.SendMessageToConnection(Connection connection, byte[] data, SendType sendType)` 
+
+`NetworkingSockets.FlushMessagesOnConnection(Connection connection)` 
+
+`NetworkingSockets.ReceiveMessagesOnConnection(Connection connection, ref NetworkingMessage[] messages, int maxMessages)` 
+
+`NetworkingSockets.ReceiveMessagesOnListenSocket(ListenSocket socket, ref NetworkingMessage[] messages, int maxMessages)` 
+
+`NetworkingSockets.GetConnectionInfo(Connection connection, ref ConnectionInfo info)` 
+
+`NetworkingSockets.GetQuickConnectionStatus(Connection connection, ConnectionStatus status)` 
+
+`NetworkingSockets.GetDetailedConnectionStatus(Connection connection, StringBuilder status, int statusLength)` 
+
+`NetworkingSockets.GetListenSocketInfo(ListenSocket socket, uint ip, ushort port)` 
+
+`NetworkingSockets.CreateSocketPair(Connection connectionOne, Connection connectionTwo, bool useNetworkLoopback)` 
+
+`NetworkingSockets.GetConnectionDebugText(Connection connection, StringBuilder debugText, int debugLength)` 
+
+`NetworkingSockets.GetConfigurationValue(ConfigurationValue configurationValue)` 
+
+`NetworkingSockets.SetConfigurationValue(ConfigurationValue configurationValue, int value)` 
+
+`NetworkingSockets.GetConfigurationValueName(ConfigurationValue configurationValue)` 
+
+`NetworkingSockets.GetConfigurationString(ConfigurationString configurationString, StringBuilder destination, int destinationLength)` 
+
+`NetworkingSockets.SetConfigurationString(ConfigurationString configurationString, string inputString)` 
+
+`NetworkingSockets.GetConfigurationStringName(ConfigurationString configurationString)` 
+
+`NetworkingSockets.GetConnectionConfigurationValue(Connection connection, ConfigurationValue configurationValue)` 
+
+`NetworkingSockets.SetConnectionConfigurationValue(Connection connection, ConfigurationValue configurationValue, int value)` 
+
+`NetworkingSockets.DispatchCallback(StatusCallback callback)` 
+
+#### Library
+Contains constant fields.
+
+`Library.maxErrorMessageLength` 
+
+`Library.maxCloseMeesageLength` 
+
+`Library.maxCloseReasonLength`
 
