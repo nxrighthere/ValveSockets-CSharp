@@ -145,7 +145,7 @@ Definitions of a flags for `NetworkingSockets.SendMessageToConnection()` functio
 
 `SendType.NoNagle` a message will not be grouped with other messages within a timer.
 
-`SendType.NoDelay` a message will not be buffered if it cannot be sent relatively quickly.
+`SendType.NoDelay` a message will not be buffered if it can't be sent relatively quickly.
 
 #### ConnectionState
 Definitions of connection states for `ConnectionInfo.state` field:
@@ -218,9 +218,9 @@ Definitions of configuration values:
 
 `ConfigurationValue.ClientMinPingsBeforePingAccurate` minimum number of lifetime pings that need to send, before think that estimate is solid. The first ping to each cluster is very often delayed because of NAT, routers not having the best route, etc. Until a sufficient number of pings is sent, our estimate is often inaccurate.
 
-`ConfigurationValue.ClientSingleSocket` set all datagram traffic to originate from the same local port. By default, we open up a new UDP socket (on a different local port) for each relay. This is not optimal, but it works around some routers that don't implement NAT properly. If intermittent problems occur talking to relays that might be NAT related, try toggling this flag.
+`ConfigurationValue.ClientSingleSocket` set all datagram traffic to originate from the same local port. By default, a new UDP socket is open up (on a different local port) for each relay. This is not optimal, but it works around some routers that don't implement NAT properly. If intermittent problems occur talking to relays that might be NAT related, try toggling this flag.
 
-`ConfigurationValue.IPAllowWithoutAuth` set all datagram traffic to originate from the same local port. By default, a new UDP socket is open up (on a different local port) for each relay. This is not optimal, but it works around some routers that don't implement NAT properly. If intermittent problems occur talking to relays that might be NAT related, try toggling this flag.
+`ConfigurationValue.IPAllowWithoutAuth` don't automatically fail IP connections that don't have a strong authenticator. On clients, this means connection attempts will be made even if it can't get a cert. On the server, it means that a connection will not be automatically rejected due to authentication failure.
 
 `ConfigurationValue.TimeoutSecondsInitial` timeout value in seconds, to use when first connecting.
 
@@ -263,7 +263,7 @@ Contains marshalled data used to notify when a connection state has changed.
 #### ConnectionInfo
 Contains marshalled data with connection info.
 
-`ConnectionInfo.userData` abitrary user data set via `NetworkingSockets.SetConnectionUserData()` function.
+`ConnectionInfo.userData` arbitrary user data set via `NetworkingSockets.SetConnectionUserData()` function.
 
 `ConnectionInfo.listenSocket` listen socket for this connection.
 
@@ -278,15 +278,15 @@ Contains marshalled data with connection info.
 `ConnectionInfo.endDebug` explanation in a readable form for connection termination or problem. This is intended for debugging diagnostic purposes only, not for displaying to users. It might have some details specific to the issue.
 
 #### ConnectionStatus
-Contains marshalled data with connection status.
+Contains marshalled data with connection status for frequent requests.
 
-`ConnectionStatus.state` 
+`ConnectionStatus.state` high-level state of the connection described in the `ConnectionState` enumeration.
 
-`ConnectionStatus.ping` 
+`ConnectionStatus.ping` current ping in milliseconds.
 
-`ConnectionStatus.connectionQualityLocal` 
+`ConnectionStatus.connectionQualityLocal` connection quality measured locally (percentage of packets delivered end-to-end in order).
 
-`ConnectionStatus.connectionQualityRemote` 
+`ConnectionStatus.connectionQualityRemote` packet delivery success rate as observed from the remote host.
 
 `ConnectionStatus.outPacketsPerSecond` 
 
@@ -296,7 +296,7 @@ Contains marshalled data with connection status.
 
 `ConnectionStatus.inBytesPerSecond` 
 
-`ConnectionStatus.sendRateBytesPerSecond` 
+`ConnectionStatus.sendRateBytesPerSecond` Estimate rate that we can send data to our peer. Note that this could be significantly higher than m_flOutBytesPerSec, meaning the capacity of the channel is higher than you are sending data.
 
 `ConnectionStatus.pendingUnreliable` 
 
