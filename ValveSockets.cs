@@ -460,9 +460,9 @@ namespace Valve.Sockets {
 	}
 
 	public static class Library {
-		public const int maxErrorMessageLength = 1024;
 		public const int maxCloseMessageLength = 128;
 		public const int maxCloseReasonLength = 999;
+		public const int maxErrorMessageLength = 1024;
 		public const int networkingCallbacks = 1200;
 
 		public static bool Initialize(StringBuilder errorMessage) {
