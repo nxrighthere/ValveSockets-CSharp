@@ -460,8 +460,8 @@ namespace Valve.Sockets {
 	}
 
 	public static class Library {
-		public const int maxCloseMessageLength = 128;
 		public const int maxCloseReasonValue = 999;
+		public const int maxCloseMessageLength = 128;
 		public const int maxErrorMessageLength = 1024;
 		public const int networkingCallbacks = 1200;
 
@@ -510,7 +510,7 @@ namespace Valve.Sockets {
 		internal static extern ListenSocket SteamAPI_ISteamNetworkingSockets_CreateListenSocket(IntPtr instance, int virtualPort, uint ip, ushort port);
 
 		[DllImport(nativeLibrary, CallingConvention = CallingConvention.Cdecl)]
-		internal static extern Connection SteamAPI_ISteamNetworkingSockets_ConnectByIPv4Address(IntPtr isntance, uint ip, ushort port);
+		internal static extern Connection SteamAPI_ISteamNetworkingSockets_ConnectByIPv4Address(IntPtr instance, uint ip, ushort port);
 
 		[DllImport(nativeLibrary, CallingConvention = CallingConvention.Cdecl)]
 		internal static extern Result SteamAPI_ISteamNetworkingSockets_AcceptConnection(IntPtr instance, Connection connection);
@@ -588,6 +588,6 @@ namespace Valve.Sockets {
 		internal static extern bool SteamAPI_ISteamNetworkingSockets_SetConnectionConfigurationValue(IntPtr instance, Connection connection, ConfigurationValue configurationValue, int value);
 
 		[DllImport(nativeLibrary, CallingConvention = CallingConvention.Cdecl)]
-		internal static extern void SteamAPI_ISteamNetworkingSockets_RunConnectionStatusChangedCallbacks(IntPtr isntance, StatusCallback callback);
+		internal static extern void SteamAPI_ISteamNetworkingSockets_RunConnectionStatusChangedCallbacks(IntPtr instance, StatusCallback callback);
 	}
 }
