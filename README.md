@@ -198,7 +198,7 @@ Definitions of configuration values:
 
 `ConfigurationValue.MinRate` minimum send rate clamp. This value will control the minimum allowed sending rate that congestion is allowed to reach. Default is 0 which means no limit.
 
-`ConfigurationValue.NagleTime` set the nagle timer in microseconds.  When `NetworkingSockets.SendMessageToConnection()` is called, if the outgoing message is less than the size of the MTU, it will be queued for a delay equal to the Nagle timer value. This is to ensure that if the application sends several small messages rapidly, they have coalesced into a single packet. See historical RFC 896. Default is 5000 microseconds.
+`ConfigurationValue.NagleTime` set the Nagle timer in microseconds.  When `NetworkingSockets.SendMessageToConnection()` is called, if the outgoing message is less than the size of the MTU, it will be queued for a delay equal to the Nagle timer value. This is to ensure that if the application sends several small messages rapidly, they have coalesced into a single packet. See historical [RFC 896](https://tools.ietf.org/html/rfc896). Default is 5000 microseconds.
 
 `ConfigurationValue.LogLevelAckRTT` set to true (non-zero) to enable logging of RTT based on acks. This doesn't track all sources of RTT, just the inline ones based on acks, but those are the most common.
 
@@ -265,17 +265,17 @@ Contains marshalled data with connection info.
 
 `ConnectionInfo.userData` abitrary user data set via `NetworkingSockets.SetConnectionUserData()` function.
 
-`ConnectionInfo.listenSocket` 
+`ConnectionInfo.listenSocket` listen socket for this connection.
 
-`ConnectionInfo.remoteIP` 
+`ConnectionInfo.remoteIP` remote IP address of the connection. Can be parsed into a printable form using `remoteIP.ParseIP()` function.
 
-`ConnectionInfo.remotePort` 
+`ConnectionInfo.remotePort` remote port of the connection.
 
-`ConnectionInfo.state` 
+`ConnectionInfo.state` high-level state of the connection described in the `ConnectionState` enumeration.
 
-`ConnectionInfo.endReason` 
+`ConnectionInfo.endReason` basic cause of the connection termination or problem.
 
-`ConnectionInfo.endDebug` 
+`ConnectionInfo.endDebug` explanation in a readable form for connection termination or problem. This is intended for debugging diagnostic purposes only, not for displaying to users. It might have some details specific to the issue.
 
 #### ConnectionStatus
 Contains marshalled data with connection status.
