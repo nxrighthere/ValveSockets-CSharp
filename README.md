@@ -10,7 +10,7 @@ Usage
 --------
 Before starting to work, the library should be initialized using `Valve.Sockets.Library.Initialize(StringBuilder errorMessage);` function.
 
-When the work is done, deinitialize the library using `Valve.Sockets.Library.Deinitialize();` function.
+After the work is done, deinitialize the library using `Valve.Sockets.Library.Deinitialize();` function.
 
 ### .NET environment
 ##### Start a new server:
@@ -302,7 +302,7 @@ Contains marshalled data with connection status for frequent requests.
 
 `ConnectionStatus.pendingReliable` 
 
-`ConnectionStatus.sentUnackedReliable` a number of bytes of reliable data that has been placed the wire, but for which not yet received an acknowledgment, and thus may be re-transmitted.
+`ConnectionStatus.sentUnackedReliable` a number of bytes of reliable data that has been placed the wire, but for which not yet received an acknowledgment, and thus might have to be re-transmitted.
 
 `ConnectionStatus.queueTime` 
 
@@ -392,10 +392,10 @@ Contains constant fields.
 
 `Library.maxCloseReasonLength` 
 
-`Library.Initialize(StringBuilder errorMessage)` 
+`Library.Initialize(StringBuilder errorMessage)` initializes the native library. Capacity of a mutable string must be equal to `Library.maxErrorMessageLength`.
 
-`Library.Deinitialize()` 
+`Library.Deinitialize()` deinitializes the native library. Should be called after the work is done.
 
 `Library.SetDebugCallback(int detailLevel, DebugCallback callback)` 
 
-`Library.Time` 
+`Library.Time` returns a current local timestamp in microseconds.
