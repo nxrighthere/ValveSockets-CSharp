@@ -290,7 +290,7 @@ namespace Valve.Sockets {
 			if (reason > Library.maxCloseReasonLength)
 				throw new ArgumentOutOfRangeException("reason");
 
-			if (debug.Length > Library.maxCloseMeesageLength)
+			if (debug.Length > Library.maxCloseMessageLength)
 				throw new ArgumentOutOfRangeException("debug");
 
 			return Native.SteamAPI_ISteamNetworkingSockets_CloseConnection(nativeSockets, connection, reason, debug, enableLinger);
@@ -301,7 +301,7 @@ namespace Valve.Sockets {
 		}
 
 		public bool CloseListenSocket(ListenSocket socket, string remoteReason) {
-			if (remoteReason.Length > Library.maxCloseMeesageLength)
+			if (remoteReason.Length > Library.maxCloseMessageLength)
 				throw new ArgumentOutOfRangeException("remoteReason");
 
 			return Native.SteamAPI_ISteamNetworkingSockets_CloseListenSocket(nativeSockets, socket, remoteReason);
@@ -461,7 +461,7 @@ namespace Valve.Sockets {
 
 	public static class Library {
 		public const int maxErrorMessageLength = 1024;
-		public const int maxCloseMeesageLength = 128;
+		public const int maxCloseMessageLength = 128;
 		public const int maxCloseReasonLength = 999;
 		public const int networkingCallbacks = 1200;
 
