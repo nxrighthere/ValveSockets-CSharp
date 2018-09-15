@@ -381,14 +381,14 @@ Contains a managed pointer to the sockets.
 
 `NetworkingSockets.SetConnectionConfigurationValue(Connection connection, ConfigurationValue configurationValue, int value)` 
 
-`NetworkingSockets.DispatchCallback(StatusCallback callback)` 
+`NetworkingSockets.DispatchCallback(StatusCallback callback)` dispatches one callback per call if available.
 
 #### Library
 Contains constant fields.
 
 `Library.maxCloseMessageLength` the maximum length of the reason string in bytes when a connection is closed.
 
-`Library.maxCloseReasonLength` the maximum length of the reason code when a connection is closed.
+`Library.maxCloseReasonValue` the maximum value of the reason code when a connection is closed.
 
 `Library.Initialize(StringBuilder errorMessage)` initializes the native library. Capacity of a mutable string for an error message must be equal to `Library.maxErrorMessageLength`.
 
