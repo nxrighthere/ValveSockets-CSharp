@@ -296,13 +296,13 @@ Contains marshalled data with connection status for frequent requests.
 
 `ConnectionStatus.inBytesPerSecond` 
 
-`ConnectionStatus.sendRateBytesPerSecond` Estimate rate that we can send data to our peer. Note that this could be significantly higher than m_flOutBytesPerSec, meaning the capacity of the channel is higher than you are sending data.
+`ConnectionStatus.sendRateBytesPerSecond` estimate rate at which data can be sent to a peer. It could be significantly higher than `ConnectionStatus.outBytesPerSecond`, meaning the capacity of the channel is higher than outbound data.
 
 `ConnectionStatus.pendingUnreliable` 
 
 `ConnectionStatus.pendingReliable` 
 
-`ConnectionStatus.sentUnackedReliable` 
+`ConnectionStatus.sentUnackedReliable` a number of bytes of reliable data that has been placed the wire, but for which not yet received an acknowledgment, and thus may be re-transmitted.
 
 `ConnectionStatus.queueTime` 
 
