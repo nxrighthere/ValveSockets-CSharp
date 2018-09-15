@@ -163,7 +163,7 @@ Definitions of connection states for `ConnectionInfo.state` field:
 `ConnectionState.ProblemDetectedLocally` a disruption in the connection has been detected locally. Attempts to send further messages will fail. Any remaining received messages in the queue are available. The connection still exists from an API perspective and must be closed to free up resources.
 
 #### ConfigurationString
-Definitions of configuration strings for appropriate functions: 
+Definitions of configuration strings: 
 
 `ConfigurationString.ClientForceRelayCluster` code of relay cluster to use. If not empty, only relays in that cluster will be used.
 
@@ -172,7 +172,7 @@ Definitions of configuration strings for appropriate functions:
 `ConfigurationString.ClientForceProxyAddr` comma-separated list for debugging, to override relays from the config with this set. 
 
 #### ConfigurationValue
-Definitions of configuration values for appropriate functions: 
+Definitions of configuration values: 
 
 `ConfigurationValue.FakeMessageLossSend` randomly discard unreliable messages instead of sending. Expected value 0-100.
 
@@ -227,7 +227,7 @@ Definitions of configuration values for appropriate functions:
 `ConfigurationValue.TimeoutSecondsConnected` timeout value in seconds, to use after connection is established.
 
 #### Result
-Definitions of operation result for appropriate functions: 
+Definitions of operation result: 
 
 `Result.OK` success.
 
@@ -256,16 +256,14 @@ Provides per application events.
 #### StatusInfo
 Contains marshalled data used to notify when a connection state has changed.
 
-`StatusInfo.connection` 
+`StatusInfo.connection` connection ID.
 
-`StatusInfo.connectionInfo` 
-
-`StatusInfo.socketState` 
+`StatusInfo.connectionInfo` essentially `ConnectionInfo` structure with marshalled data.
 
 #### ConnectionInfo
 Contains marshalled data with connection info.
 
-`ConnectionInfo.userData` 
+`ConnectionInfo.userData` abitrary user data set via `NetworkingSockets.SetConnectionUserData()` function.
 
 `ConnectionInfo.listenSocket` 
 
