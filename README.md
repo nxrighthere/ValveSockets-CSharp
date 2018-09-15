@@ -245,12 +245,12 @@ Definitions of operation result:
 #### Socket callbacks
 Provides per socket events.
 
-`StatusCallback(StatusInfo info)` 
+`StatusCallback(StatusInfo info)` notifies when dispatch mechanism on the listen socket returns a connection state.
 
 #### Library callbacks
 Provides per application events.
 
-`DebugCallback(int type, string message)` 
+`DebugCallback(int type, string message)` notifies when debug information with the desired verbosity come up.
 
 ### Structures
 #### StatusInfo
