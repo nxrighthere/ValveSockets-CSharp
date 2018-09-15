@@ -386,16 +386,14 @@ Contains a managed pointer to the sockets.
 #### Library
 Contains constant fields.
 
-`Library.maxErrorMessageLength` 
-
-`Library.maxCloseMeesageLength` 
+`Library.maxCloseMessageLength` 
 
 `Library.maxCloseReasonLength` 
 
-`Library.Initialize(StringBuilder errorMessage)` initializes the native library. Capacity of a mutable string must be equal to `Library.maxErrorMessageLength`.
+`Library.Initialize(StringBuilder errorMessage)` initializes the native library. Capacity of a mutable string for an error message must be equal to `Library.maxErrorMessageLength`.
 
 `Library.Deinitialize()` deinitializes the native library. Should be called after the work is done.
 
-`Library.SetDebugCallback(int detailLevel, DebugCallback callback)` 
+`Library.SetDebugCallback(int detailLevel, DebugCallback callback)` setup callback for debug output.
 
 `Library.Time` returns a current local timestamp in microseconds.
