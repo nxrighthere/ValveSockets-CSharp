@@ -386,9 +386,9 @@ Contains a managed pointer to the sockets.
 #### Library
 Contains constant fields.
 
-`Library.maxCloseMessageLength` 
+`Library.maxCloseMessageLength` the maximum length of the reason string in bytes when a connection is closed.
 
-`Library.maxCloseReasonLength` 
+`Library.maxCloseReasonLength` the maximum length of the reason code when a connection is closed.
 
 `Library.Initialize(StringBuilder errorMessage)` initializes the native library. Capacity of a mutable string for an error message must be equal to `Library.maxErrorMessageLength`.
 
@@ -396,4 +396,4 @@ Contains constant fields.
 
 `Library.SetDebugCallback(int detailLevel, DebugCallback callback)` setup callback for debug output.
 
-`Library.Time` returns a current local timestamp in microseconds.
+`Library.Time` returns a current local monotonic time in microseconds. It never reset while the application remains alive.
