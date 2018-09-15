@@ -392,5 +392,12 @@ Contains constant fields.
 
 `Library.maxCloseMeesageLength` 
 
-`Library.maxCloseReasonLength`
+`Library.maxCloseReasonLength` 
 
+`Library.Initialize(StringBuilder errorMessage)` 
+
+`Library.Deinitialize()` 
+
+`Library.SetDebugCallback(int detailLevel, DebugCallback callback)` 
+
+`Library.Time` 
