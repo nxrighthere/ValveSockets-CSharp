@@ -329,7 +329,7 @@ Contains a managed pointer to the sockets.
 
 `NetworkingSockets.CreateListenSocket(string ip, ushort port)` 
 
-`NetworkingSockets.Connect(string ip, ushort port)` 
+`NetworkingSockets.Connect(string ip, ushort port)` initiates a connection to a foreign host. Returns a local connection ID.
 
 `NetworkingSockets.AcceptConnection(Connection connection)` 
 
@@ -386,9 +386,9 @@ Contains a managed pointer to the sockets.
 #### Library
 Contains constant fields.
 
-`Library.maxCloseMessageLength` the maximum length of the reason string in bytes when a connection is closed.
-
 `Library.maxCloseReasonValue` the maximum value of the reason code when a connection is closed.
+
+`Library.maxCloseMessageLength` the maximum length of the reason string in bytes when a connection is closed.
 
 `Library.Initialize(StringBuilder errorMessage)` initializes the native library. Capacity of a mutable string for an error message must be equal to `Library.maxErrorMessageLength`.
 
