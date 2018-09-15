@@ -167,10 +167,65 @@ Definitions of configuration strings for appropriate configuration functions:
 
 `ConfigurationString.ClientForceRelayCluster` code of relay cluster to use. If not empty, only relays in that cluster will be used.
 
-`ConfigurationString.ClientDebugTicketAddress` generate unsigned ticket for debugging, using the specified gameserver address. Router must be configured to accept unsigned tickets.
+`ConfigurationString.ClientDebugTicketAddress` generate an unsigned ticket for debugging, using the specified gameserver address. Router must be configured to accept unsigned tickets.
 
 `ConfigurationString.ClientForceProxyAddr` comma-separated list for debugging, to override relays from the config with this set. 
 
 #### ConfigurationValue
 Definitions of configuration values for appropriate configuration functions: 
+
+`ConfigurationValue.FakeMessageLossSend` randomly discard unreliable messages instead of sending. Expected value 0-100.
+
+`ConfigurationValue.FakeMessageLossRecv` randomly discard unreliable messages upon receive. Expected value 0-100.
+
+`ConfigurationValue.FakePacketLossSend` randomly discard packets instead of sending. Expected value 0-100.
+
+`ConfigurationValue.FakePacketLossRecv` randomly discard packets upon receive. Expected value 0-100.
+
+`ConfigurationValue.FakePacketReorderSend` globally reorder outbound packets by N percentage. Expected value 0-100.
+
+`ConfigurationValue.FakePacketReorderRecv` globally reorder inbound packets by N percentage. Expected value 0-100.
+
+`ConfigurationValue.FakePacketLagSend` globally delay all outbound packets by N milliseconds before sending.
+
+`ConfigurationValue.FakePacketLagRecv` globally delay all inbound packets by N milliseconds before processing.
+
+`ConfigurationValue.FakePacketReorderTime` amount of delay in milliseconds, to apply packets reordering.
+
+`ConfigurationValue.SendBufferSize` upper limit of buffered pending bytes to be sent. If this limit is reached, then `NetworkingSockets.SendMessageToConnection()` function will return `Result.LimitExceeded`. Default is 524,288 bytes.
+
+`ConfigurationValue.MaxRate` maximum send rate clamp. This value will control the maximum allowed sending rate that congestion is allowed to reach. Default is 0 which means no limit.
+
+`ConfigurationValue.MinRate` minimum send rate clamp. This value will control the minimum allowed sending rate that congestion is allowed to reach. Default is 0 which means no limit.
+
+`ConfigurationValue.NagleTime` set the nagle timer in microseconds.  When `NetworkingSockets.SendMessageToConnection()` is called, if the outgoing message is less than the size of the MTU, it will be queued for a delay equal to the Nagle timer value. This is to ensure that if the application sends several small messages rapidly, they have coalesced into a single packet. See historical RFC 896. Default is 5000 microseconds.
+
+`ConfigurationValue.LogLevelAckRTT` 
+
+`ConfigurationValue.LogLevelPacket` 
+
+`ConfigurationValue.LogLevelMessage` 
+
+`ConfigurationValue.LogLevelPacketGaps` 
+
+`ConfigurationValue.LogLevelP2PRendezvous` 
+
+`ConfigurationValue.LogLevelRelayPings` 
+
+`ConfigurationValue.ClientConsecutitivePingTimeoutsFailInitial` 
+
+`ConfigurationValue.ClientConsecutitivePingTimeoutsFail` 
+
+`ConfigurationValue.ClientMinPingsBeforePingAccurate` 
+
+`ConfigurationValue.ClientSingleSocket` 
+
+`ConfigurationValue.IPAllowWithoutAuth` 
+
+`ConfigurationValue.TimeoutSecondsInitial` 
+
+`ConfigurationValue.TimeoutSecondsConnected` 
+
+#### Result
+Definitions of operation result for appropriate functions: 
 
