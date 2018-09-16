@@ -192,39 +192,39 @@ Definitions of configuration values:
 
 `ConfigurationValue.FakePacketReorderTime` amount of delay in milliseconds, to apply packets reordering.
 
-`ConfigurationValue.SendBufferSize` upper limit of buffered pending bytes to be sent. If this limit is reached, then `NetworkingSockets.SendMessageToConnection()` function will return `Result.LimitExceeded`. Default is 524,288 bytes.
+`ConfigurationValue.SendBufferSize` an upper limit of buffered pending bytes to be sent. If this limit is reached, then `NetworkingSockets.SendMessageToConnection()` function will return `Result.LimitExceeded`. Default is 524,288 bytes.
 
-`ConfigurationValue.MaxRate` maximum send rate clamp. This value will control the maximum allowed sending rate that congestion is allowed to reach. Default is 0 which means no limit.
+`ConfigurationValue.MaxRate` a maximum send rate clamp. This value will control the maximum allowed sending rate that congestion is allowed to reach. Default is 0 which means no limit.
 
-`ConfigurationValue.MinRate` minimum send rate clamp. This value will control the minimum allowed sending rate that congestion is allowed to reach. Default is 0 which means no limit.
+`ConfigurationValue.MinRate` a minimum send rate clamp. This value will control the minimum allowed sending rate that congestion is allowed to reach. Default is 0 which means no limit.
 
 `ConfigurationValue.NagleTime` set the Nagle timer in microseconds.  When `NetworkingSockets.SendMessageToConnection()` is called, if the outgoing message is less than the size of the MTU, it will be queued for a delay equal to the Nagle timer value. This is to ensure that if the application sends several small messages rapidly, they have coalesced into a single packet. See historical [RFC 896](https://tools.ietf.org/html/rfc896). Default is 5000 microseconds.
 
 `ConfigurationValue.LogLevelAckRTT` set to true (non-zero) to enable logging of RTT based on acks. This doesn't track all sources of RTT, just the inline ones based on acks, but those are the most common.
 
-`ConfigurationValue.LogLevelPacket` log level of SNP packet decoding.
+`ConfigurationValue.LogLevelPacket` a log level of SNP packet decoding.
 
-`ConfigurationValue.LogLevelMessage` log when messages are sent/received.
+`ConfigurationValue.LogLevelMessage` a log when messages are sent/received.
 
-`ConfigurationValue.LogLevelPacketGaps` log level when individual packets drop.
+`ConfigurationValue.LogLevelPacketGaps` a log level when individual packets drop.
 
-`ConfigurationValue.LogLevelP2PRendezvous` log level for P2P rendezvous.
+`ConfigurationValue.LogLevelP2PRendezvous` a log level for P2P rendezvous.
 
-`ConfigurationValue.LogLevelRelayPings` log level for sending and receiving pings to relays.
+`ConfigurationValue.LogLevelRelayPings` a log level for sending and receiving pings to relays.
 
 `ConfigurationValue.ClientConsecutitivePingTimeoutsFailInitial` if the first N pings to a port fail, mark that port as unavailable for a while, and try a different one. Some ISPs and routers may drop the first packet, so setting this to 1 may greatly disrupt communications.
 
 `ConfigurationValue.ClientConsecutitivePingTimeoutsFail` if N consecutive pings to a port fail, after having received successful communication, mark that port as unavailable for a while, and try a different one.
 
-`ConfigurationValue.ClientMinPingsBeforePingAccurate` minimum number of lifetime pings that need to send, before think that estimate is solid. The first ping to each cluster is very often delayed because of NAT, routers not having the best route, etc. Until a sufficient number of pings is sent, our estimate is often inaccurate.
+`ConfigurationValue.ClientMinPingsBeforePingAccurate` the minimum number of lifetime pings that need to send, before think that estimate is solid. The first ping to each cluster is very often delayed because of NAT, routers not having the best route, etc. Until a sufficient number of pings is sent, our estimate is often inaccurate.
 
 `ConfigurationValue.ClientSingleSocket` set all datagram traffic to originate from the same local port. By default, a new UDP socket is open up (on a different local port) for each relay. This is not optimal, but it works around some routers that don't implement NAT properly. If intermittent problems occur talking to relays that might be NAT related, try toggling this flag.
 
 `ConfigurationValue.IPAllowWithoutAuth` don't automatically fail IP connections that don't have a strong authenticator. On clients, this means connection attempts will be made even if it can't get a cert. On the server, it means that a connection will not be automatically rejected due to authentication failure.
 
-`ConfigurationValue.TimeoutSecondsInitial` timeout value in seconds, to use when first connecting.
+`ConfigurationValue.TimeoutSecondsInitial` a timeout value in seconds, to use when first connecting.
 
-`ConfigurationValue.TimeoutSecondsConnected` timeout value in seconds, to use after connection is established.
+`ConfigurationValue.TimeoutSecondsConnected` a timeout value in seconds, to use after connection is established.
 
 #### Result
 Definitions of operation result: 
@@ -345,7 +345,7 @@ Contains a managed pointer to the sockets.
 
 `NetworkingSockets.GetConnectionName(Connection peer, StringBuilder name, int maxLength)` fetches connection name to the mutable string. Returns true on success or false on failure.
 
-`NetworkingSockets.SendMessageToConnection(Connection connection, byte[] data, SendType sendType)` 
+`NetworkingSockets.SendMessageToConnection(Connection connection, byte[] data, SendType flags)` sends a message to the host on the connected socket. The send type parameter is optional. Multiple types can be specified at once. Returns a result described in the `Result` enumeration.
 
 `NetworkingSockets.FlushMessagesOnConnection(Connection connection)` 
 
