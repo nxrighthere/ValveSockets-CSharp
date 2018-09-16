@@ -309,7 +309,7 @@ Contains marshalled data with connection status for frequent requests.
 #### NetworkingMessage
 Contains marshalled data of networking message.
 
-`NetworkingMessage.userData` an user-supplied set using `NetworkingSockets.SetConnectionUserData()` function.
+`NetworkingMessage.userData` an user-supplied data set using `NetworkingSockets.SetConnectionUserData()` function.
 
 `NetworkingMessage.timeReceived` the local timestamp when the message was received.
 
@@ -363,7 +363,7 @@ Contains a managed pointer to the sockets.
 
 `NetworkingSockets.CreateSocketPair(Connection connectionOne, Connection connectionTwo, bool useNetworkLoopback)` 
 
-`NetworkingSockets.GetConnectionDebugText(Connection connection, StringBuilder debugText, int debugLength)` 
+`NetworkingSockets.GetConnectionDebugText(Connection connection, StringBuilder debugText, int debugLength)` gets debug text from the connection. Returns true on success or false on failure.
 
 `NetworkingSockets.GetConfigurationValue(ConfigurationValue configurationValue)` 
 
