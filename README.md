@@ -198,7 +198,7 @@ Definitions of configuration values:
 
 `ConfigurationValue.MinRate` a minimum send rate clamp. This value will control the minimum allowed sending rate that congestion is allowed to reach. Default is 0 which means no limit.
 
-`ConfigurationValue.NagleTime` set the Nagle timer in microseconds.  When `NetworkingSockets.SendMessageToConnection()` is called, if the outgoing message is less than the size of the MTU, it will be queued for a delay equal to the Nagle timer value. This is to ensure that if the application sends several small messages rapidly, they have coalesced into a single packet. See historical [RFC 896](https://tools.ietf.org/html/rfc896). Default is 5000 microseconds.
+`ConfigurationValue.NagleTime` set the Nagle timer in microseconds. When `NetworkingSockets.SendMessageToConnection()` is called, if the outgoing message is less than the size of the MTU, it will be queued for a delay equal to the Nagle timer value. This is to ensure that if the application sends several small messages rapidly, they have coalesced into a single packet. See historical [RFC 896](https://tools.ietf.org/html/rfc896). Default is 5000 microseconds.
 
 `ConfigurationValue.LogLevelAckRTT` set to true (non-zero) to enable logging of RTT based on acks. This doesn't track all sources of RTT, just the inline ones based on acks, but those are the most common.
 
@@ -288,19 +288,19 @@ Contains marshalled data with connection status for frequent requests.
 
 `ConnectionStatus.connectionQualityRemote` a packet delivery success rate as observed from the remote host.
 
-`ConnectionStatus.outPacketsPerSecond` 
+`ConnectionStatus.outPacketsPerSecond` current outbound packet rates from recent history.
 
-`ConnectionStatus.outBytesPerSecond` 
+`ConnectionStatus.outBytesPerSecond` current outbound data rates from recent history.
 
-`ConnectionStatus.inPacketsPerSecond` 
+`ConnectionStatus.inPacketsPerSecond` current inbound packet rates from recent history.
 
-`ConnectionStatus.inBytesPerSecond` 
+`ConnectionStatus.inBytesPerSecond` current inbound data rates from recent history.
 
 `ConnectionStatus.sendRateBytesPerSecond` the estimated rate at which data can be sent to a peer. It could be significantly higher than `ConnectionStatus.outBytesPerSecond`, meaning the capacity of the channel is higher than sent data.
 
-`ConnectionStatus.pendingUnreliable` 
+`ConnectionStatus.pendingUnreliable` the number of bytes pending to be sent unreliably. This is data that recently requested to be sent but has not yet actually been put on the wire.
 
-`ConnectionStatus.pendingReliable` 
+`ConnectionStatus.pendingReliable` the number of bytes pending to be sent reliably. The reliable number also includes data that was previously placed on the wire but has now been scheduled for re-transmission. Thus, it's possible to observe increasing of the bytes between two checks, even if no calls were made to send reliable data between the checks. Data that is awaiting the Nagle delay will appear in these numbers.
 
 `ConnectionStatus.sentUnackedReliable` the number of bytes of reliable data that has been placed the wire, but for which not yet received an acknowledgment, and thus might have to be re-transmitted.
 
@@ -347,7 +347,7 @@ Contains a managed pointer to the sockets.
 
 `NetworkingSockets.SendMessageToConnection(Connection connection, byte[] data, SendType flags)` sends a message to the host on the connected socket. The send type parameter is optional. Multiple flags can be specified at once. Returns a result described in the `Result` enumeration.
 
-`NetworkingSockets.FlushMessagesOnConnection(Connection connection)` if the Nagle is enabled (it's enabled by default) then the message will be queued up the Nagle time before being sent, to merge small messages into the same packet. Call this function to flush any queued messages and send them immediately on the next transmission time.
+`NetworkingSockets.FlushMessagesOnConnection(Connection connection)` if the Nagle is enabled (it's enabled by default) then the message will be queued up the Nagle time before being sent, to merge small messages into the same packet. Call this function to flush any queued messages and send them immediately on the next transmission time. Returns a result described in the `Result` enumeration.
 
 `NetworkingSockets.ReceiveMessagesOnConnection(Connection connection, ref NetworkingMessage[] messages, int maxMessages)` 
 
