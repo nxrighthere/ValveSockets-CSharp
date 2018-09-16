@@ -319,15 +319,15 @@ Contains marshalled data of networking message.
 
 `NetworkingMessage.length` length of the payload.
 
-`NetworkingMessage.connection` the connection ID from which the message came from.
+`NetworkingMessage.connection` connection ID from which the message came from.
 
-`NetworkingMessage.channel` the channel number the message was received on.
+`NetworkingMessage.channel` channel number the message was received on.
 
 ### Classes
 #### NetworkingSockets
 Contains a managed pointer to the sockets.
 
-`NetworkingSockets.CreateListenSocket(string ip, ushort port)` 
+`NetworkingSockets.CreateListenSocket(string ip, ushort port)` creates a socket that listens for incoming connections which initiated by `NetworkingSockets.Connect()` function. Returns a socket ID.
 
 `NetworkingSockets.Connect(string ip, ushort port)` initiates a connection to a foreign host. Returns a local connection ID.
 
