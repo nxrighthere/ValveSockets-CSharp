@@ -256,37 +256,37 @@ Provides per application events.
 #### StatusInfo
 Contains marshalled data with connection state.
 
-`StatusInfo.connection` connection ID.
+`StatusInfo.connection` the connection ID.
 
 `StatusInfo.connectionInfo` essentially `ConnectionInfo` structure with marshalled data.
 
 #### ConnectionInfo
 Contains marshalled data with connection info.
 
-`ConnectionInfo.userData` arbitrary user data set via `NetworkingSockets.SetConnectionUserData()` function.
+`ConnectionInfo.userData` an arbitrary user data set via `NetworkingSockets.SetConnectionUserData()` function.
 
-`ConnectionInfo.listenSocket` listen socket for this connection.
+`ConnectionInfo.listenSocket` the listen socket for this connection.
 
-`ConnectionInfo.remoteIP` remote IP address of the connection. Can be parsed into a printable form using `remoteIP.ParseIP()` function.
+`ConnectionInfo.remoteIP` the remote IP address of the connection. Can be parsed into a printable form using `remoteIP.ParseIP()` function.
 
-`ConnectionInfo.remotePort` remote port of the connection.
+`ConnectionInfo.remotePort` the remote port of the connection.
 
-`ConnectionInfo.state` high-level state of the connection described in the `ConnectionState` enumeration.
+`ConnectionInfo.state` the high-level state of the connection described in the `ConnectionState` enumeration.
 
-`ConnectionInfo.endReason` basic cause of the connection termination or problem.
+`ConnectionInfo.endReason` the basic cause of the connection termination or problem.
 
-`ConnectionInfo.endDebug` explanation in a readable form for connection termination or problem. This is intended for debugging diagnostic purposes only, not for displaying to users. It might have some details specific to the issue.
+`ConnectionInfo.endDebug` the explanation in a readable form for connection termination or problem. This is intended for debugging diagnostic purposes only, not for displaying to users. It might have some details specific to the issue.
 
 #### ConnectionStatus
 Contains marshalled data with connection status for frequent requests.
 
-`ConnectionStatus.state` high-level state of the connection described in the `ConnectionState` enumeration.
+`ConnectionStatus.state` the high-level state of the connection described in the `ConnectionState` enumeration.
 
-`ConnectionStatus.ping` current ping in milliseconds.
+`ConnectionStatus.ping` the current ping in milliseconds.
 
-`ConnectionStatus.connectionQualityLocal` connection quality measured locally (percentage of packets delivered end-to-end in order).
+`ConnectionStatus.connectionQualityLocal` a connection quality measured locally (percentage of packets delivered end-to-end in order).
 
-`ConnectionStatus.connectionQualityRemote` packet delivery success rate as observed from the remote host.
+`ConnectionStatus.connectionQualityRemote` a packet delivery success rate as observed from the remote host.
 
 `ConnectionStatus.outPacketsPerSecond` 
 
@@ -296,32 +296,32 @@ Contains marshalled data with connection status for frequent requests.
 
 `ConnectionStatus.inBytesPerSecond` 
 
-`ConnectionStatus.sendRateBytesPerSecond` estimate rate at which data can be sent to a peer. It could be significantly higher than `ConnectionStatus.outBytesPerSecond`, meaning the capacity of the channel is higher than outbound data.
+`ConnectionStatus.sendRateBytesPerSecond` the estimated rate at which data can be sent to a peer. It could be significantly higher than `ConnectionStatus.outBytesPerSecond`, meaning the capacity of the channel is higher than outbound data.
 
 `ConnectionStatus.pendingUnreliable` 
 
 `ConnectionStatus.pendingReliable` 
 
-`ConnectionStatus.sentUnackedReliable` a number of bytes of reliable data that has been placed the wire, but for which not yet received an acknowledgment, and thus might have to be re-transmitted.
+`ConnectionStatus.sentUnackedReliable` the number of bytes of reliable data that has been placed the wire, but for which not yet received an acknowledgment, and thus might have to be re-transmitted.
 
 `ConnectionStatus.queueTime` 
 
 #### NetworkingMessage
 Contains marshalled data of networking message.
 
-`NetworkingMessage.userData` arbitrary user data set via `NetworkingSockets.SetConnectionUserData()` function.
+`NetworkingMessage.userData` an arbitrary user data set via `NetworkingSockets.SetConnectionUserData()` function.
 
-`NetworkingMessage.timeReceived` local timestamp when the message was received.
+`NetworkingMessage.timeReceived` the local timestamp when the message was received.
 
-`NetworkingMessage.messageNumber` message number assigned by the sender.
+`NetworkingMessage.messageNumber` the message number assigned by the sender.
 
-`NetworkingMessage.data` message payload. Can be copied using `data.CopyTo(byte[] destination)` function.
+`NetworkingMessage.data` the payload of a message. Can be copied using `data.CopyTo(byte[] destination)` function.
 
-`NetworkingMessage.length` length of the payload.
+`NetworkingMessage.length` the length of a payload.
 
-`NetworkingMessage.connection` connection ID from which the message came from.
+`NetworkingMessage.connection` the connection ID from which the message came from.
 
-`NetworkingMessage.channel` channel number the message was received on.
+`NetworkingMessage.channel` the channel number the message was received on.
 
 ### Classes
 #### NetworkingSockets
@@ -331,7 +331,7 @@ Contains a managed pointer to the sockets.
 
 `NetworkingSockets.Connect(string ip, ushort port)` initiates a connection to a foreign host. Returns a local connection ID.
 
-`NetworkingSockets.AcceptConnection(Connection connection)` 
+`NetworkingSockets.AcceptConnection(Connection connection)` accepts an incoming connection that has received on a listen socket. When a connection attempt is received (perhaps after a few basic handshake packets have been exchanged to prevent trivial spoofing), a connection interface object is created in the `ConnectionState.Connecting` state and a `StatusCallback()` is called.
 
 `NetworkingSockets.CloseConnection(Connection connection, int reason, string debug, bool enableLinger)` 
 
@@ -394,6 +394,6 @@ Contains constant fields.
 
 `Library.Deinitialize()` deinitializes the native library. Should be called after the work is done.
 
-`Library.SetDebugCallback(int detailLevel, DebugCallback callback)` setup callback for debug output.
+`Library.SetDebugCallback(int detailLevel, DebugCallback callback)` setups callback for debug output.
 
 `Library.Time` returns a current local monotonic time in microseconds. It never reset while the application remains alive.
