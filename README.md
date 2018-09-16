@@ -345,9 +345,9 @@ Contains a managed pointer to the sockets.
 
 `NetworkingSockets.GetConnectionName(Connection peer, StringBuilder name, int maxLength)` fetches connection name to the mutable string. Returns true on success or false on failure.
 
-`NetworkingSockets.SendMessageToConnection(Connection connection, byte[] data, SendType flags)` sends a message to the host on the connected socket. The send type parameter is optional. Multiple types can be specified at once. Returns a result described in the `Result` enumeration.
+`NetworkingSockets.SendMessageToConnection(Connection connection, byte[] data, SendType flags)` sends a message to the host on the connected socket. The send type parameter is optional. Multiple flags can be specified at once. Returns a result described in the `Result` enumeration.
 
-`NetworkingSockets.FlushMessagesOnConnection(Connection connection)` 
+`NetworkingSockets.FlushMessagesOnConnection(Connection connection)` if the Nagle is enabled (it's enabled by default) then the message will be queued up the Nagle time before being sent, to merge small messages into the same packet. Call this function to flush any queued messages and send them immediately on the next transmission time.
 
 `NetworkingSockets.ReceiveMessagesOnConnection(Connection connection, ref NetworkingMessage[] messages, int maxMessages)` 
 
