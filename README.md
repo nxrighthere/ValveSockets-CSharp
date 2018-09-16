@@ -275,7 +275,7 @@ Contains marshalled data with connection info.
 
 `ConnectionInfo.endReason` the basic cause of the connection termination or problem.
 
-`ConnectionInfo.endDebug` the explanation in a readable form for connection termination or problem. This is intended for debugging diagnostic purposes only, not for displaying to users. It might have some details specific to the issue.
+`ConnectionInfo.endDebug` the explanation in a human-readable form for connection termination or problem. This is intended for debugging diagnostic purposes only, not for displaying to users. It might have some details specific to the issue.
 
 #### ConnectionStatus
 Contains marshalled data with connection status for frequent requests.
@@ -317,7 +317,7 @@ Contains marshalled data of networking message.
 
 `NetworkingMessage.data` the payload of a message. Can be copied using `data.CopyTo(byte[] destination)` function.
 
-`NetworkingMessage.length` the length of a payload.
+`NetworkingMessage.length` the length of the payload.
 
 `NetworkingMessage.connection` the connection ID from which the message came from.
 
@@ -327,13 +327,13 @@ Contains marshalled data of networking message.
 #### NetworkingSockets
 Contains a managed pointer to the sockets.
 
-`NetworkingSockets.CreateListenSocket(string ip, ushort port)` creates a socket that listens for incoming connections which initiated by `NetworkingSockets.Connect()` function. Returns a socket ID.
+`NetworkingSockets.CreateListenSocket(string ip, ushort port)` creates a socket and returns a socket ID that listens for incoming connections which initiated by `NetworkingSockets.Connect()` function. An IP address parameter is optional.
 
 `NetworkingSockets.Connect(string ip, ushort port)` initiates a connection to a foreign host. Returns a local connection ID.
 
 `NetworkingSockets.AcceptConnection(Connection connection)` accepts an incoming connection that has received on a listen socket. When a connection attempt is received (perhaps after a few basic handshake packets have been exchanged to prevent trivial spoofing), a connection interface object is created in the `ConnectionState.Connecting` state and a `StatusCallback()` is called.
 
-`NetworkingSockets.CloseConnection(Connection connection, int reason, string debug, bool enableLinger)` 
+`NetworkingSockets.CloseConnection(Connection connection, int reason, string debug, bool enableLinger)` disconnects from the host and invalidates the connection handle. Any unread data on the connection is discarded. The reason parameter is an optional user-supplied code that will be received on the other end and recorded (when possible) in backend analytics. The value should be less than `Library.maxCloseReasonValue`. The debug parameter is an optional human-readable diagnostic string that will be received on the other end and recorded (when possible) in backend analytics. If the user wishes to put the socket into a lingering state, where an attempt is made to flush any remaining sent data, the linger parameter should be enabled, otherwise reliable data is not flushed. If the connection has already ended, the reason code, debug string and linger parameter is ignored.
 
 `NetworkingSockets.CloseListenSocket(ListenSocket socket, string remoteReason)` 
 
