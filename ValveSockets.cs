@@ -327,8 +327,8 @@ namespace Valve.Sockets {
 			return SendMessageToConnection(connection, data, SendType.Unreliable);
 		}
 
-		public Result SendMessageToConnection(Connection connection, byte[] data, SendType sendType) {
-			return Native.SteamAPI_ISteamNetworkingSockets_SendMessageToConnection(nativeSockets, connection, data, (uint)data.Length, sendType);
+		public Result SendMessageToConnection(Connection connection, byte[] data, SendType flags) {
+			return Native.SteamAPI_ISteamNetworkingSockets_SendMessageToConnection(nativeSockets, connection, data, (uint)data.Length, flags);
 		}
 
 		public Result FlushMessagesOnConnection(Connection connection) {
@@ -534,7 +534,7 @@ namespace Valve.Sockets {
 		internal static extern bool SteamAPI_ISteamNetworkingSockets_GetConnectionName(IntPtr instance, Connection peer, StringBuilder name, int maxLength);
 
 		[DllImport(nativeLibrary, CallingConvention = CallingConvention.Cdecl)]
-		internal static extern Result SteamAPI_ISteamNetworkingSockets_SendMessageToConnection(IntPtr instance, Connection connection, byte[] data, uint length, SendType sendType);
+		internal static extern Result SteamAPI_ISteamNetworkingSockets_SendMessageToConnection(IntPtr instance, Connection connection, byte[] data, uint length, SendType flags);
 
 		[DllImport(nativeLibrary, CallingConvention = CallingConvention.Cdecl)]
 		internal static extern Result SteamAPI_ISteamNetworkingSockets_FlushMessagesOnConnection(IntPtr instance, Connection connection);
