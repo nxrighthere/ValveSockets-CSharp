@@ -254,7 +254,7 @@ Provides per application events.
 
 ### Structures
 #### StatusInfo
-Contains marshalled data used to notify when a connection state has changed.
+Contains marshalled data with connection state.
 
 `StatusInfo.connection` connection ID.
 
@@ -309,19 +309,19 @@ Contains marshalled data with connection status for frequent requests.
 #### NetworkingMessage
 Contains marshalled data of networking message.
 
-`NetworkingMessage.userData` 
+`NetworkingMessage.userData` arbitrary user data set via `NetworkingSockets.SetConnectionUserData()` function.
 
-`NetworkingMessage.timeReceived` 
+`NetworkingMessage.timeReceived` local timestamp when the message was received.
 
-`NetworkingMessage.messageNumber` 
+`NetworkingMessage.messageNumber` message number assigned by the sender.
 
-`NetworkingMessage.data` 
+`NetworkingMessage.data` message payload. Can be copied using `data.CopyTo(byte[] destination)` function.
 
-`NetworkingMessage.length` 
+`NetworkingMessage.length` length of the payload.
 
-`NetworkingMessage.connection` 
+`NetworkingMessage.connection` the connection ID from which the message came from.
 
-`NetworkingMessage.channel` 
+`NetworkingMessage.channel` the channel number the message was received on.
 
 ### Classes
 #### NetworkingSockets
