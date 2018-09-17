@@ -263,7 +263,7 @@ Contains marshalled data with connection state.
 #### ConnectionInfo
 Contains marshalled data with connection info.
 
-`ConnectionInfo.userData` an user-supplied data set using `NetworkingSockets.SetConnectionUserData()` function.
+`ConnectionInfo.userData` the user-supplied data set using `NetworkingSockets.SetConnectionUserData()` function.
 
 `ConnectionInfo.listenSocket` the listen socket for this connection.
 
@@ -309,7 +309,7 @@ Contains marshalled data with connection status for frequent requests.
 #### NetworkingMessage
 Contains marshalled data of networking message.
 
-`NetworkingMessage.userData` an user-supplied data set using `NetworkingSockets.SetConnectionUserData()` function.
+`NetworkingMessage.userData` the user-supplied data set using `NetworkingSockets.SetConnectionUserData()` function.
 
 `NetworkingMessage.timeReceived` the local timestamp when the message was received.
 
@@ -369,13 +369,13 @@ Contains a managed pointer to the sockets.
 
 `NetworkingSockets.SetConfigurationValue(ConfigurationValue configurationValue, int value)` 
 
-`NetworkingSockets.GetConfigurationValueName(ConfigurationValue configurationValue)` 
+`NetworkingSockets.GetConfigurationValueName(ConfigurationValue configurationValue)` returns the name of a `ConfigurationValue`, or `null` if config value isn't known.
 
-`NetworkingSockets.GetConfigurationString(ConfigurationString configurationString, StringBuilder destination, int destinationLength)` 
+`NetworkingSockets.GetConfigurationString(ConfigurationString configurationString, StringBuilder destination, int destinationLength)`
 
 `NetworkingSockets.SetConfigurationString(ConfigurationString configurationString, string inputString)` 
 
-`NetworkingSockets.GetConfigurationStringName(ConfigurationString configurationString)` 
+`NetworkingSockets.GetConfigurationStringName(ConfigurationString configurationString)` returns the name of a `ConfigurationString`, or `null` if config value isn't known.
 
 `NetworkingSockets.GetConnectionConfigurationValue(Connection connection, ConfigurationValue configurationValue)` gets a configuration values described in the `ConfigurationValue` enumeration. Returns true on success or false on failure.
 
