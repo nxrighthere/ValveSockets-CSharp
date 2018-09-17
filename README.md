@@ -377,9 +377,9 @@ Contains a managed pointer to the sockets.
 
 `NetworkingSockets.GetConfigurationStringName(ConfigurationString configurationString)` 
 
-`NetworkingSockets.GetConnectionConfigurationValue(Connection connection, ConfigurationValue configurationValue)` 
+`NetworkingSockets.GetConnectionConfigurationValue(Connection connection, ConfigurationValue configurationValue)` gets a configuration values described in the `ConfigurationValue` enumeration. Returns true on success or false on failure.
 
-`NetworkingSockets.SetConnectionConfigurationValue(Connection connection, ConfigurationValue configurationValue, int value)` 
+`NetworkingSockets.SetConnectionConfigurationValue(Connection connection, ConfigurationValue configurationValue, int value)` sets a configuration values described in the `ConfigurationValue` enumeration. Returns true on success or false on failure.
 
 `NetworkingSockets.DispatchCallback(StatusCallback callback)` dispatches one callback per call if available.
 
@@ -394,6 +394,6 @@ Contains constant fields.
 
 `Library.Deinitialize()` deinitializes the native library. Should be called after the work is done.
 
-`Library.SetDebugCallback(int detailLevel, DebugCallback callback)` setups callback for debug output.
+`Library.SetDebugCallback(int detailLevel, DebugCallback callback)` sets a callback for debug output.
 
 `Library.Time` returns a current local monotonic time in microseconds. It never reset while the application remains alive.
