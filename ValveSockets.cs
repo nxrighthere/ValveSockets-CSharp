@@ -396,7 +396,7 @@ namespace Valve.Sockets {
 		}
 
 		public string GetConfigurationStringName(ConfigurationString configurationString) {
-			return Native.SteamAPI_ISteamNetworkingSockets_GetConfigurationStringName(nativeSockets, configurationString);;
+			return Native.SteamAPI_ISteamNetworkingSockets_GetConfigurationStringName(nativeSockets, configurationString);
 		}
 
 		public int GetConnectionConfigurationValue(Connection connection, ConfigurationValue configurationValue) {
