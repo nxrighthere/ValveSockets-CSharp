@@ -167,7 +167,7 @@ Definitions of configuration strings:
 
 `ConfigurationString.ClientForceRelayCluster` code of relay cluster to use. If not empty, only relays in that cluster will be used.
 
-`ConfigurationString.ClientDebugTicketAddress` generate an unsigned ticket using the specified gameserver address for debugging. Router must be configured to accept unsigned tickets.
+`ConfigurationString.ClientDebugTicketAddress` generate an unsigned ticket using the specified game server address for debugging. A router must be configured to accept unsigned tickets.
 
 `ConfigurationString.ClientForceProxyAddr` comma-separated list to override relays from the config with this set for debugging.
 
@@ -224,7 +224,7 @@ Definitions of configuration values:
 
 `ConfigurationValue.TimeoutSecondsInitial` a timeout value in seconds, to use when first connecting.
 
-`ConfigurationValue.TimeoutSecondsConnected` a timeout value in seconds, to use after connection is established.
+`ConfigurationValue.TimeoutSecondsConnected` a timeout value in seconds, to use after a connection is established.
 
 #### Result
 Definitions of operation result: 
@@ -296,7 +296,7 @@ Contains marshalled data with connection status for frequent requests.
 
 `ConnectionStatus.inBytesPerSecond` current inbound data rates from recent history.
 
-`ConnectionStatus.sendRateBytesPerSecond` the estimated rate at which data can be sent to a peer. It could be significantly higher than `ConnectionStatus.outBytesPerSecond`, meaning the capacity of the channel is higher than sent data.
+`ConnectionStatus.sendRateBytesPerSecond` the estimated rate at which data can be sent to a peer. It could be significantly higher than `ConnectionStatus.outBytesPerSecond`, meaning the capacity of the channel is higher than the sent data.
 
 `ConnectionStatus.pendingUnreliable` the number of bytes pending to be sent unreliably. This is data that recently requested to be sent but has not yet actually been put on the wire.
 
@@ -388,7 +388,7 @@ Contains constant fields.
 
 `Library.maxCloseMessageLength` the maximum length of the reason string in bytes when a connection is closed.
 
-`Library.Initialize(StringBuilder errorMessage)` initializes the native library. Capacity of a mutable string for an error message must be equal to `Library.maxErrorMessageLength`.
+`Library.Initialize(StringBuilder errorMessage)` initializes the native library. The capacity of a mutable string for an error message must be equal to `Library.maxErrorMessageLength`.
 
 `Library.Deinitialize()` deinitializes the native library. Should be called after the work is done.
 
