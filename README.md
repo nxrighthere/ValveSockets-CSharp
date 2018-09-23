@@ -167,9 +167,9 @@ Definitions of configuration strings:
 
 `ConfigurationString.ClientForceRelayCluster` code of relay cluster to use. If not empty, only relays in that cluster will be used.
 
-`ConfigurationString.ClientDebugTicketAddress` generate an unsigned ticket for debugging, using the specified gameserver address. Router must be configured to accept unsigned tickets.
+`ConfigurationString.ClientDebugTicketAddress` generate an unsigned ticket using the specified gameserver address for debugging. Router must be configured to accept unsigned tickets.
 
-`ConfigurationString.ClientForceProxyAddr` comma-separated list for debugging, to override relays from the config with this set. 
+`ConfigurationString.ClientForceProxyAddr` comma-separated list to override relays from the config with this set for debugging.
 
 #### ConfigurationValue
 Definitions of configuration values: 
@@ -200,7 +200,7 @@ Definitions of configuration values:
 
 `ConfigurationValue.NagleTime` set the Nagle timer in microseconds. When `NetworkingSockets.SendMessageToConnection()` is called, if the outgoing message is less than the size of the MTU, it will be queued for a delay equal to the Nagle timer value. This is to ensure that if the application sends several small messages rapidly, they have coalesced into a single packet. See historical [RFC 896](https://tools.ietf.org/html/rfc896). Default is 5000 microseconds.
 
-`ConfigurationValue.LogLevelAckRTT` set to true (non-zero) to enable logging of RTT based on acks. This doesn't track all sources of RTT, just the inline ones based on acks, but those are the most common.
+`ConfigurationValue.LogLevelAckRTT` set to true (non-zero) to enable logging of round trip time based on acks. This doesn't track all sources of round trip time, just the inline ones based on acks, but those are the most common.
 
 `ConfigurationValue.LogLevelPacket` a log level of SNP packet decoding.
 
@@ -304,8 +304,6 @@ Contains marshalled data with connection status for frequent requests.
 
 `ConnectionStatus.sentUnackedReliable` the number of bytes of reliable data that has been placed the wire, but for which not yet received an acknowledgment, and thus might have to be re-transmitted.
 
-`ConnectionStatus.queueTime` 
-
 #### NetworkingMessage
 Contains marshalled data of networking message.
 
@@ -365,17 +363,17 @@ Contains a managed pointer to the sockets.
 
 `NetworkingSockets.GetConnectionDebugText(Connection connection, StringBuilder debugText, int debugLength)` gets debug text from the connection. Returns true on success or false on failure.
 
-`NetworkingSockets.GetConfigurationValue(ConfigurationValue configurationValue)` 
+`NetworkingSockets.GetConfigurationValue(ConfigurationValue configurationValue)` gets the configuration value described in the `ConfigurationValue` enumeration. Returns -1 if the configuration value is invalid.
 
-`NetworkingSockets.SetConfigurationValue(ConfigurationValue configurationValue, int value)` 
+`NetworkingSockets.SetConfigurationValue(ConfigurationValue configurationValue, int value)` sets the configuration value described in the `ConfigurationValue` enumeration. Returns true on success or false on failure.
 
-`NetworkingSockets.GetConfigurationValueName(ConfigurationValue configurationValue)` returns the name of a `ConfigurationValue`, or `null` if config value isn't known.
+`NetworkingSockets.GetConfigurationValueName(ConfigurationValue configurationValue)` returns the name of a `ConfigurationValue` or `null` if config value isn't known.
 
-`NetworkingSockets.GetConfigurationString(ConfigurationString configurationString, StringBuilder destination, int destinationLength)`
+`NetworkingSockets.GetConfigurationString(ConfigurationString configurationString, StringBuilder destination, int destinationLength)` gets the configuration string described in the `ConfigurationString` enumeration. Returns a length if the capacity of the mutable string is not enough or -1 if the configuration string is invalid.
 
-`NetworkingSockets.SetConfigurationString(ConfigurationString configurationString, string inputString)` 
+`NetworkingSockets.SetConfigurationString(ConfigurationString configurationString, string inputString)` sets the configuration string described in the `ConfigurationString` enumeration. Returns true on success or false on failure.
 
-`NetworkingSockets.GetConfigurationStringName(ConfigurationString configurationString)` returns the name of a `ConfigurationString`, or `null` if config value isn't known.
+`NetworkingSockets.GetConfigurationStringName(ConfigurationString configurationString)` returns the name of a `ConfigurationString` or `null` if config value isn't known.
 
 `NetworkingSockets.GetConnectionConfigurationValue(Connection connection, ConfigurationValue configurationValue)` gets a configuration values described in the `ConfigurationValue` enumeration. Returns true on success or false on failure.
 
