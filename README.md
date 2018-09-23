@@ -347,19 +347,19 @@ Contains a managed pointer to the sockets.
 
 `NetworkingSockets.FlushMessagesOnConnection(Connection connection)` if the Nagle is enabled (it's enabled by default) then the message will be queued up the Nagle time before being sent, to merge small messages into the same packet. Call this function to flush any queued messages and send them immediately on the next transmission time. Returns a result described in the `Result` enumeration.
 
-`NetworkingSockets.ReceiveMessagesOnConnection(Connection connection, ref NetworkingMessage[] messages, int maxMessages)` 
+`NetworkingSockets.ReceiveMessagesOnConnection(Connection connection, ref NetworkingMessage[] messages, int maxMessages)` fetches the next available messages from the socket for a connection. Returns a number of messages or -1 if the connection handle is invalid. The order of the messages returned in the array is relevant. Reliable messages will be received in the order they were sent. If any messages are obtained, `message.Destroy()` should be called for each of them to free up resources.
 
-`NetworkingSockets.ReceiveMessagesOnListenSocket(ListenSocket socket, ref NetworkingMessage[] messages, int maxMessages)` 
+`NetworkingSockets.ReceiveMessagesOnListenSocket(ListenSocket socket, ref NetworkingMessage[] messages, int maxMessages)` fetches the next available messages from the socket. Returns a number of messages or -1 if the connection handle is invalid. Delivery order of messages among different clients is not defined. They may be returned in an order different from what they were actually received. Delivery order of messages from the same client is well defined, and thus the order of the messages is relevant. If any messages are obtained, `message.Destroy()` should be called for each of them to free up resources.
 
-`NetworkingSockets.GetConnectionInfo(Connection connection, ref ConnectionInfo info)` 
+`NetworkingSockets.GetConnectionInfo(Connection connection, ref ConnectionInfo info)` gets information about the specified connection. Returns true on success or false on failure.
 
-`NetworkingSockets.GetQuickConnectionStatus(Connection connection, ConnectionStatus status)` 
+`NetworkingSockets.GetQuickConnectionStatus(Connection connection, ConnectionStatus status)` gets a brief set of connection status that can be displayed to the user in-game. Returns true on success or false on failure.
 
-`NetworkingSockets.GetDetailedConnectionStatus(Connection connection, StringBuilder status, int statusLength)` 
+`NetworkingSockets.GetDetailedConnectionStatus(Connection connection, StringBuilder status, int statusLength)` gets detailed connection stats in a printable form. Returns 0 on success, -1 on failure, or > 0 if a capacity of the mutable string is not enough.
 
-`NetworkingSockets.GetListenSocketInfo(ListenSocket socket, uint ip, ushort port)` 
+`NetworkingSockets.GetListenSocketInfo(ListenSocket socket, uint ip, ushort port)` gets information about the listen socket. Returns true on success or false on failure.
 
-`NetworkingSockets.CreateSocketPair(Connection connectionOne, Connection connectionTwo, bool useNetworkLoopback)` 
+`NetworkingSockets.CreateSocketPair(Connection connectionOne, Connection connectionTwo, bool useNetworkLoopback)` creates a pair of connections that are talking to each other e.g. a loopback communication. The two connections will be immediately placed into the connected state, and no callbacks will be called. After this, if either connection is closed, the other connection will receive a callback, exactly as if they were communicating over the network. By default, internal buffers are used, completely bypassing the network, the chopping up of messages into packets, encryption, copying the payload, etc. This means that loopback packets, by default, will not simulate lag or loss. Enabled network loopback parameter will cause the socket pair to send packets through the local network loopback device (127.0.0.1) on ephemeral ports. Fake lag and loss are supported in this case, and CPU time is expended to encrypt and decrypt.
 
 `NetworkingSockets.GetConnectionDebugText(Connection connection, StringBuilder debugText, int debugLength)` gets debug text from the connection. Returns true on success or false on failure.
 
@@ -367,9 +367,9 @@ Contains a managed pointer to the sockets.
 
 `NetworkingSockets.SetConfigurationValue(ConfigurationValue configurationValue, int value)` sets the configuration value described in the `ConfigurationValue` enumeration. Returns true on success or false on failure.
 
-`NetworkingSockets.GetConfigurationValueName(ConfigurationValue configurationValue)` returns the name of a `ConfigurationValue` or `null` if config value isn't known.
+`NetworkingSockets.GetConfigurationValueName(ConfigurationValue configurationValue)` returns a name of the `ConfigurationValue` or `null` if config value isn't known.
 
-`NetworkingSockets.GetConfigurationString(ConfigurationString configurationString, StringBuilder destination, int destinationLength)` gets the configuration string described in the `ConfigurationString` enumeration. Returns a length if the capacity of the mutable string is not enough or -1 if the configuration string is invalid.
+`NetworkingSockets.GetConfigurationString(ConfigurationString configurationString, StringBuilder destination, int destinationLength)` gets the configuration string described in the `ConfigurationString` enumeration. Returns a length if a capacity of the mutable string is not enough or -1 if the configuration string is invalid.
 
 `NetworkingSockets.SetConfigurationString(ConfigurationString configurationString, string inputString)` sets the configuration string described in the `ConfigurationString` enumeration. Returns true on success or false on failure.
 
