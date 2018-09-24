@@ -200,7 +200,7 @@ Definitions of configuration values:
 
 `ConfigurationValue.NagleTime` set the Nagle timer in microseconds. When `NetworkingSockets.SendMessageToConnection()` is called, if the outgoing message is less than the size of the MTU, it will be queued for a delay equal to the Nagle timer value. This is to ensure that if the application sends several small messages rapidly, they have coalesced into a single packet. See historical [RFC 896](https://tools.ietf.org/html/rfc896). Default is 5000 microseconds.
 
-`ConfigurationValue.LogLevelAckRTT` set to true (non-zero) to enable logging of round trip time based on acks. This doesn't track all sources of round trip time, just the inline ones based on acks, but those are the most common.
+`ConfigurationValue.LogLevelAckRTT` set to non-zero value to enable logging of round trip time based on acks. This doesn't track all sources of round trip time, just the inline ones based on acks, but those are the most common.
 
 `ConfigurationValue.LogLevelPacket` a log level of SNP packet decoding.
 
