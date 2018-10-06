@@ -158,7 +158,7 @@ Definitions of connection states for `ConnectionInfo.state` field:
 
 `ConnectionState.Connected` a connection request initiated by `NetworkingSockets.Connect()` function has completed.
 
-`ConnectionState.ClosedByPeer` a connection has been closed by the peer, but not closed locally. If there are any messages in the inbound queue, they can be retrieved. Otherwise, nothing may be done with the connection except to close it. The connection still exists from an API perspective and must be closed to free up resources.
+`ConnectionState.ClosedByPeer` a connection has been closed by the peer, but not closed locally. If there are any messages in the inbound queue, they can be retrieved. Otherwise, nothing may be done with the connection except to close it using `NetworkingSockets.CloseConnection()` function. The connection still exists from an API perspective and must be closed to free up resources.
 
 `ConnectionState.ProblemDetectedLocally` a disruption in the connection has been detected locally. Attempts to send further messages will fail. Any remaining received messages in the queue are available. The connection still exists from an API perspective and must be closed to free up resources.
 
