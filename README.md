@@ -313,7 +313,7 @@ Contains marshalled data of networking message.
 
 `NetworkingMessage.messageNumber` the message number assigned by the sender.
 
-`NetworkingMessage.data` the payload of a message. Can be copied using `data.CopyTo(byte[] destination)` function.
+`NetworkingMessage.data` the payload of a message. Can be copied using `message.CopyTo(byte[] destination)` function.
 
 `NetworkingMessage.length` the length of the payload.
 
