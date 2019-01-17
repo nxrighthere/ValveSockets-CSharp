@@ -32,12 +32,12 @@ StatusCallback status = (info, context) => {
 			break;
 
 		case ConnectionState.Connected:
-			Console.WriteLine("Client connected - ID: " + info.connection + ", IP: " + info.connectionInfo.address.ip.ParseIP());
+			Console.WriteLine("Client connected - ID: " + info.connection + ", IP: " + info.connectionInfo.address.GetIP());
 			break;
 
 		case ConnectionState.ClosedByPeer:
 			server.CloseConnection(info.connection);
-			Console.WriteLine("Client disconnected - ID: " + info.connection + ", IP: " + info.connectionInfo.address.ip.ParseIP());
+			Console.WriteLine("Client disconnected - ID: " + info.connection + ", IP: " + info.connectionInfo.address.GetIP());
 			break;
 	}
 };
@@ -277,11 +277,13 @@ Provides per application events.
 #### Address
 Contains marshalled structure with an IP address and port number.
 
-`Address.ip` IP address. The extension `ParseIP()` function can be used to get an IP address in a printable form.
+`Address.ip` IP address in bytes.
 
 `Address.port` port number.
 
 `Address.IsLocalHost` checks if identity is localhost.
+
+`Address.GetIP()` gets an IP address in a printable form.
 
 `Address.SetLocalHost(ushort port)` sets localhost with a specified port.
 
@@ -349,9 +351,9 @@ Contains marshalled data of networking identity.
 
 `NetworkingIdentity.IsInvalid` checks if identity has the invalid type.
 
-`NetworkingIdentity.SetSteamID(ulong steamID)` sets Steam ID.
-
 `NetworkingIdentity.GetSteamID()` gets Steam ID.
+
+`NetworkingIdentity.SetSteamID(ulong steamID)` sets Steam ID.
 
 `NetworkingIdentity.EqualsTo(NetworkingIdentity identity)` checks if two identities are identical.
 
