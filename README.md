@@ -160,10 +160,6 @@ Definitions of identity type for `NetworkingIdentity` structure:
 
 `IdentityType.IPAddress` IPv4/IPv6 address.
 
-`IdentityType.GenericString` application-specific string.
-
-`IdentityType.GenericBytes` application-specific bytes.
-
 `IdentityType.SteamID` Steam identifier.
 
 #### ConnectionState
