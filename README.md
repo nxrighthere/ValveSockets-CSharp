@@ -264,7 +264,7 @@ Definitions of operation result:
 
 `Result.InvalidState` called object was in an invalid state.
 
-`Result.Ignored` target is ignoring sender.
+`Result.Ignored` target is ignoring a sender.
 
 ### Delegates
 #### Socket callbacks
@@ -368,7 +368,7 @@ Contains marshalled data of networking message.
 
 `NetworkingMessage.timeReceived` local timestamp when the message was received.
 
-`NetworkingMessage.messageNumber` message number assigned by the sender.
+`NetworkingMessage.messageNumber` message number assigned by a sender.
 
 `NetworkingMessage.data` payload of a message.
 
