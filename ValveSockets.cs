@@ -409,18 +409,18 @@ namespace Valve.Sockets {
 			return Native.SteamAPI_ISteamNetworkingSockets_FlushMessagesOnConnection(nativeSockets, connection);
 		}
 
-		public int ReceiveMessagesOnConnection(Connection connection, ref NetworkingMessage[] messages, int maxMessages) {
+		public int ReceiveMessagesOnConnection(Connection connection, NetworkingMessage[] messages, int maxMessages) {
 			IntPtr nativeMessages = IntPtr.Zero;
 			int messagesCount = Native.SteamAPI_ISteamNetworkingSockets_ReceiveMessagesOnConnection(nativeSockets, connection, out nativeMessages, maxMessages);
-			MarshalMessages(nativeMessages, ref messages, messagesCount);
+			MarshalMessages(nativeMessages, messages, messagesCount);
 
 			return messagesCount;
 		}
 
-		public int ReceiveMessagesOnListenSocket(ListenSocket socket, ref NetworkingMessage[] messages, int maxMessages) {
+		public int ReceiveMessagesOnListenSocket(ListenSocket socket, NetworkingMessage[] messages, int maxMessages) {
 			IntPtr nativeMessages = IntPtr.Zero;
 			int messagesCount = Native.SteamAPI_ISteamNetworkingSockets_ReceiveMessagesOnListenSocket(nativeSockets, socket, out nativeMessages, maxMessages);
-			MarshalMessages(nativeMessages, ref messages, messagesCount);
+			MarshalMessages(nativeMessages, messages, messagesCount);
 
 			return messagesCount;
 		}
@@ -489,7 +489,7 @@ namespace Valve.Sockets {
 			Native.SteamAPI_ISteamNetworkingSockets_RunConnectionStatusChangedCallbacks(nativeSockets, callback, context);
 		}
 
-		private void MarshalMessages(IntPtr nativeMessages, ref NetworkingMessage[] messages, int messagesCount) {
+		private void MarshalMessages(IntPtr nativeMessages, NetworkingMessage[] messages, int messagesCount) {
 			for (int i = 0; i < messagesCount; i++) {
 				IntPtr nativeMessage = new IntPtr(nativeMessages.ToInt64() + (nativeMessageSize * i));
 
