@@ -47,7 +47,7 @@ NetworkingMessage[] netMessages = new NetworkingMessage[1];
 while (!Console.KeyAvailable) {
 	server.DispatchCallback(status);
 
-	int netMessagesCount = server.ReceiveMessagesOnListenSocket(listenSocket, ref netMessages, 1);
+	int netMessagesCount = server.ReceiveMessagesOnListenSocket(listenSocket, netMessages, 1);
 
 	if (netMessagesCount > 0) {
 		Console.WriteLine("Message received from - ID: " + netMessages[0].connection + ", Channel ID: " + netMessages[0].channel + ", Data length: " + netMessages[0].length);
@@ -93,7 +93,7 @@ NetworkingMessage[] netMessages = new NetworkingMessage[1];
 while (!Console.KeyAvailable) {
 	client.DispatchCallback(status);
 
-	int netMessagesCount = client.ReceiveMessagesOnConnection(connection, ref netMessages, 1);
+	int netMessagesCount = client.ReceiveMessagesOnConnection(connection, netMessages, 1);
 
 	if (netMessagesCount > 0) {
 		Console.WriteLine("Message received from server - Channel ID: " + netMessages[0].channel + ", Data length: " + netMessages[0].length);
