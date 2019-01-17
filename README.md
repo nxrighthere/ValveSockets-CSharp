@@ -317,7 +317,7 @@ Contains marshalled data with connection info.
 
 `ConnectionInfo.endDebug` explanation in a human-readable form for connection termination or problem. This is intended for debugging diagnostic purposes only, not for displaying to users. It might have some details specific to the issue.
 
-`ConnectionInfo.connectionDescription` 
+`ConnectionInfo.connectionDescription` debug description includes the connection handle, connection type, and peer information.
 
 #### ConnectionStatus
 Contains marshalled data with connection status for frequent requests.
@@ -420,7 +420,7 @@ Contains a managed pointer to the sockets.
 
 `NetworkingSockets.GetListenSocketAddress(ListenSocket socket, ref Address address)` gets local IP and port number of a listen socket. Returns true on success or false on failure.
 
-`NetworkingSockets.CreateSocketPair(Connection connectionOne, Connection connectionTwo, bool useNetworkLoopback)` creates a pair of connections that are talking to each other e.g. a loopback communication. The two connections will be immediately placed into the connected state, and no callbacks will be called. After this, if either connection is closed, the other connection will receive a callback, exactly as if they were communicating over the network. By default, internal buffers are used, completely bypassing the network, the chopping up of messages into packets, encryption, copying the payload, etc. This means that loopback packets, by default, will not simulate lag or loss. Enabled network loopback parameter will cause the socket pair to send packets through the local network loopback device (127.0.0.1) on ephemeral ports. Fake lag and loss are supported in this case, and CPU time is expended to encrypt and decrypt.
+`NetworkingSockets.CreateSocketPair(Connection connectionOne, Connection connectionTwo, bool useNetworkLoopback)` creates a pair of connections that are talking to each other e.g. a loopback communication. The two connections will be immediately placed into the connected state, and no callbacks will be called. After this, if either connection is closed, the other connection will receive a callback, exactly as if they were communicating over the network. By default, internal buffers are used, completely bypassing the network, the chopping up of messages into packets, encryption, copying the payload, etc. This means that loopback packets, by default, will not simulate lag or loss. Enabled network loopback parameter will cause the socket pair to send packets through the local network loopback device on ephemeral ports. Fake lag and loss are supported in this case, and CPU time is expended to encrypt and decrypt.
 
 `NetworkingSockets.GetConnectionDebugText(Connection connection, StringBuilder debugText, int debugLength)` gets debug text from the connection. Returns true on success or false on failure.
 
