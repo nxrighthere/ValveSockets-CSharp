@@ -394,11 +394,15 @@ namespace Valve.Sockets {
 		}
 
 		public Result SendMessageToConnection(Connection connection, byte[] data) {
-			return SendMessageToConnection(connection, data, SendType.Unreliable);
+			return SendMessageToConnection(connection, data, data.Length, SendType.Unreliable);
 		}
 
 		public Result SendMessageToConnection(Connection connection, byte[] data, SendType flags) {
-			return Native.SteamAPI_ISteamNetworkingSockets_SendMessageToConnection(nativeSockets, connection, data, (uint)data.Length, flags);
+			return SendMessageToConnection(connection, data, data.Length, SendType.Unreliable);
+		}
+
+		public Result SendMessageToConnection(Connection connection, byte[] data, int length, SendType flags) {
+			return Native.SteamAPI_ISteamNetworkingSockets_SendMessageToConnection(nativeSockets, connection, data, (uint)length, flags);
 		}
 
 		public Result FlushMessagesOnConnection(Connection connection) {
