@@ -292,8 +292,12 @@ namespace Valve.Sockets {
 			Native.SteamAPI_SteamNetworkingIdentity_SetSteamID64(ref this, steamID);
 		}
 
-		public ulong GetStreamID() {
+		public ulong GetSteamID() {
 			return Native.SteamAPI_SteamNetworkingIdentity_GetSteamID64(this);
+		}
+
+		public bool EqualsTo(NetworkingIdentity identity) {
+			return Native.SteamAPI_SteamNetworkingIdentity_EqualTo(this, identity);
 		}
 	}
 
@@ -536,7 +540,7 @@ namespace Valve.Sockets {
 			IPAddress address = default(IPAddress);
 
 			if (IPAddress.TryParse(ip, out address)) {
-				if (address.AddressFamily != AddressFamily.InterNetworkV6 )
+				if (address.AddressFamily != AddressFamily.InterNetworkV6)
 					throw new Exception("Incorrect format of an IPv6 address");
 			}
 
@@ -689,6 +693,9 @@ namespace Valve.Sockets {
 
 		[DllImport(nativeLibrary, CallingConvention = CallingConvention.Cdecl)]
 		internal static extern ulong SteamAPI_SteamNetworkingIdentity_GetSteamID64(NetworkingIdentity identity);
+
+		[DllImport(nativeLibrary, CallingConvention = CallingConvention.Cdecl)]
+		internal static extern bool SteamAPI_SteamNetworkingIdentity_EqualTo(NetworkingIdentity identityOne, NetworkingIdentity identityTwo);
 
 		[DllImport(nativeLibrary, CallingConvention = CallingConvention.Cdecl)]
 		internal static extern void SteamAPI_ISteamNetworkingSockets_RunConnectionStatusChangedCallbacks(IntPtr instance, StatusCallback callback, IntPtr context);
