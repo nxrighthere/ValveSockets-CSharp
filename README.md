@@ -287,7 +287,7 @@ Contains marshalled structure with an IP address and port number.
 
 `Address.IsLocalHost` checks if identity is localhost.
 
-`Address.SetLocalHost(ushort port)` sets `::1` IPv6 address with a specified port.
+`Address.SetLocalHost(ushort port)` sets localhost with a specified port.
 
 `Address.SetIPv4(string ip, ushort port)` sets an IPv4 address with a specified port.
 
