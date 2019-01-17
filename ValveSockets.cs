@@ -220,6 +220,10 @@ namespace Valve.Sockets {
 			}
 		}
 
+		public string GetIP() {
+			return ip.ParseIP();
+		}
+
 		public void SetLocalHost(ushort port) {
 			Native.SteamAPI_SteamNetworkingIPAddr_SetIPv6LocalHost(ref this, port);
 		}
@@ -288,12 +292,12 @@ namespace Valve.Sockets {
 			}
 		}
 
-		public void SetSteamID(ulong steamID) {
-			Native.SteamAPI_SteamNetworkingIdentity_SetSteamID64(ref this, steamID);
-		}
-
 		public ulong GetSteamID() {
 			return Native.SteamAPI_SteamNetworkingIdentity_GetSteamID64(this);
+		}
+
+		public void SetSteamID(ulong steamID) {
+			Native.SteamAPI_SteamNetworkingIdentity_SetSteamID64(ref this, steamID);
 		}
 
 		public bool EqualsTo(NetworkingIdentity identity) {
