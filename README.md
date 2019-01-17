@@ -351,6 +351,14 @@ Contains marshalled data of networking identity.
 
 `NetworkingIdentity.type` description of a networking identity.
 
+`NetworkingIdentity.IsInvalid` checks if identity has the invalid type.
+
+`NetworkingIdentity.SetSteamID(ulong steamID)` sets Steam ID.
+
+`NetworkingIdentity.GetSteamID()` gets Steam ID.
+
+`NetworkingIdentity.EqualsTo(NetworkingIdentity identity)` checks if two identities are identical.
+
 #### NetworkingMessage
 Contains marshalled data of networking message.
 
