@@ -158,7 +158,7 @@ Definitions of identity type for `NetworkingIdentity` structure:
 
 `IdentityType.Invalid` unknown or invalid.
 
-`IdentityType.IPAddress` IPv4 or IPv6 address.
+`IdentityType.IPAddress` IPv4/IPv6 address.
 
 `IdentityType.GenericString` application-specific string.
 
@@ -281,54 +281,54 @@ Provides per application events.
 #### Address
 Contains marshalled structure with an IP address and port number.
 
-`Address.ip` 
+`Address.ip` IP address. The extension `ParseIP()` function can be used to get an IP address in a printable form.
 
-`Address.port` 
+`Address.port` port number.
 
-`Address.IsLocalHost` 
+`Address.IsLocalHost` checks if identity is localhost.
 
-`Address.SetLocalHost(ushort port)` 
+`Address.SetLocalHost(ushort port)` sets `::1` IPv6 address with a specified port.
 
-`Address.SetIPv4(string ip, ushort port)` 
+`Address.SetIPv4(string ip, ushort port)` sets an IPv4 address with a specified port.
 
-`Address.SetIPv6(string ip, ushort port)` 
+`Address.SetIPv6(string ip, ushort port)` sets an IPv6 address with a specified port.
 
 #### StatusInfo
 Contains marshalled data with connection state.
 
-`StatusInfo.connection` the connection ID.
+`StatusInfo.connection` connection ID.
 
 `StatusInfo.connectionInfo` essentially `ConnectionInfo` structure with marshalled data.
 
 #### ConnectionInfo
 Contains marshalled data with connection info.
 
-`ConnectionInfo.identity` 
+`ConnectionInfo.identity` identifier of an endpoint.
 
-`ConnectionInfo.userData` the user-supplied data set using `NetworkingSockets.SetConnectionUserData()` function.
+`ConnectionInfo.userData` user-supplied data set using `NetworkingSockets.SetConnectionUserData()` function.
 
-`ConnectionInfo.listenSocket` the listen socket for this connection.
+`ConnectionInfo.listenSocket` listen socket for this connection.
 
-`ConnectionInfo.address` 
+`ConnectionInfo.address` remote address of an endpoint.
 
-`ConnectionInfo.state` the high-level state of the connection described in the `ConnectionState` enumeration.
+`ConnectionInfo.state` high-level state of the connection described in the `ConnectionState` enumeration.
 
-`ConnectionInfo.endReason` the basic cause of the connection termination or problem.
+`ConnectionInfo.endReason` basic cause of the connection termination or problem.
 
-`ConnectionInfo.endDebug` the explanation in a human-readable form for connection termination or problem. This is intended for debugging diagnostic purposes only, not for displaying to users. It might have some details specific to the issue.
+`ConnectionInfo.endDebug` explanation in a human-readable form for connection termination or problem. This is intended for debugging diagnostic purposes only, not for displaying to users. It might have some details specific to the issue.
 
 `ConnectionInfo.connectionDescription` 
 
 #### ConnectionStatus
 Contains marshalled data with connection status for frequent requests.
 
-`ConnectionStatus.state` the high-level state of the connection described in the `ConnectionState` enumeration.
+`ConnectionStatus.state` high-level state of the connection described in the `ConnectionState` enumeration.
 
-`ConnectionStatus.ping` the current ping in milliseconds.
+`ConnectionStatus.ping` current ping in milliseconds.
 
-`ConnectionStatus.connectionQualityLocal` a connection quality measured locally (percentage of packets delivered end-to-end in order).
+`ConnectionStatus.connectionQualityLocal` connection quality measured locally (percentage of packets delivered end-to-end in order).
 
-`ConnectionStatus.connectionQualityRemote` a packet delivery success rate as observed from the remote host.
+`ConnectionStatus.connectionQualityRemote` packet delivery success rate as observed from the remote host.
 
 `ConnectionStatus.outPacketsPerSecond` current outbound packet rates from recent history.
 
@@ -338,41 +338,41 @@ Contains marshalled data with connection status for frequent requests.
 
 `ConnectionStatus.inBytesPerSecond` current inbound data rates from recent history.
 
-`ConnectionStatus.sendRateBytesPerSecond` the estimated rate at which data can be sent to a peer. It could be significantly higher than `ConnectionStatus.outBytesPerSecond`, meaning the capacity of the channel is higher than the sent data.
+`ConnectionStatus.sendRateBytesPerSecond` estimated rate at which data can be sent to a peer. It could be significantly higher than `ConnectionStatus.outBytesPerSecond`, meaning the capacity of the channel is higher than the sent data.
 
-`ConnectionStatus.pendingUnreliable` the number of bytes pending to be sent unreliably. This is data that recently requested to be sent but has not yet actually been put on the wire.
+`ConnectionStatus.pendingUnreliable` number of bytes pending to be sent unreliably. This is data that recently requested to be sent but has not yet actually been put on the wire.
 
-`ConnectionStatus.pendingReliable` the number of bytes pending to be sent reliably. The reliable number also includes data that was previously placed on the wire but has now been scheduled for re-transmission. Thus, it's possible to observe increasing of the bytes between two checks, even if no calls were made to send reliable data between the checks. Data that is awaiting the Nagle delay will appear in these numbers.
+`ConnectionStatus.pendingReliable` number of bytes pending to be sent reliably. The reliable number also includes data that was previously placed on the wire but has now been scheduled for re-transmission. Thus, it's possible to observe increasing of the bytes between two checks, even if no calls were made to send reliable data between the checks. Data that is awaiting the Nagle delay will appear in these numbers.
 
-`ConnectionStatus.sentUnackedReliable` the number of bytes of reliable data that has been placed the wire, but for which not yet received an acknowledgment, and thus might have to be re-transmitted.
+`ConnectionStatus.sentUnackedReliable` number of bytes of reliable data that has been placed the wire, but for which not yet received an acknowledgment, and thus might have to be re-transmitted.
 
 #### NetworkingIdentity
 Contains marshalled data of networking identity.
 
-`NetworkingIdentity.type` 
+`NetworkingIdentity.type` description of a networking identity.
 
 #### NetworkingMessage
 Contains marshalled data of networking message.
 
-`NetworkingMessage.identity` 
+`NetworkingMessage.identity` identifier of a sender.
 
-`NetworkingMessage.userData` the user-supplied data set using `NetworkingSockets.SetConnectionUserData()` function.
+`NetworkingMessage.userData` user-supplied data set using `NetworkingSockets.SetConnectionUserData()` function.
 
-`NetworkingMessage.timeReceived` the local timestamp when the message was received.
+`NetworkingMessage.timeReceived` local timestamp when the message was received.
 
-`NetworkingMessage.messageNumber` the message number assigned by the sender.
+`NetworkingMessage.messageNumber` message number assigned by the sender.
 
-`NetworkingMessage.data` the payload of a message.
+`NetworkingMessage.data` payload of a message.
 
-`NetworkingMessage.length` the length of the payload.
+`NetworkingMessage.length` length of the payload.
 
-`NetworkingMessage.connection` the connection ID from which the message came from.
+`NetworkingMessage.connection` connection ID from which the message came from.
 
-`NetworkingMessage.channel` the channel number the message was received on.
+`NetworkingMessage.channel` channel number the message was received on.
 
-`NetworkingMessage.CopyTo()` 
+`NetworkingMessage.CopyTo()` copies payload from the message to the destination array.
 
-`NetworkingMessage.Destroy()` 
+`NetworkingMessage.Destroy()` destroys the message. Should be called only when the message obtained using `NetworkingSockets.ReceiveMessagesOnListenSocket` function.
 
 ### Classes
 #### NetworkingSockets
@@ -380,7 +380,7 @@ Contains a managed pointer to the sockets.
 
 `NetworkingSockets.CreateListenSocket(Address address)` creates a socket and returns a socket ID that listens for incoming connections which initiated by `NetworkingSockets.Connect()` function.
 
-`NetworkingSockets.Connect(Address address)` initiates a connection (IPv4/IPv6) to a foreign host. Returns a local connection ID.
+`NetworkingSockets.Connect(Address address)` initiates a connection to a foreign host. Returns a local connection ID.
 
 `NetworkingSockets.AcceptConnection(Connection connection)` accepts an incoming connection that has received on a listen socket. When a connection attempt is received (perhaps after a few basic handshake packets have been exchanged to prevent trivial spoofing), a connection interface object is created in the `ConnectionState.Connecting` state and a `StatusCallback()` is called. Returns a result described in the `Result` enumeration.
 
