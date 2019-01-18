@@ -378,7 +378,7 @@ Contains marshalled data of networking message.
 
 `NetworkingMessage.CopyTo(byte[] destination)` copies payload from the message to the destination array.
 
-`NetworkingMessage.Destroy()` destroys the message. Should be called only when the message obtained using `NetworkingSockets.ReceiveMessagesOnListenSocket` function.
+`NetworkingMessage.Destroy()` destroys the message. Should be called only when the message obtained using `NetworkingSockets.ReceiveMessagesOnListenSocket()` function.
 
 ### Classes
 #### NetworkingSockets
