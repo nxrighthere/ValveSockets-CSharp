@@ -118,22 +118,15 @@ byte[] buffer = new byte[1024];
 netMessages[0].CopyTo(buffer);
 ```
 
-##### Set a custom configuration:
-```c#
-sockets.SetConfigurationValue(ConfigurationValue.FakePacketLagSend, 80);
-sockets.SetConfigurationValue(ConfigurationValue.FakePacketLossSend, 25);
-sockets.SetConfigurationValue(ConfigurationValue.FakePacketReorderSend, 25);
-sockets.SetConfigurationValue(ConfigurationValue.TimeoutSecondsInitial, 30);
-sockets.SetConfigurationValue(ConfigurationValue.TimeoutSecondsConnected, 60);
-```
-
 ##### Set a hook for debug information:
 ```c#
 DebugCallback debug = (type, message) => {
 	Console.WriteLine("Debug - Type: " + type + ", Message: " + message);
 };
 
-Library.SetDebugCallback(10, debug);
+NetworkingUtils utils = new NetworkingUtils();
+
+utils.SetDebugCallback(DebugType.Everything, debug);
 ```
 
 ### Unity
@@ -177,75 +170,20 @@ Definitions of connection states for `ConnectionInfo.state` field:
 
 `ConnectionState.ProblemDetectedLocally` a disruption in the connection has been detected locally. Attempts to send further messages will fail. Any remaining received messages in the queue are available. The connection still exists from an API perspective and must be closed to free up resources.
 
-#### ConfigurationString
-Definitions of configuration strings: 
+#### ConfigurationScope
 
-`ConfigurationString.ClientForceRelayCluster` code of relay cluster to use. If not empty, only relays in that cluster will be used.
 
-`ConfigurationString.ClientDebugTicketAddress` generate an unsigned ticket using the specified game server address for debugging. A router must be configured to accept unsigned tickets.
+#### ConfigurationDataType
 
-`ConfigurationString.ClientForceProxyAddr` comma-separated list to override relays from the config with this set for debugging.
 
 #### ConfigurationValue
-Definitions of configuration values: 
 
-`ConfigurationValue.FakeMessageLossSend` randomly discard unreliable messages instead of sending. Expected value 0-100.
 
-`ConfigurationValue.FakeMessageLossRecv` randomly discard unreliable messages upon receive. Expected value 0-100.
+#### ConfigurationValueResult
 
-`ConfigurationValue.FakePacketLossSend` randomly discard packets instead of sending. Expected value 0-100.
 
-`ConfigurationValue.FakePacketLossRecv` randomly discard packets upon receive. Expected value 0-100.
+#### DebugType
 
-`ConfigurationValue.FakePacketReorderSend` globally reorder outbound packets by N percentage. Expected value 0-100.
-
-`ConfigurationValue.FakePacketReorderRecv` globally reorder inbound packets by N percentage. Expected value 0-100.
-
-`ConfigurationValue.FakePacketLagSend` globally delay all outbound packets by N milliseconds before sending.
-
-`ConfigurationValue.FakePacketLagRecv` globally delay all inbound packets by N milliseconds before processing.
-
-`ConfigurationValue.FakePacketReorderTime` amount of delay in milliseconds, to apply packets reordering.
-
-`ConfigurationValue.SendBufferSize` an upper limit of buffered pending bytes to be sent. If this limit is reached, then `NetworkingSockets.SendMessageToConnection()` function will return `Result.LimitExceeded`. Default is 524,288 bytes.
-
-`ConfigurationValue.MaxRate` a maximum send rate clamp. This value will control the maximum allowed sending rate that congestion is allowed to reach. Default is 0 which means no limit.
-
-`ConfigurationValue.MinRate` a minimum send rate clamp. This value will control the minimum allowed sending rate that congestion is allowed to reach. Default is 0 which means no limit.
-
-`ConfigurationValue.NagleTime` set the Nagle timer in microseconds. When `NetworkingSockets.SendMessageToConnection()` is called, if the outgoing message is less than the size of the MTU, it will be queued for a delay equal to the Nagle timer value. This is to ensure that if the application sends several small messages rapidly, they have coalesced into a single packet. See historical [RFC 896](https://tools.ietf.org/html/rfc896). Default is 5000 microseconds.
-
-`ConfigurationValue.LogLevelAckRTT` set to non-zero value to enable logging of round trip time based on acks. This doesn't track all sources of round trip time, just the inline ones based on acks, but those are the most common.
-
-`ConfigurationValue.LogLevelPacket` a log level of SNP packet decoding.
-
-`ConfigurationValue.LogLevelMessage` a log when messages are sent/received.
-
-`ConfigurationValue.LogLevelPacketGaps` a log level when individual packets drop.
-
-`ConfigurationValue.LogLevelP2PRendezvous` a log level for P2P rendezvous.
-
-`ConfigurationValue.LogLevelRelayPings` a log level for sending and receiving pings to relays.
-
-`ConfigurationValue.ClientConsecutitivePingTimeoutsFailInitial` if the first N pings to a port fail, mark that port as unavailable for a while, and try a different one. Some ISPs and routers may drop the first packet, so setting this to 1 may greatly disrupt communications.
-
-`ConfigurationValue.ClientConsecutitivePingTimeoutsFail` if N consecutive pings to a port fail, after having received successful communication, mark that port as unavailable for a while, and try a different one.
-
-`ConfigurationValue.ClientMinPingsBeforePingAccurate` the minimum number of lifetime pings that need to send, before think that estimate is solid. The first ping to each cluster is very often delayed because of NAT, routers not having the best route, etc. Until a sufficient number of pings is sent, our estimate is often inaccurate.
-
-`ConfigurationValue.ClientSingleSocket` set all datagram traffic to originate from the same local port. By default, a new UDP socket is open up (on a different local port) for each relay. This is not optimal, but it works around some routers that don't implement NAT properly. If intermittent problems occur talking to relays that might be NAT related, try toggling this flag.
-
-`ConfigurationValue.IPAllowWithoutAuth` don't automatically fail IP connections that don't have a strong authenticator. On clients, this means connection attempts will be made even if it can't get a cert. On the server, it means that a connection will not be automatically rejected due to authentication failure.
-
-`ConfigurationValue.TimeoutSecondsInitial` a timeout value in seconds, to use when first connecting.
-
-`ConfigurationValue.TimeoutSecondsConnected` a timeout value in seconds, to use after a connection is established.
-
-`Configuration Value.FakePacketDupSend` a percentage of duplicate outbound packets.
-
-`ConfigurationValue.FakePacketDupRecv` a percentage of duplicate inbound packets.
-
-`ConfigurationValue.FakePacketDupTimeMax` amount of delay in milliseconds, to delay duplicated packets.
 
 #### Result
 Definitions of operation result: 
@@ -271,7 +209,7 @@ Provides per socket events.
 #### Library callbacks
 Provides per application events.
 
-`DebugCallback(int type, string message)` notifies when debug information with the desired verbosity come up.
+`DebugCallback(DebugType type, string message)` notifies when debug information with the desired verbosity come up.
 
 ### Structures
 #### Address
@@ -420,24 +358,6 @@ Contains a managed pointer to the sockets.
 
 `NetworkingSockets.CreateSocketPair(Connection connectionOne, Connection connectionTwo, bool useNetworkLoopback)` creates a pair of connections that are talking to each other e.g. a loopback communication. The two connections will be immediately placed into the connected state, and no callbacks will be called. After this, if either connection is closed, the other connection will receive a callback, exactly as if they were communicating over the network. By default, internal buffers are used, completely bypassing the network, the chopping up of messages into packets, encryption, copying the payload, etc. This means that loopback packets, by default, will not simulate lag or loss. Enabled network loopback parameter will cause the socket pair to send packets through the local network loopback device on ephemeral ports. Fake lag and loss are supported in this case, and CPU time is expended to encrypt and decrypt.
 
-`NetworkingSockets.GetConnectionDebugText(Connection connection, StringBuilder debugText, int debugLength)` gets debug text from the connection. Returns true on success or false on failure.
-
-`NetworkingSockets.GetConfigurationValue(ConfigurationValue configurationValue)` gets the configuration value described in the `ConfigurationValue` enumeration. Returns -1 if the configuration value is invalid.
-
-`NetworkingSockets.SetConfigurationValue(ConfigurationValue configurationValue, int value)` sets the configuration value described in the `ConfigurationValue` enumeration. Returns true on success or false on failure.
-
-`NetworkingSockets.GetConfigurationValueName(ConfigurationValue configurationValue)` returns a name of the `ConfigurationValue` or `null` if config value isn't known.
-
-`NetworkingSockets.GetConfigurationString(ConfigurationString configurationString, StringBuilder destination, int destinationLength)` gets the configuration string described in the `ConfigurationString` enumeration. Returns a length if a capacity of the mutable string is not enough or -1 if the configuration string is invalid.
-
-`NetworkingSockets.SetConfigurationString(ConfigurationString configurationString, string inputString)` sets the configuration string described in the `ConfigurationString` enumeration. Returns true on success or false on failure.
-
-`NetworkingSockets.GetConfigurationStringName(ConfigurationString configurationString)` returns the name of a `ConfigurationString` or `null` if config value isn't known.
-
-`NetworkingSockets.GetConnectionConfigurationValue(Connection connection, ConfigurationValue configurationValue)` gets a configuration values described in the `ConfigurationValue` enumeration. Returns true on success or false on failure.
-
-`NetworkingSockets.SetConnectionConfigurationValue(Connection connection, ConfigurationValue configurationValue, int value)` sets a configuration values described in the `ConfigurationValue` enumeration. Returns true on success or false on failure.
-
 `NetworkingSockets.DispatchCallback(StatusCallback callback, IntPtr context)` dispatches one callback per call if available. Optional context parameter may be specified for `StatusCallback` delegate.
 
 #### Library
@@ -452,7 +372,3 @@ Contains constant fields.
 `Library.Initialize(StringBuilder errorMessage)` initializes the native library. The capacity of a mutable string for an error message must be equal to `Library.maxErrorMessageLength`.
 
 `Library.Deinitialize()` deinitializes the native library. Should be called after the work is done.
-
-`Library.SetDebugCallback(int detailLevel, DebugCallback callback)` sets a callback for debug output.
-
-`Library.Time` returns a current local monotonic time in microseconds. It never reset while the application remains alive.
