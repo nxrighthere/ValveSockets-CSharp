@@ -383,6 +383,6 @@ Contains constant fields.
 
 `Library.maxMessageSize` the maximum size of a single message that can be sent.
 
-`Library.Initialize(StringBuilder errorMessage)` initializes the native library. The capacity of a mutable string for an error message must be equal to `Library.maxErrorMessageLength`.
+`Library.Initialize(StringBuilder errorMessage)` initializes the native library. Error message parameter is optional and should be used to determine error during initialization. The capacity of a mutable string for an error message must be equal to `Library.maxErrorMessageLength`.
 
 `Library.Deinitialize()` deinitializes the native library. Should be called after the work is done.
