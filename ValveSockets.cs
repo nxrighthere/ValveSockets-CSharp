@@ -37,7 +37,7 @@ namespace Valve.Sockets {
 	public enum SendType {
 		Unreliable = 0,
 		NoNagle = 1 << 0,
-		NoDelay = 1 << 1,
+		NoDelay = 1 << 2,
 		Reliable = 1 << 3
 	}
 
@@ -58,15 +58,23 @@ namespace Valve.Sockets {
 		ProblemDetectedLocally = 5
 	}
 
-	public enum ConfigurationString {
-		ClientForceRelayCluster = 0,
-		ClientDebugTicketAddress = 1,
-		ClientForceProxyAddr = 2
+	public enum ConfigurationScope {
+		Global = 1,
+		SocketsInterface = 2,
+		ListenSocket = 3,
+		Connection = 4
+	}
+
+	public enum ConfigurationDataType {
+		Int32 = 1,
+		Int64 = 2,
+		Float = 3,
+		String = 4,
+		FunctionPtr = 5
 	}
 
 	public enum ConfigurationValue {
-		FakeMessageLossSend = 0,
-		FakeMessageLossRecv = 1,
+		Invalid = 0,
 		FakePacketLossSend = 2,
 		FakePacketLossRecv = 3,
 		FakePacketLagSend = 4,
@@ -74,26 +82,49 @@ namespace Valve.Sockets {
 		FakePacketReorderSend = 6,
 		FakePacketReorderRecv = 7,
 		FakePacketReorderTime = 8,
+		FakePacketDupSend = 26,
+		FakePacketDupRecv = 27,
+		FakePacketDupTimeMax = 28,
+		TimeoutInitial = 24,
+		TimeoutConnected = 25,
 		SendBufferSize = 9,
-		MaxRate = 10,
-		MinRate = 11,
+		SendRateMin = 10,
+		SendRateMax = 11,
 		NagleTime = 12,
+		IPAllowWithoutAuth = 23,
+		SDRClientConsecutitivePingTimeoutsFailInitial = 19,
+		SDRClientConsecutitivePingTimeoutsFail = 20,
+		SDRClientMinPingsBeforePingAccurate = 21,
+		SDRClientSingleSocket = 22,
+		SDRClientForceRelayCluster = 29,
+		SDRClientDebugTicketAddress = 30,
+		SDRClientForceProxyAddr = 31,
 		LogLevelAckRTT = 13,
-		LogLevelPacket = 14,
+		LogLevelPacketDecode = 14,
 		LogLevelMessage = 15,
 		LogLevelPacketGaps = 16,
 		LogLevelP2PRendezvous = 17,
-		LogLevelRelayPings = 18,
-		ClientConsecutitivePingTimeoutsFailInitial = 19,
-		ClientConsecutitivePingTimeoutsFail = 20,
-		ClientMinPingsBeforePingAccurate = 21,
-		ClientSingleSocket = 22,
-		IPAllowWithoutAuth = 23,
-		TimeoutSecondsInitial = 24,
-		TimeoutSecondsConnected = 25,
-		FakePacketDupSend = 26,
-		FakePacketDupRecv = 27,
-		FakePacketDupTimeMax = 28
+		LogLevelSDRRelayPings = 18
+	}
+
+	public enum ConfigurationValueResult {
+		BadValue = -1,
+		BadScopeObject = -2,
+		BufferTooSmall = -3,
+		OK = 1,
+		OKInherited = 2
+	}
+
+	public enum DebugType {
+		None = 0,
+		Bug = 1,
+		Error = 2,
+		Important = 3,
+		Warning = 4,
+		Msg = 5,
+		Verbose = 6,
+		Debug = 7,
+		Everything = 8
 	}
 
 	public enum Result {
@@ -251,7 +282,7 @@ namespace Valve.Sockets {
 		public long userData;
 		public ListenSocket listenSocket;
 		public Address address;
-		private ushort pad1;
+		private ushort pad;
 		private uint popRemote;
 		private uint popRelay;
 		public ConnectionState state;
@@ -334,7 +365,7 @@ namespace Valve.Sockets {
 	}
 
 	public delegate void StatusCallback(StatusInfo info, IntPtr context);
-	public delegate void DebugCallback(int type, string message);
+	public delegate void DebugCallback(DebugType type, string message);
 
 	public class NetworkingSockets {
 		private IntPtr nativeSockets;
@@ -445,42 +476,6 @@ namespace Valve.Sockets {
 			return Native.SteamAPI_ISteamNetworkingSockets_CreateSocketPair(nativeSockets, connectionOne, connectionTwo, useNetworkLoopback, identityOne, identityTwo);
 		}
 
-		public bool GetConnectionDebugText(Connection connection, StringBuilder debugText, int debugLength) {
-			return Native.SteamAPI_ISteamNetworkingSockets_GetConnectionDebugText(nativeSockets, connection, debugText, debugLength);
-		}
-
-		public int GetConfigurationValue(ConfigurationValue configurationValue) {
-			return Native.SteamAPI_ISteamNetworkingSockets_GetConfigurationValue(nativeSockets, configurationValue);
-		}
-
-		public bool SetConfigurationValue(ConfigurationValue configurationValue, int value) {
-			return Native.SteamAPI_ISteamNetworkingSockets_SetConfigurationValue(nativeSockets, configurationValue, value);
-		}
-
-		public string GetConfigurationValueName(ConfigurationValue configurationValue) {
-			return Native.SteamAPI_ISteamNetworkingSockets_GetConfigurationValueName(nativeSockets, configurationValue);
-		}
-
-		public int GetConfigurationString(ConfigurationString configurationString, StringBuilder destination, int destinationLength) {
-			return Native.SteamAPI_ISteamNetworkingSockets_GetConfigurationString(nativeSockets, configurationString, destination, destinationLength);
-		}
-
-		public bool SetConfigurationString(ConfigurationString configurationString, string inputString) {
-			return Native.SteamAPI_ISteamNetworkingSockets_SetConfigurationString(nativeSockets, configurationString, inputString);
-		}
-
-		public string GetConfigurationStringName(ConfigurationString configurationString) {
-			return Native.SteamAPI_ISteamNetworkingSockets_GetConfigurationStringName(nativeSockets, configurationString);
-		}
-
-		public int GetConnectionConfigurationValue(Connection connection, ConfigurationValue configurationValue) {
-			return Native.SteamAPI_ISteamNetworkingSockets_GetConnectionConfigurationValue(nativeSockets, connection, configurationValue);
-		}
-
-		public bool SetConnectionConfigurationValue(Connection connection, ConfigurationValue configurationValue, int value) {
-			return Native.SteamAPI_ISteamNetworkingSockets_SetConnectionConfigurationValue(nativeSockets, connection, configurationValue, value);
-		}
-
 		public void DispatchCallback(StatusCallback callback) {
 			DispatchCallback(callback, IntPtr.Zero);
 		}
@@ -496,6 +491,41 @@ namespace Valve.Sockets {
 				messages[i] = (NetworkingMessage)Marshal.PtrToStructure(nativeMessage, typeof(NetworkingMessage));
 				messages[i].release = nativeMessage;
 			}
+		}
+	}
+
+	public class NetworkingUtils {
+		private IntPtr nativeUtils;
+
+		public NetworkingUtils() {
+			nativeUtils = Native.SteamNetworkingUtils();
+
+			if (nativeUtils == IntPtr.Zero)
+				throw new InvalidOperationException("Networking utils not created");
+		}
+
+		public Microseconds Time {
+			get {
+				return Native.SteamAPI_ISteamNetworkingUtils_GetLocalTimestamp(nativeUtils);
+			}
+		}
+
+		public ConfigurationValue FirstConfigurationValue {
+			get {
+				return Native.SteamAPI_ISteamNetworkingUtils_GetFirstConfigValue(nativeUtils);
+			}
+		}
+
+		public void SetDebugCallback(DebugType detailLevel, DebugCallback callback) {
+			Native.SteamAPI_ISteamNetworkingUtils_SetDebugOutputFunction(nativeUtils, detailLevel, callback);
+		}
+
+		public bool SetConfiguratioValue(ConfigurationValue configurationValue, ConfigurationScope configurationScope, IntPtr scopeObject, ConfigurationDataType dataType, IntPtr value) {
+			return Native.SteamAPI_ISteamNetworkingUtils_SetConfigValue(nativeUtils, configurationValue, configurationScope, scopeObject, dataType, value);
+		}
+
+		public ConfigurationValueResult GetConfigurationValue(ConfigurationValue configurationValue, ConfigurationScope configurationScope, IntPtr scopeObject, ConfigurationDataType dataType, IntPtr result, IntPtr resultLength) {
+			return Native.SteamAPI_ISteamNetworkingUtils_GetConfigValue(nativeUtils, configurationValue, configurationScope, scopeObject, dataType, result, resultLength);
 		}
 	}
 
@@ -515,16 +545,6 @@ namespace Valve.Sockets {
 
 		public static void Deinitialize() {
 			Native.GameNetworkingSockets_Kill();
-		}
-
-		public static void SetDebugCallback(int detailLevel, DebugCallback callback) {
-			Native.SteamNetworkingSockets_SetDebugOutputFunction(detailLevel, callback);
-		}
-
-		public static Microseconds Time {
-			get {
-				return Native.SteamNetworkingSockets_GetLocalTimestamp();
-			}
 		}
 	}
 
@@ -589,94 +609,64 @@ namespace Valve.Sockets {
 		internal static extern IntPtr SteamNetworkingSockets();
 
 		[DllImport(nativeLibrary, CallingConvention = CallingConvention.Cdecl)]
-		internal static extern Microseconds SteamNetworkingSockets_GetLocalTimestamp();
+		internal static extern IntPtr SteamNetworkingUtils();
 
 		[DllImport(nativeLibrary, CallingConvention = CallingConvention.Cdecl)]
-		internal static extern void SteamNetworkingSockets_SetDebugOutputFunction(int detailLevel, DebugCallback callback);
+		internal static extern ListenSocket SteamAPI_ISteamNetworkingSockets_CreateListenSocketIP(IntPtr sockets, Address address);
 
 		[DllImport(nativeLibrary, CallingConvention = CallingConvention.Cdecl)]
-		internal static extern ListenSocket SteamAPI_ISteamNetworkingSockets_CreateListenSocketIP(IntPtr instance, Address address);
+		internal static extern Connection SteamAPI_ISteamNetworkingSockets_ConnectByIPAddress(IntPtr sockets, Address address);
 
 		[DllImport(nativeLibrary, CallingConvention = CallingConvention.Cdecl)]
-		internal static extern Connection SteamAPI_ISteamNetworkingSockets_ConnectByIPAddress(IntPtr instance, Address address);
+		internal static extern Result SteamAPI_ISteamNetworkingSockets_AcceptConnection(IntPtr sockets, Connection connection);
 
 		[DllImport(nativeLibrary, CallingConvention = CallingConvention.Cdecl)]
-		internal static extern Result SteamAPI_ISteamNetworkingSockets_AcceptConnection(IntPtr instance, Connection connection);
+		internal static extern bool SteamAPI_ISteamNetworkingSockets_CloseConnection(IntPtr sockets, Connection peer, int reason, string debug, bool enableLinger);
 
 		[DllImport(nativeLibrary, CallingConvention = CallingConvention.Cdecl)]
-		internal static extern bool SteamAPI_ISteamNetworkingSockets_CloseConnection(IntPtr instance, Connection peer, int reason, string debug, bool enableLinger);
+		internal static extern bool SteamAPI_ISteamNetworkingSockets_CloseListenSocket(IntPtr sockets, ListenSocket socket);
 
 		[DllImport(nativeLibrary, CallingConvention = CallingConvention.Cdecl)]
-		internal static extern bool SteamAPI_ISteamNetworkingSockets_CloseListenSocket(IntPtr instance, ListenSocket socket);
+		internal static extern bool SteamAPI_ISteamNetworkingSockets_SetConnectionUserData(IntPtr sockets, Connection peer, long userData);
 
 		[DllImport(nativeLibrary, CallingConvention = CallingConvention.Cdecl)]
-		internal static extern bool SteamAPI_ISteamNetworkingSockets_SetConnectionUserData(IntPtr instance, Connection peer, long userData);
+		internal static extern long SteamAPI_ISteamNetworkingSockets_GetConnectionUserData(IntPtr sockets, Connection peer);
 
 		[DllImport(nativeLibrary, CallingConvention = CallingConvention.Cdecl)]
-		internal static extern long SteamAPI_ISteamNetworkingSockets_GetConnectionUserData(IntPtr instance, Connection peer);
+		internal static extern void SteamAPI_ISteamNetworkingSockets_SetConnectionName(IntPtr sockets, Connection peer, string name);
 
 		[DllImport(nativeLibrary, CallingConvention = CallingConvention.Cdecl)]
-		internal static extern void SteamAPI_ISteamNetworkingSockets_SetConnectionName(IntPtr instance, Connection peer, string name);
+		internal static extern bool SteamAPI_ISteamNetworkingSockets_GetConnectionName(IntPtr sockets, Connection peer, StringBuilder name, int maxLength);
 
 		[DllImport(nativeLibrary, CallingConvention = CallingConvention.Cdecl)]
-		internal static extern bool SteamAPI_ISteamNetworkingSockets_GetConnectionName(IntPtr instance, Connection peer, StringBuilder name, int maxLength);
+		internal static extern Result SteamAPI_ISteamNetworkingSockets_SendMessageToConnection(IntPtr sockets, Connection connection, byte[] data, uint length, SendType flags);
 
 		[DllImport(nativeLibrary, CallingConvention = CallingConvention.Cdecl)]
-		internal static extern Result SteamAPI_ISteamNetworkingSockets_SendMessageToConnection(IntPtr instance, Connection connection, byte[] data, uint length, SendType flags);
+		internal static extern Result SteamAPI_ISteamNetworkingSockets_FlushMessagesOnConnection(IntPtr sockets, Connection connection);
 
 		[DllImport(nativeLibrary, CallingConvention = CallingConvention.Cdecl)]
-		internal static extern Result SteamAPI_ISteamNetworkingSockets_FlushMessagesOnConnection(IntPtr instance, Connection connection);
+		internal static extern int SteamAPI_ISteamNetworkingSockets_ReceiveMessagesOnConnection(IntPtr sockets, Connection connection, out IntPtr messages, int maxMessages);
 
 		[DllImport(nativeLibrary, CallingConvention = CallingConvention.Cdecl)]
-		internal static extern int SteamAPI_ISteamNetworkingSockets_ReceiveMessagesOnConnection(IntPtr instance, Connection connection, out IntPtr messages, int maxMessages);
+		internal static extern int SteamAPI_ISteamNetworkingSockets_ReceiveMessagesOnListenSocket(IntPtr sockets, ListenSocket socket, out IntPtr messages, int maxMessages);
 
 		[DllImport(nativeLibrary, CallingConvention = CallingConvention.Cdecl)]
-		internal static extern int SteamAPI_ISteamNetworkingSockets_ReceiveMessagesOnListenSocket(IntPtr instance, ListenSocket socket, out IntPtr messages, int maxMessages);
+		internal static extern bool SteamAPI_ISteamNetworkingSockets_GetConnectionInfo(IntPtr sockets, Connection connection, ref ConnectionInfo info);
 
 		[DllImport(nativeLibrary, CallingConvention = CallingConvention.Cdecl)]
-		internal static extern bool SteamAPI_ISteamNetworkingSockets_GetConnectionInfo(IntPtr instance, Connection connection, ref ConnectionInfo info);
+		internal static extern bool SteamAPI_ISteamNetworkingSockets_GetQuickConnectionStatus(IntPtr sockets, Connection connection, ConnectionStatus status);
 
 		[DllImport(nativeLibrary, CallingConvention = CallingConvention.Cdecl)]
-		internal static extern bool SteamAPI_ISteamNetworkingSockets_GetQuickConnectionStatus(IntPtr instance, Connection connection, ConnectionStatus status);
+		internal static extern int SteamAPI_ISteamNetworkingSockets_GetDetailedConnectionStatus(IntPtr sockets, Connection connection, StringBuilder status, int statusLength);
 
 		[DllImport(nativeLibrary, CallingConvention = CallingConvention.Cdecl)]
-		internal static extern int SteamAPI_ISteamNetworkingSockets_GetDetailedConnectionStatus(IntPtr instance, Connection connection, StringBuilder status, int statusLength);
+		internal static extern bool SteamAPI_ISteamNetworkingSockets_GetListenSocketAddress(IntPtr sockets, ListenSocket socket, ref Address address);
 
 		[DllImport(nativeLibrary, CallingConvention = CallingConvention.Cdecl)]
-		internal static extern bool SteamAPI_ISteamNetworkingSockets_GetListenSocketAddress(IntPtr instance, ListenSocket socket, ref Address address);
+		internal static extern void SteamAPI_ISteamNetworkingSockets_RunConnectionStatusChangedCallbacks(IntPtr sockets, StatusCallback callback, IntPtr context);
 
 		[DllImport(nativeLibrary, CallingConvention = CallingConvention.Cdecl)]
-		internal static extern bool SteamAPI_ISteamNetworkingSockets_CreateSocketPair(IntPtr instance, Connection connectionOne, Connection connectionTwo, bool useNetworkLoopback, NetworkingIdentity identityOne, NetworkingIdentity identityTwo);
-
-		[DllImport(nativeLibrary, CallingConvention = CallingConvention.Cdecl)]
-		internal static extern bool SteamAPI_ISteamNetworkingSockets_GetConnectionDebugText(IntPtr instance, Connection connection, StringBuilder debugText, int debugLength);
-
-		[DllImport(nativeLibrary, CallingConvention = CallingConvention.Cdecl)]
-		internal static extern int SteamAPI_ISteamNetworkingSockets_GetConfigurationValue(IntPtr instance, ConfigurationValue configurationValue);
-
-		[DllImport(nativeLibrary, CallingConvention = CallingConvention.Cdecl)]
-		internal static extern bool SteamAPI_ISteamNetworkingSockets_SetConfigurationValue(IntPtr instance, ConfigurationValue configurationValue, int value);
-
-		[DllImport(nativeLibrary, CallingConvention = CallingConvention.Cdecl)]
-		internal static extern string SteamAPI_ISteamNetworkingSockets_GetConfigurationValueName(IntPtr instance, ConfigurationValue configurationValue);
-
-		[DllImport(nativeLibrary, CallingConvention = CallingConvention.Cdecl)]
-		internal static extern int SteamAPI_ISteamNetworkingSockets_GetConfigurationString(IntPtr instance, ConfigurationString configurationString, StringBuilder destination, int destinationLength);
-
-		[DllImport(nativeLibrary, CallingConvention = CallingConvention.Cdecl)]
-		internal static extern bool SteamAPI_ISteamNetworkingSockets_SetConfigurationString(IntPtr instance, ConfigurationString configurationString, string inputString);
-
-		[DllImport(nativeLibrary, CallingConvention = CallingConvention.Cdecl)]
-		internal static extern string SteamAPI_ISteamNetworkingSockets_GetConfigurationStringName(IntPtr instance, ConfigurationString configurationString);
-
-		[DllImport(nativeLibrary, CallingConvention = CallingConvention.Cdecl)]
-		internal static extern int SteamAPI_ISteamNetworkingSockets_GetConnectionConfigurationValue(IntPtr instance, Connection connection, ConfigurationValue configurationValue);
-
-		[DllImport(nativeLibrary, CallingConvention = CallingConvention.Cdecl)]
-		internal static extern bool SteamAPI_ISteamNetworkingSockets_SetConnectionConfigurationValue(IntPtr instance, Connection connection, ConfigurationValue configurationValue, int value);
-
-		[DllImport(nativeLibrary, CallingConvention = CallingConvention.Cdecl)]
-		internal static extern void SteamAPI_SteamNetworkingMessage_t_Release(IntPtr nativeMessage);
+		internal static extern bool SteamAPI_ISteamNetworkingSockets_CreateSocketPair(IntPtr sockets, Connection connectionOne, Connection connectionTwo, bool useNetworkLoopback, NetworkingIdentity identityOne, NetworkingIdentity identityTwo);
 
 		[DllImport(nativeLibrary, CallingConvention = CallingConvention.Cdecl)]
 		internal static extern void SteamAPI_SteamNetworkingIPAddr_SetIPv6(ref Address address, byte[] ip, ushort port);
@@ -706,6 +696,24 @@ namespace Valve.Sockets {
 		internal static extern bool SteamAPI_SteamNetworkingIdentity_EqualTo(NetworkingIdentity identityOne, NetworkingIdentity identityTwo);
 
 		[DllImport(nativeLibrary, CallingConvention = CallingConvention.Cdecl)]
-		internal static extern void SteamAPI_ISteamNetworkingSockets_RunConnectionStatusChangedCallbacks(IntPtr instance, StatusCallback callback, IntPtr context);
+		internal static extern Microseconds SteamAPI_ISteamNetworkingUtils_GetLocalTimestamp(IntPtr utils);
+
+		[DllImport(nativeLibrary, CallingConvention = CallingConvention.Cdecl)]
+		internal static extern void SteamAPI_ISteamNetworkingUtils_SetDebugOutputFunction(IntPtr utils, DebugType detailLevel, DebugCallback callback);
+
+		[DllImport(nativeLibrary, CallingConvention = CallingConvention.Cdecl)]
+		internal static extern bool SteamAPI_ISteamNetworkingUtils_SetConfigValue(IntPtr utils, ConfigurationValue configurationValue, ConfigurationScope configurationScope, IntPtr scopeObject, ConfigurationDataType dataType, IntPtr value);
+
+		[DllImport(nativeLibrary, CallingConvention = CallingConvention.Cdecl)]
+		internal static extern ConfigurationValueResult SteamAPI_ISteamNetworkingUtils_GetConfigValue(IntPtr utils, ConfigurationValue configurationValue, ConfigurationScope configurationScope, IntPtr scopeObject, ConfigurationDataType dataType, IntPtr result, IntPtr resultLength);
+
+		[DllImport(nativeLibrary, CallingConvention = CallingConvention.Cdecl)]
+		internal static extern bool SteamAPI_ISteamNetworkingUtils_GetConfigValueInfo(IntPtr utils, ConfigurationValue configurationValue, IntPtr outName, ConfigurationDataType dataType, ConfigurationScope configurationScope, ConfigurationValue outNextValue);
+
+		[DllImport(nativeLibrary, CallingConvention = CallingConvention.Cdecl)]
+		internal static extern ConfigurationValue SteamAPI_ISteamNetworkingUtils_GetFirstConfigValue(IntPtr utils);
+
+		[DllImport(nativeLibrary, CallingConvention = CallingConvention.Cdecl)]
+		internal static extern void SteamAPI_SteamNetworkingMessage_t_Release(IntPtr nativeMessage);
 	}
 }
