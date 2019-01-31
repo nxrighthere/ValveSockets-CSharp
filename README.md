@@ -360,6 +360,18 @@ Contains a managed pointer to the sockets.
 
 `NetworkingSockets.DispatchCallback(StatusCallback callback, IntPtr context)` dispatches one callback per call if available. Optional context parameter may be specified for `StatusCallback` delegate.
 
+#### NetworkingUtils
+
+`Time` 
+
+`FirstConfigurationValue` 
+
+`SetDebugCallback(DebugType detailLevel, DebugCallback callback)` 
+
+`SetConfiguratioValue(ConfigurationValue configurationValue, ConfigurationScope configurationScope, IntPtr scopeObject, ConfigurationDataType dataType, IntPtr value)` 
+
+`GetConfigurationValue(ConfigurationValue configurationValue, ConfigurationScope configurationScope, IntPtr scopeObject, ConfigurationDataType dataType, IntPtr result, IntPtr resultLength)` 
+
 #### Library
 Contains constant fields.
 
