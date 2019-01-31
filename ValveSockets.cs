@@ -536,8 +536,12 @@ namespace Valve.Sockets {
 		public const int maxMessageSize = 512 * 1024;
 		public const int socketsCallbacks = 1220;
 
+		public static bool Initialize() {
+			return Initialize(null);
+		}
+
 		public static bool Initialize(StringBuilder errorMessage) {
-			if (errorMessage.Capacity != maxErrorMessageLength)
+			if (errorMessage != null && errorMessage.Capacity != maxErrorMessageLength)
 				throw new ArgumentOutOfRangeException("Capacity of the error message must be equal to " + maxErrorMessageLength);
 
 			return Native.GameNetworkingSockets_Init(IntPtr.Zero, errorMessage);
