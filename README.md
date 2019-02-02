@@ -10,7 +10,7 @@ A managed assembly can be built using any available compiling platform that supp
 
 Usage
 --------
-Before starting to work, the library should be initialized using `Valve.Sockets.Library.Initialize(StringBuilder errorMessage);` function.
+Before starting to work, the library should be initialized using `Valve.Sockets.Library.Initialize();` function.
 
 After the work is done, deinitialize the library using `Valve.Sockets.Library.Deinitialize();` function.
 
