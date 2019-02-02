@@ -179,7 +179,49 @@ Definitions of connection states for `ConnectionInfo.state` field:
 
 
 #### ConfigurationValue
+Definitions of configuration values: 
 
+`FakePacketLossSend` 
+
+`FakePacketLossRecv` 
+
+`FakePacketLagSend` 
+
+`FakePacketLagRecv` 
+
+`FakePacketReorderSend` 
+
+`FakePacketReorderRecv` 
+
+`FakePacketReorderTime` 
+
+`FakePacketDupSend` 
+
+`FakePacketDupRecv` 
+
+`FakePacketDupTimeMax` 
+
+`TimeoutInitial` 
+
+`TimeoutConnected` 
+
+`SendBufferSize` 
+
+`SendRateMin` 
+
+`SendRateMax` 
+
+`NagleTime` 
+
+`IPAllowWithoutAuth` 
+
+`LogLevelAckRTT` 
+
+`LogLevelPacketDecode` 
+
+`LogLevelMessage` 
+
+`LogLevelPacketGaps` 
 
 #### ConfigurationValueResult
 
@@ -362,11 +404,11 @@ Contains a managed pointer to the sockets.
 
 #### NetworkingUtils
 
-`Time` 
+`Time` returns a current local monotonic time in microseconds. It never reset while the application remains alive.
 
 `FirstConfigurationValue` 
 
-`SetDebugCallback(DebugType detailLevel, DebugCallback callback)` 
+`SetDebugCallback(DebugType detailLevel, DebugCallback callback)` sets a callback for debug output.
 
 `SetConfiguratioValue(ConfigurationValue configurationValue, ConfigurationScope configurationScope, IntPtr scopeObject, ConfigurationDataType dataType, IntPtr value)` 
 
