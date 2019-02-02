@@ -173,10 +173,28 @@ Definitions of connection states for `ConnectionInfo.state` field:
 `ConnectionState.ProblemDetectedLocally` a disruption in the connection has been detected locally. Attempts to send further messages will fail. Any remaining received messages in the queue are available. The connection still exists from an API perspective and must be closed to free up resources.
 
 #### ConfigurationScope
+Definitions of configuration scopes: 
 
+`Global` 
+
+`SocketsInterface` 
+
+`ListenSocket` 
+
+`Connection` 
 
 #### ConfigurationDataType
+Definitions of configuration data types: 
 
+`Int32` 
+
+`Int64` 
+
+`Float` 
+
+`String` 
+
+`FunctionPtr` 
 
 #### ConfigurationValue
 Definitions of configuration values: 
@@ -224,10 +242,38 @@ Definitions of configuration values:
 `LogLevelPacketGaps` 
 
 #### ConfigurationValueResult
+Definitions of configuration value results: 
 
+`BadValue` 
+
+`BadScopeObject` 
+
+`BufferTooSmall` 
+
+`OK` 
+
+`OKInherited` 
 
 #### DebugType
+Definitions of debug types: 
 
+`None` 
+
+`Bug` 
+
+`Error` 
+
+`Important` 
+
+`Warning` 
+
+`Message` 
+
+`Verbose` 
+
+`Debug` 
+
+`Everything` 
 
 #### Result
 Definitions of operation result: 
