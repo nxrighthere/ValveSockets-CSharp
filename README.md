@@ -20,7 +20,7 @@ After the work is done, deinitialize the library using `Valve.Sockets.Library.De
 NetworkingSockets server = new NetworkingSockets();
 Address address = new Address();
 
-address.SetIP("::0", port);
+address.SetAddress("::0", port);
 
 uint listenSocket = server.CreateListenSocket(address);
 
@@ -65,7 +65,7 @@ while (!Console.KeyAvailable) {
 NetworkingSockets client = new NetworkingSockets();
 Address address = new Address();
 
-address.SetIP("::1", port);
+address.SetAddress("::1", port);
 
 uint connection = client.Connect(address);
 
@@ -227,9 +227,7 @@ Contains marshalled structure with an IP address and port number.
 
 `Address.SetLocalHost(ushort port)` sets localhost with a specified port.
 
-`Address.SetIPv4(string ip, ushort port)` sets an IPv4 address with a specified port.
-
-`Address.SetIPv6(string ip, ushort port)` sets an IPv6 address with a specified port.
+`Address.SetAddress(string ip, ushort port)` sets an IP address (IPv4/IPv6) with a specified port.
 
 #### StatusInfo
 Contains marshalled data with connection state.
