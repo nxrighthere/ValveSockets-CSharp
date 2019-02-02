@@ -259,12 +259,11 @@ namespace Valve.Sockets {
 			Native.SteamAPI_SteamNetworkingIPAddr_SetIPv6LocalHost(ref this, port);
 		}
 
-		public void SetIPv4(string ip, ushort port) {
-			Native.SteamAPI_SteamNetworkingIPAddr_SetIPv4(ref this, ip.ParseIPv4(), port);
-		}
-
-		public void SetIPv6(string ip, ushort port) {
-			Native.SteamAPI_SteamNetworkingIPAddr_SetIPv6(ref this, ip.ParseIPv6(), port);
+		public void SetIP(string ip, ushort port) {
+			if (!ip.Contains(":"))
+				Native.SteamAPI_SteamNetworkingIPAddr_SetIPv4(ref this, ip.ParseIPv4(), port);
+			else
+				Native.SteamAPI_SteamNetworkingIPAddr_SetIPv6(ref this, ip.ParseIPv6(), port);
 		}
 	}
 
