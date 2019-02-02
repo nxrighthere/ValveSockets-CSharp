@@ -121,7 +121,7 @@ namespace Valve.Sockets {
 		Error = 2,
 		Important = 3,
 		Warning = 4,
-		Msg = 5,
+		Message = 5,
 		Verbose = 6,
 		Debug = 7,
 		Everything = 8
