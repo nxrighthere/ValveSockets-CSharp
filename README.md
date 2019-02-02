@@ -20,7 +20,7 @@ After the work is done, deinitialize the library using `Valve.Sockets.Library.De
 NetworkingSockets server = new NetworkingSockets();
 Address address = new Address();
 
-address.SetIPv6("::0", port);
+address.SetIP("::0", port);
 
 uint listenSocket = server.CreateListenSocket(address);
 
@@ -65,7 +65,7 @@ while (!Console.KeyAvailable) {
 NetworkingSockets client = new NetworkingSockets();
 Address address = new Address();
 
-address.SetIPv6("::1", port);
+address.SetIP("::1", port);
 
 uint connection = client.Connect(address);
 
