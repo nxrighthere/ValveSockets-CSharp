@@ -452,7 +452,7 @@ Contains a managed pointer to the sockets.
 
 `Time` returns a current local monotonic time in microseconds. It never reset while the application remains alive.
 
-`FirstConfigurationValue` 
+`FirstConfigurationValue` gets the lowest numbered configuration value available in the current environment.
 
 `SetDebugCallback(DebugType detailLevel, DebugCallback callback)` sets a callback for debug output.
 
