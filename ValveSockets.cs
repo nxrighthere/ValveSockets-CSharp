@@ -337,14 +337,14 @@ namespace Valve.Sockets {
 
 	[StructLayout(LayoutKind.Sequential)]
 	public struct NetworkingMessage {
+		public IntPtr data;
+		public int length;
+		public Connection connection;
 		public NetworkingIdentity identity;
 		public long userData;
 		public Microseconds timeReceived;
 		public long messageNumber;
 		internal IntPtr release;
-		public IntPtr data;
-		public int length;
-		public Connection connection;
 		public int channel;
 		private int padDummy;
 
