@@ -309,12 +309,10 @@ namespace Valve.Sockets {
 		public Microseconds queueTime;
 	}
 
-	[StructLayout(LayoutKind.Sequential)]
+	[StructLayout(LayoutKind.Explicit, Size = 136, CharSet = CharSet.Ansi)]
 	public struct NetworkingIdentity {
+		[FieldOffset(0)]
 		public IdentityType type;
-		private int size;
-		[MarshalAs(UnmanagedType.ByValArray, SizeConst = 32)]
-		private byte[] internals;
 
 		public bool IsInvalid {
 			get {
