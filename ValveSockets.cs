@@ -309,7 +309,7 @@ namespace Valve.Sockets {
 		public Microseconds queueTime;
 	}
 
-	[StructLayout(LayoutKind.Explicit, Size = 136, CharSet = CharSet.Ansi)]
+	[StructLayout(LayoutKind.Explicit, Size = 136)]
 	public struct NetworkingIdentity {
 		[FieldOffset(0)]
 		public IdentityType type;
