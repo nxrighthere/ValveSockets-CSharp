@@ -140,9 +140,9 @@ API reference
 #### SendType
 Definitions of a flags for `NetworkingSockets.SendMessageToConnection()` function:
 
-`SendType.Unreliable` unreliable, delivery of message is not guaranteed.
+`SendType.Unreliable` unreliable, delivery of message is not guaranteed, the message may be delivered out of order.
 
-`SendType.Reliable` reliable, a message must be received by the target connection and resend attempts should be made until the message is delivered.
+`SendType.Reliable` reliable ordered, a message must be received by the target connection and resend attempts should be made until the message is delivered.
 
 `SendType.NoNagle` a message will not be grouped with other messages within a timer.
 
