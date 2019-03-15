@@ -57,7 +57,7 @@ while (!Console.KeyAvailable) {
 		for (int i = 0; i < netMessagesCount; i++) {
 			ref NetworkingMessage netMessage = ref netMessages[i];
 
-			Console.WriteLine("Message received from - ID: " + netMessages[0].connection + ", Channel ID: " + netMessages[0].channel + ", Data length: " + netMessages[0].length);
+			Console.WriteLine("Message received from - ID: " + netMessage.connection + ", Channel ID: " + netMessage.channel + ", Data length: " + netMessage.length);
 
 			netMessages[0].Destroy();
 		}
@@ -110,7 +110,7 @@ while (!Console.KeyAvailable) {
 		for (int i = 0; i < netMessagesCount; i++) {
 			ref NetworkingMessage netMessage = ref netMessages[i];
 
-			Console.WriteLine("Message received from server - Channel ID: " + netMessages[0].channel + ", Data length: " + netMessages[0].length);
+			Console.WriteLine("Message received from server - Channel ID: " + netMessage.channel + ", Data length: " + netMessage.length);
 
 			netMessages[0].Destroy();
 		}
