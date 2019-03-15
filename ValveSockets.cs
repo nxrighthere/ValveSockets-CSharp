@@ -344,7 +344,7 @@ namespace Valve.Sockets {
 		public long messageNumber;
 		internal IntPtr release;
 		public int channel;
-		private int padDummy;
+		private int pad;
 
 		public void CopyTo(byte[] destination) {
 			if (destination == null)
@@ -363,6 +363,17 @@ namespace Valve.Sockets {
 
 	public delegate void StatusCallback(StatusInfo info, IntPtr context);
 	public delegate void DebugCallback(DebugType type, string message);
+
+	internal static class ArrayPool {
+		private static IntPtr[] pointerBuffer;
+
+		public static IntPtr[] GetPointerBuffer() {
+			if (pointerBuffer == null)
+				pointerBuffer = new IntPtr[256];
+
+			return pointerBuffer;
+		}
+	}
 
 	public class NetworkingSockets {
 		private IntPtr nativeSockets;
@@ -438,16 +449,18 @@ namespace Valve.Sockets {
 		}
 
 		public int ReceiveMessagesOnConnection(Connection connection, NetworkingMessage[] messages, int maxMessages) {
-			IntPtr nativeMessages = IntPtr.Zero;
-			int messagesCount = Native.SteamAPI_ISteamNetworkingSockets_ReceiveMessagesOnConnection(nativeSockets, connection, out nativeMessages, maxMessages);
+			IntPtr[] nativeMessages = ArrayPool.GetPointerBuffer();
+			int messagesCount = Native.SteamAPI_ISteamNetworkingSockets_ReceiveMessagesOnConnection(nativeSockets, connection, nativeMessages, maxMessages);
+
 			MarshalMessages(nativeMessages, messages, messagesCount);
 
 			return messagesCount;
 		}
 
 		public int ReceiveMessagesOnListenSocket(ListenSocket socket, NetworkingMessage[] messages, int maxMessages) {
-			IntPtr nativeMessages = IntPtr.Zero;
-			int messagesCount = Native.SteamAPI_ISteamNetworkingSockets_ReceiveMessagesOnListenSocket(nativeSockets, socket, out nativeMessages, maxMessages);
+			IntPtr[] nativeMessages = ArrayPool.GetPointerBuffer();
+			int messagesCount = Native.SteamAPI_ISteamNetworkingSockets_ReceiveMessagesOnListenSocket(nativeSockets, socket, nativeMessages, maxMessages);
+
 			MarshalMessages(nativeMessages, messages, messagesCount);
 
 			return messagesCount;
@@ -481,12 +494,10 @@ namespace Valve.Sockets {
 			Native.SteamAPI_ISteamNetworkingSockets_RunConnectionStatusChangedCallbacks(nativeSockets, callback, context);
 		}
 
-		private void MarshalMessages(IntPtr nativeMessages, NetworkingMessage[] messages, int messagesCount) {
+		private void MarshalMessages(IntPtr[] nativeMessages, NetworkingMessage[] messages, int messagesCount) {
 			for (int i = 0; i < messagesCount; i++) {
-				IntPtr nativeMessage = new IntPtr(nativeMessages.ToInt64() + (nativeMessageSize * i));
-
-				messages[i] = (NetworkingMessage)Marshal.PtrToStructure(nativeMessage, typeof(NetworkingMessage));
-				messages[i].release = nativeMessage;
+				messages[i] = (NetworkingMessage)Marshal.PtrToStructure(nativeMessages[i], typeof(NetworkingMessage));
+				messages[i].release = nativeMessages[i];
 			}
 		}
 	}
@@ -646,10 +657,10 @@ namespace Valve.Sockets {
 		internal static extern Result SteamAPI_ISteamNetworkingSockets_FlushMessagesOnConnection(IntPtr sockets, Connection connection);
 
 		[DllImport(nativeLibrary, CallingConvention = CallingConvention.Cdecl)]
-		internal static extern int SteamAPI_ISteamNetworkingSockets_ReceiveMessagesOnConnection(IntPtr sockets, Connection connection, out IntPtr messages, int maxMessages);
+		internal static extern int SteamAPI_ISteamNetworkingSockets_ReceiveMessagesOnConnection(IntPtr sockets, Connection connection, IntPtr[] messages, int maxMessages);
 
 		[DllImport(nativeLibrary, CallingConvention = CallingConvention.Cdecl)]
-		internal static extern int SteamAPI_ISteamNetworkingSockets_ReceiveMessagesOnListenSocket(IntPtr sockets, ListenSocket socket, out IntPtr messages, int maxMessages);
+		internal static extern int SteamAPI_ISteamNetworkingSockets_ReceiveMessagesOnListenSocket(IntPtr sockets, ListenSocket socket, IntPtr[] messages, int maxMessages);
 
 		[DllImport(nativeLibrary, CallingConvention = CallingConvention.Cdecl)]
 		internal static extern bool SteamAPI_ISteamNetworkingSockets_GetConnectionInfo(IntPtr sockets, Connection connection, ref ConnectionInfo info);
