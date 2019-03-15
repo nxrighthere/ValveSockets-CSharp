@@ -59,7 +59,7 @@ while (!Console.KeyAvailable) {
 
 			Console.WriteLine("Message received from - ID: " + netMessage.connection + ", Channel ID: " + netMessage.channel + ", Data length: " + netMessage.length);
 
-			netMessages[0].Destroy();
+			netMessage.Destroy();
 		}
 	}
 
@@ -112,7 +112,7 @@ while (!Console.KeyAvailable) {
 
 			Console.WriteLine("Message received from server - Channel ID: " + netMessage.channel + ", Data length: " + netMessage.length);
 
-			netMessages[0].Destroy();
+			netMessage.Destroy();
 		}
 	}
 
