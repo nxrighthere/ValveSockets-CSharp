@@ -365,6 +365,7 @@ namespace Valve.Sockets {
 	public delegate void DebugCallback(DebugType type, string message);
 
 	internal static class ArrayPool {
+		[ThreadStatic]
 		private static IntPtr[] pointerBuffer;
 
 		public static IntPtr[] GetPointerBuffer() {
