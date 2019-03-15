@@ -131,7 +131,7 @@ sockets.SendMessageToConnection(connection, data);
 ```c#
 byte[] buffer = new byte[1024];
 
-netMessages[0].CopyTo(buffer);
+netMessage.CopyTo(buffer);
 ```
 
 ##### Set a hook for debug information:
