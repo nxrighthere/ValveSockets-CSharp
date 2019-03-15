@@ -104,7 +104,7 @@ NetworkingMessage[] netMessages = new NetworkingMessage[maxMessages];
 while (!Console.KeyAvailable) {
 	client.DispatchCallback(status);
 
-	int netMessagesCount = client.ReceiveMessagesOnConnection(connection, netMessages, 1);
+	int netMessagesCount = client.ReceiveMessagesOnConnection(connection, netMessages, maxMessages);
 
 	if (netMessagesCount > 0) {
 		for (int i = 0; i < netMessagesCount; i++) {
