@@ -369,7 +369,7 @@ namespace Valve.Sockets {
 
 		public static IntPtr[] GetPointerBuffer() {
 			if (pointerBuffer == null)
-				pointerBuffer = new IntPtr[256];
+				pointerBuffer = new IntPtr[Library.maxMessagesPerBatch];
 
 			return pointerBuffer;
 		}
@@ -449,6 +449,9 @@ namespace Valve.Sockets {
 		}
 
 		public int ReceiveMessagesOnConnection(Connection connection, NetworkingMessage[] messages, int maxMessages) {
+			if (maxMessages > Library.maxMessagesPerBatch)
+				throw new ArgumentOutOfRangeException("maxMessages");
+
 			IntPtr[] nativeMessages = ArrayPool.GetPointerBuffer();
 			int messagesCount = Native.SteamAPI_ISteamNetworkingSockets_ReceiveMessagesOnConnection(nativeSockets, connection, nativeMessages, maxMessages);
 
@@ -458,6 +461,9 @@ namespace Valve.Sockets {
 		}
 
 		public int ReceiveMessagesOnListenSocket(ListenSocket socket, NetworkingMessage[] messages, int maxMessages) {
+			if (maxMessages > Library.maxMessagesPerBatch)
+				throw new ArgumentOutOfRangeException("maxMessages");
+
 			IntPtr[] nativeMessages = ArrayPool.GetPointerBuffer();
 			int messagesCount = Native.SteamAPI_ISteamNetworkingSockets_ReceiveMessagesOnListenSocket(nativeSockets, socket, nativeMessages, maxMessages);
 
@@ -541,6 +547,7 @@ namespace Valve.Sockets {
 		public const int maxCloseMessageLength = 128;
 		public const int maxCloseReasonValue = 999;
 		public const int maxErrorMessageLength = 1024;
+		public const int maxMessagesPerBatch = 256;
 		public const int maxMessageSize = 512 * 1024;
 		public const int socketsCallbacks = 1220;
 
