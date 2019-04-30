@@ -22,7 +22,7 @@ Address address = new Address();
 
 address.SetAddress("::0", port);
 
-uint listenSocket = server.CreateListenSocket(address);
+uint listenSocket = server.CreateListenSocket(ref address);
 
 StatusCallback status = (info, context) => {
 	switch (info.connectionInfo.state) {
@@ -74,7 +74,7 @@ Address address = new Address();
 
 address.SetAddress("::1", port);
 
-uint connection = client.Connect(address);
+uint connection = client.Connect(ref address);
 
 StatusCallback status = (info, context) => {
 	switch (info.connectionInfo.state) {
@@ -424,9 +424,9 @@ Contains marshalled data of networking message.
 #### NetworkingSockets
 Contains a managed pointer to the sockets.
 
-`NetworkingSockets.CreateListenSocket(Address address)` creates a socket and returns a socket ID that listens for incoming connections which initiated by `NetworkingSockets.Connect()` function.
+`NetworkingSockets.CreateListenSocket(ref Address address)` creates a socket and returns a socket ID that listens for incoming connections which initiated by `NetworkingSockets.Connect()` function.
 
-`NetworkingSockets.Connect(Address address)` initiates a connection to a foreign host. Returns a local connection ID.
+`NetworkingSockets.Connect(ref Address address)` initiates a connection to a foreign host. Returns a local connection ID.
 
 `NetworkingSockets.AcceptConnection(Connection connection)` accepts an incoming connection that has received on a listen socket. When a connection attempt is received (perhaps after a few basic handshake packets have been exchanged to prevent trivial spoofing), a connection interface object is created in the `ConnectionState.Connecting` state and a `StatusCallback()` is called. Returns a result described in the `Result` enumeration.
 
