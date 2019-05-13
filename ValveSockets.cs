@@ -471,7 +471,7 @@ namespace Valve.Sockets {
 					Span<NetworkingMessage> message;
 
 					unsafe {
-						message = new Span<NetworkingMessage>((NetworkingMessage*)nativeMessages[i], 1);
+						message = new Span<NetworkingMessage>((void*)nativeMessages[i], 1);
 					}
 
 					callback(in message[0]);
@@ -494,7 +494,7 @@ namespace Valve.Sockets {
 					Span<NetworkingMessage> message;
 
 					unsafe {
-						message = new Span<NetworkingMessage>((NetworkingMessage*)nativeMessages[i], 1);
+						message = new Span<NetworkingMessage>((void*)nativeMessages[i], 1);
 					}
 
 					callback(in message[0]);
