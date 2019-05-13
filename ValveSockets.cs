@@ -24,6 +24,7 @@
 using System;
 using System.Net;
 using System.Net.Sockets;
+using System.Runtime.CompilerServices;
 using System.Runtime.InteropServices;
 using System.Security;
 using System.Text;
@@ -353,16 +354,22 @@ namespace Valve.Sockets {
 			Marshal.Copy(data, destination, 0, length);
 		}
 
-		public void Destroy() {
-			if (release == IntPtr.Zero)
-				throw new InvalidOperationException("Message not created");
+		#if !VALVESOCKETS_SPAN
+			public void Destroy() {
+				if (release == IntPtr.Zero)
+					throw new InvalidOperationException("Message not created");
 
-			Native.SteamAPI_SteamNetworkingMessage_t_Release(release);
-		}
+				Native.SteamAPI_SteamNetworkingMessage_t_Release(release);
+			}
+		#endif
 	}
 
 	public delegate void StatusCallback(StatusInfo info, IntPtr context);
 	public delegate void DebugCallback(DebugType type, string message);
+
+	#if VALVESOCKETS_SPAN
+		public delegate void MessageCallback(in NetworkingMessage message);
+	#endif
 
 	internal static class ArrayPool {
 		[ThreadStatic]
@@ -449,29 +456,89 @@ namespace Valve.Sockets {
 			return Native.SteamAPI_ISteamNetworkingSockets_FlushMessagesOnConnection(nativeSockets, connection);
 		}
 
-		public int ReceiveMessagesOnConnection(Connection connection, NetworkingMessage[] messages, int maxMessages) {
-			if (maxMessages > Library.maxMessagesPerBatch)
-				throw new ArgumentOutOfRangeException("maxMessages");
+		#if VALVESOCKETS_SPAN
+			#if VALVESOCKETS_INLINING
+				[MethodImpl(256)]
+			#endif
+			public void ReceiveMessagesOnConnection(Connection connection, MessageCallback callback, int maxMessages) {
+				if (maxMessages > Library.maxMessagesPerBatch)
+					throw new ArgumentOutOfRangeException("maxMessages");
 
-			IntPtr[] nativeMessages = ArrayPool.GetPointerBuffer();
-			int messagesCount = Native.SteamAPI_ISteamNetworkingSockets_ReceiveMessagesOnConnection(nativeSockets, connection, nativeMessages, maxMessages);
+				IntPtr[] nativeMessages = ArrayPool.GetPointerBuffer();
+				int messagesCount = Native.SteamAPI_ISteamNetworkingSockets_ReceiveMessagesOnConnection(nativeSockets, connection, nativeMessages, maxMessages);
 
-			MarshalMessages(nativeMessages, messages, messagesCount);
+				for (int i = 0; i < messagesCount; i++) {
+					Span<NetworkingMessage> message;
 
-			return messagesCount;
-		}
+					unsafe {
+						message = new Span<NetworkingMessage>((NetworkingMessage*)nativeMessages[i], 1);
+					}
 
-		public int ReceiveMessagesOnListenSocket(ListenSocket socket, NetworkingMessage[] messages, int maxMessages) {
-			if (maxMessages > Library.maxMessagesPerBatch)
-				throw new ArgumentOutOfRangeException("maxMessages");
+					callback(in message[0]);
 
-			IntPtr[] nativeMessages = ArrayPool.GetPointerBuffer();
-			int messagesCount = Native.SteamAPI_ISteamNetworkingSockets_ReceiveMessagesOnListenSocket(nativeSockets, socket, nativeMessages, maxMessages);
+					Native.SteamAPI_SteamNetworkingMessage_t_Release(nativeMessages[i]);
+				}
+			}
 
-			MarshalMessages(nativeMessages, messages, messagesCount);
+			#if VALVESOCKETS_INLINING
+				[MethodImpl(256)]
+			#endif
+			public void ReceiveMessagesOnListenSocket(ListenSocket socket, MessageCallback callback, int maxMessages) {
+				if (maxMessages > Library.maxMessagesPerBatch)
+					throw new ArgumentOutOfRangeException("maxMessages");
 
-			return messagesCount;
-		}
+				IntPtr[] nativeMessages = ArrayPool.GetPointerBuffer();
+				int messagesCount = Native.SteamAPI_ISteamNetworkingSockets_ReceiveMessagesOnListenSocket(nativeSockets, socket, nativeMessages, maxMessages);
+
+				for (int i = 0; i < messagesCount; i++) {
+					Span<NetworkingMessage> message;
+
+					unsafe {
+						message = new Span<NetworkingMessage>((NetworkingMessage*)nativeMessages[i], 1);
+					}
+
+					callback(in message[0]);
+
+					Native.SteamAPI_SteamNetworkingMessage_t_Release(nativeMessages[i]);
+				}
+			}
+		#else
+			#if VALVESOCKETS_INLINING
+				[MethodImpl(256)]
+			#endif
+			public int ReceiveMessagesOnConnection(Connection connection, NetworkingMessage[] messages, int maxMessages) {
+				if (maxMessages > Library.maxMessagesPerBatch)
+					throw new ArgumentOutOfRangeException("maxMessages");
+
+				IntPtr[] nativeMessages = ArrayPool.GetPointerBuffer();
+				int messagesCount = Native.SteamAPI_ISteamNetworkingSockets_ReceiveMessagesOnConnection(nativeSockets, connection, nativeMessages, maxMessages);
+
+				for (int i = 0; i < messagesCount; i++) {
+					messages[i] = (NetworkingMessage)Marshal.PtrToStructure(nativeMessages[i], typeof(NetworkingMessage));
+					messages[i].release = nativeMessages[i];
+				}
+
+				return messagesCount;
+			}
+
+			#if VALVESOCKETS_INLINING
+				[MethodImpl(256)]
+			#endif
+			public int ReceiveMessagesOnListenSocket(ListenSocket socket, NetworkingMessage[] messages, int maxMessages) {
+				if (maxMessages > Library.maxMessagesPerBatch)
+					throw new ArgumentOutOfRangeException("maxMessages");
+
+				IntPtr[] nativeMessages = ArrayPool.GetPointerBuffer();
+				int messagesCount = Native.SteamAPI_ISteamNetworkingSockets_ReceiveMessagesOnListenSocket(nativeSockets, socket, nativeMessages, maxMessages);
+
+				for (int i = 0; i < messagesCount; i++) {
+					messages[i] = (NetworkingMessage)Marshal.PtrToStructure(nativeMessages[i], typeof(NetworkingMessage));
+					messages[i].release = nativeMessages[i];
+				}
+
+				return messagesCount;
+			}
+		#endif
 
 		public bool GetConnectionInfo(Connection connection, ref ConnectionInfo info) {
 			return Native.SteamAPI_ISteamNetworkingSockets_GetConnectionInfo(nativeSockets, connection, ref info);
@@ -499,13 +566,6 @@ namespace Valve.Sockets {
 
 		public void DispatchCallback(StatusCallback callback, IntPtr context) {
 			Native.SteamAPI_ISteamNetworkingSockets_RunConnectionStatusChangedCallbacks(nativeSockets, callback, context);
-		}
-
-		private void MarshalMessages(IntPtr[] nativeMessages, NetworkingMessage[] messages, int messagesCount) {
-			for (int i = 0; i < messagesCount; i++) {
-				messages[i] = (NetworkingMessage)Marshal.PtrToStructure(nativeMessages[i], typeof(NetworkingMessage));
-				messages[i].release = nativeMessages[i];
-			}
 		}
 	}
 
