@@ -599,8 +599,8 @@ namespace Valve.Sockets {
 			return Native.SteamAPI_ISteamNetworkingUtils_SetConfigValue(nativeUtils, configurationValue, configurationScope, scopeObject, dataType, value);
 		}
 
-		public ConfigurationValueResult GetConfigurationValue(ConfigurationValue configurationValue, ConfigurationScope configurationScope, IntPtr scopeObject, ConfigurationDataType dataType, IntPtr result, IntPtr resultLength) {
-			return Native.SteamAPI_ISteamNetworkingUtils_GetConfigValue(nativeUtils, configurationValue, configurationScope, scopeObject, dataType, result, resultLength);
+		public ConfigurationValueResult GetConfigurationValue(ConfigurationValue configurationValue, ConfigurationScope configurationScope, IntPtr scopeObject, out ConfigurationDataType dataType, out IntPtr result, out IntPtr resultLength) {
+			return Native.SteamAPI_ISteamNetworkingUtils_GetConfigValue(nativeUtils, configurationValue, configurationScope, scopeObject, out dataType, out result, out resultLength);
 		}
 	}
 
@@ -785,10 +785,7 @@ namespace Valve.Sockets {
 		internal static extern bool SteamAPI_ISteamNetworkingUtils_SetConfigValue(IntPtr utils, ConfigurationValue configurationValue, ConfigurationScope configurationScope, IntPtr scopeObject, ConfigurationDataType dataType, IntPtr value);
 
 		[DllImport(nativeLibrary, CallingConvention = CallingConvention.Cdecl)]
-		internal static extern ConfigurationValueResult SteamAPI_ISteamNetworkingUtils_GetConfigValue(IntPtr utils, ConfigurationValue configurationValue, ConfigurationScope configurationScope, IntPtr scopeObject, ConfigurationDataType dataType, IntPtr result, IntPtr resultLength);
-
-		[DllImport(nativeLibrary, CallingConvention = CallingConvention.Cdecl)]
-		internal static extern bool SteamAPI_ISteamNetworkingUtils_GetConfigValueInfo(IntPtr utils, ConfigurationValue configurationValue, IntPtr outName, ConfigurationDataType dataType, ConfigurationScope configurationScope, ConfigurationValue outNextValue);
+		internal static extern ConfigurationValueResult SteamAPI_ISteamNetworkingUtils_GetConfigValue(IntPtr utils, ConfigurationValue configurationValue, ConfigurationScope configurationScope, IntPtr scopeObject, out ConfigurationDataType dataType, out IntPtr result, out IntPtr resultLength);
 
 		[DllImport(nativeLibrary, CallingConvention = CallingConvention.Cdecl)]
 		internal static extern ConfigurationValue SteamAPI_ISteamNetworkingUtils_GetFirstConfigValue(IntPtr utils);
