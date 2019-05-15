@@ -402,7 +402,7 @@ Contains marshalled data of networking identity.
 
 `NetworkingIdentity.SetSteamID(ulong steamID)` sets Steam ID.
 
-`NetworkingIdentity.EqualsTo(NetworkingIdentity identity)` checks if two identities are identical.
+`NetworkingIdentity.EqualsTo(ref NetworkingIdentity identity)` checks if two identities are identical.
 
 #### NetworkingMessage
 Contains marshalled data of networking message.
