@@ -479,7 +479,7 @@ Contains a managed pointer to the sockets.
 
 `SetConfiguratioValue(ConfigurationValue configurationValue, ConfigurationScope configurationScope, IntPtr scopeObject, ConfigurationDataType dataType, IntPtr value)` 
 
-`GetConfigurationValue(ConfigurationValue configurationValue, ConfigurationScope configurationScope, IntPtr scopeObject, ConfigurationDataType dataType, IntPtr result, IntPtr resultLength)` 
+`GetConfigurationValue(ConfigurationValue configurationValue, ConfigurationScope configurationScope, IntPtr scopeObject, out ConfigurationDataType dataType, out IntPtr result, out IntPtr resultLength)` 
 
 #### Library
 Contains constant fields.
