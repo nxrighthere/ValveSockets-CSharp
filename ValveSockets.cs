@@ -317,20 +317,20 @@ namespace Valve.Sockets {
 
 		public bool IsInvalid {
 			get {
-				return Native.SteamAPI_SteamNetworkingIdentity_IsInvalid(this);
+				return Native.SteamAPI_SteamNetworkingIdentity_IsInvalid(ref this);
 			}
 		}
 
 		public ulong GetSteamID() {
-			return Native.SteamAPI_SteamNetworkingIdentity_GetSteamID64(this);
+			return Native.SteamAPI_SteamNetworkingIdentity_GetSteamID64(ref this);
 		}
 
 		public void SetSteamID(ulong steamID) {
 			Native.SteamAPI_SteamNetworkingIdentity_SetSteamID64(ref this, steamID);
 		}
 
-		public bool EqualsTo(NetworkingIdentity identity) {
-			return Native.SteamAPI_SteamNetworkingIdentity_EqualTo(this, identity);
+		public bool EqualsTo(ref NetworkingIdentity identity) {
+			return Native.SteamAPI_SteamNetworkingIdentity_EqualTo(ref this, ref identity);
 		}
 	}
 
@@ -764,16 +764,16 @@ namespace Valve.Sockets {
 		internal static extern bool SteamAPI_SteamNetworkingIPAddr_IsLocalHost(ref Address address);
 
 		[DllImport(nativeLibrary, CallingConvention = CallingConvention.Cdecl)]
-		internal static extern bool SteamAPI_SteamNetworkingIdentity_IsInvalid(NetworkingIdentity identity);
+		internal static extern bool SteamAPI_SteamNetworkingIdentity_IsInvalid(ref NetworkingIdentity identity);
 
 		[DllImport(nativeLibrary, CallingConvention = CallingConvention.Cdecl)]
 		internal static extern void SteamAPI_SteamNetworkingIdentity_SetSteamID64(ref NetworkingIdentity identity, ulong steamID);
 
 		[DllImport(nativeLibrary, CallingConvention = CallingConvention.Cdecl)]
-		internal static extern ulong SteamAPI_SteamNetworkingIdentity_GetSteamID64(NetworkingIdentity identity);
+		internal static extern ulong SteamAPI_SteamNetworkingIdentity_GetSteamID64(ref NetworkingIdentity identity);
 
 		[DllImport(nativeLibrary, CallingConvention = CallingConvention.Cdecl)]
-		internal static extern bool SteamAPI_SteamNetworkingIdentity_EqualTo(NetworkingIdentity identityOne, NetworkingIdentity identityTwo);
+		internal static extern bool SteamAPI_SteamNetworkingIdentity_EqualTo(ref NetworkingIdentity identityOne, ref NetworkingIdentity identityTwo);
 
 		[DllImport(nativeLibrary, CallingConvention = CallingConvention.Cdecl)]
 		internal static extern Microseconds SteamAPI_ISteamNetworkingUtils_GetLocalTimestamp(IntPtr utils);
