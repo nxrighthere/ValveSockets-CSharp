@@ -51,24 +51,34 @@ StatusCallback status = (info, context) => {
 	}
 };
 
-const int maxMessages = 20;
+#if !VALVESOCKETS_SPAN
+	const int maxMessages = 20;
 
-NetworkingMessage[] netMessages = new NetworkingMessage[maxMessages];
+	NetworkingMessage[] netMessages = new NetworkingMessage[maxMessages];
+#else
+	MessageCallback message = (in NetworkingMessage netMessage) => {
+		Console.WriteLine("Message received from - ID: " + netMessage.connection + ", Channel ID: " + netMessage.channel + ", Data length: " + netMessage.length);
+	};
+#endif
 
 while (!Console.KeyAvailable) {
 	server.DispatchCallback(status);
 
-	int netMessagesCount = server.ReceiveMessagesOnListenSocket(listenSocket, netMessages, maxMessages);
+	#if !VALVESOCKETS_SPAN
+		int netMessagesCount = server.ReceiveMessagesOnListenSocket(listenSocket, netMessages, maxMessages);
 
-	if (netMessagesCount > 0) {
-		for (int i = 0; i < netMessagesCount; i++) {
-			ref NetworkingMessage netMessage = ref netMessages[i];
+		if (netMessagesCount > 0) {
+			for (int i = 0; i < netMessagesCount; i++) {
+				ref NetworkingMessage netMessage = ref netMessages[i];
 
-			Console.WriteLine("Message received from - ID: " + netMessage.connection + ", Channel ID: " + netMessage.channel + ", Data length: " + netMessage.length);
+				Console.WriteLine("Message received from - ID: " + netMessage.connection + ", Channel ID: " + netMessage.channel + ", Data length: " + netMessage.length);
 
-			netMessage.Destroy();
+				netMessage.Destroy();
+			}
 		}
-	}
+	#else
+		server.ReceiveMessagesOnListenSocket(listenSocket, message, 20);
+	#endif
 
 	Thread.Sleep(15);
 }
@@ -104,24 +114,34 @@ StatusCallback status = (info, context) => {
 	}
 };
 
-const int maxMessages = 20;
+#if !VALVESOCKETS_SPAN
+	const int maxMessages = 20;
 
-NetworkingMessage[] netMessages = new NetworkingMessage[maxMessages];
+	NetworkingMessage[] netMessages = new NetworkingMessage[maxMessages];
+#else
+	MessageCallback message = (in NetworkingMessage netMessage) => {
+		Console.WriteLine("Message received from server - Channel ID: " + netMessage.channel + ", Data length: " + netMessage.length);
+	};
+#endif
 
 while (!Console.KeyAvailable) {
 	client.DispatchCallback(status);
 
-	int netMessagesCount = client.ReceiveMessagesOnConnection(connection, netMessages, maxMessages);
+	#if !VALVESOCKETS_SPAN
+		int netMessagesCount = client.ReceiveMessagesOnConnection(connection, netMessages, maxMessages);
 
-	if (netMessagesCount > 0) {
-		for (int i = 0; i < netMessagesCount; i++) {
-			ref NetworkingMessage netMessage = ref netMessages[i];
+		if (netMessagesCount > 0) {
+			for (int i = 0; i < netMessagesCount; i++) {
+				ref NetworkingMessage netMessage = ref netMessages[i];
 
-			Console.WriteLine("Message received from server - Channel ID: " + netMessage.channel + ", Data length: " + netMessage.length);
+				Console.WriteLine("Message received from server - Channel ID: " + netMessage.channel + ", Data length: " + netMessage.length);
 
-			netMessage.Destroy();
+				netMessage.Destroy();
+			}
 		}
-	}
+	#else
+		client.ReceiveMessagesOnConnection(connection, message, 20);
+	#endif
 
 	Thread.Sleep(15);
 }
