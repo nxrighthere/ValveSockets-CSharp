@@ -51,20 +51,22 @@ StatusCallback status = (info, context) => {
 	}
 };
 
-#if !VALVESOCKETS_SPAN
-	const int maxMessages = 20;
-
-	NetworkingMessage[] netMessages = new NetworkingMessage[maxMessages];
-#else
+#if VALVESOCKETS_SPAN
 	MessageCallback message = (in NetworkingMessage netMessage) => {
 		Console.WriteLine("Message received from - ID: " + netMessage.connection + ", Channel ID: " + netMessage.channel + ", Data length: " + netMessage.length);
 	};
+#else
+	const int maxMessages = 20;
+
+	NetworkingMessage[] netMessages = new NetworkingMessage[maxMessages];
 #endif
 
 while (!Console.KeyAvailable) {
 	server.DispatchCallback(status);
 
-	#if !VALVESOCKETS_SPAN
+	#if VALVESOCKETS_SPAN
+		server.ReceiveMessagesOnListenSocket(listenSocket, message, 20);
+	#else
 		int netMessagesCount = server.ReceiveMessagesOnListenSocket(listenSocket, netMessages, maxMessages);
 
 		if (netMessagesCount > 0) {
@@ -76,8 +78,6 @@ while (!Console.KeyAvailable) {
 				netMessage.Destroy();
 			}
 		}
-	#else
-		server.ReceiveMessagesOnListenSocket(listenSocket, message, 20);
 	#endif
 
 	Thread.Sleep(15);
@@ -114,20 +114,22 @@ StatusCallback status = (info, context) => {
 	}
 };
 
-#if !VALVESOCKETS_SPAN
-	const int maxMessages = 20;
-
-	NetworkingMessage[] netMessages = new NetworkingMessage[maxMessages];
-#else
+#if VALVESOCKETS_SPAN
 	MessageCallback message = (in NetworkingMessage netMessage) => {
 		Console.WriteLine("Message received from server - Channel ID: " + netMessage.channel + ", Data length: " + netMessage.length);
 	};
+#else
+	const int maxMessages = 20;
+
+	NetworkingMessage[] netMessages = new NetworkingMessage[maxMessages];
 #endif
 
 while (!Console.KeyAvailable) {
 	client.DispatchCallback(status);
 
-	#if !VALVESOCKETS_SPAN
+	#if VALVESOCKETS_SPAN
+		client.ReceiveMessagesOnConnection(connection, message, 20);
+	#else
 		int netMessagesCount = client.ReceiveMessagesOnConnection(connection, netMessages, maxMessages);
 
 		if (netMessagesCount > 0) {
@@ -139,8 +141,6 @@ while (!Console.KeyAvailable) {
 				netMessage.Destroy();
 			}
 		}
-	#else
-		client.ReceiveMessagesOnConnection(connection, message, 20);
 	#endif
 
 	Thread.Sleep(15);
