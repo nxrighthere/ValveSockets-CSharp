@@ -440,6 +440,18 @@ namespace Valve.Sockets {
 			return Native.SteamAPI_ISteamNetworkingSockets_GetConnectionName(nativeSockets, peer, name, maxLength);
 		}
 
+		public Result SendMessageToConnection(Connection connection, IntPtr data, uint length) {
+			return SendMessageToConnection(connection, data, length, SendType.Unreliable);
+		}
+
+		public Result SendMessageToConnection(Connection connection, IntPtr data, uint length, SendType flags) {
+			return SendMessageToConnection(connection, data, length, SendType.Unreliable);
+		}
+
+		public Result SendMessageToConnection(Connection connection, IntPtr data, int length, SendType flags) {
+			return Native.SteamAPI_ISteamNetworkingSockets_SendMessageToConnection(nativeSockets, connection, data, (uint)length, flags);
+		}
+
 		public Result SendMessageToConnection(Connection connection, byte[] data) {
 			return SendMessageToConnection(connection, data, data.Length, SendType.Unreliable);
 		}
@@ -717,6 +729,9 @@ namespace Valve.Sockets {
 
 		[DllImport(nativeLibrary, CallingConvention = CallingConvention.Cdecl)]
 		internal static extern bool SteamAPI_ISteamNetworkingSockets_GetConnectionName(IntPtr sockets, Connection peer, StringBuilder name, int maxLength);
+
+		[DllImport(nativeLibrary, CallingConvention = CallingConvention.Cdecl)]
+		internal static extern Result SteamAPI_ISteamNetworkingSockets_SendMessageToConnection(IntPtr sockets, Connection connection, IntPtr data, uint length, SendType flags);
 
 		[DllImport(nativeLibrary, CallingConvention = CallingConvention.Cdecl)]
 		internal static extern Result SteamAPI_ISteamNetworkingSockets_SendMessageToConnection(IntPtr sockets, Connection connection, byte[] data, uint length, SendType flags);
