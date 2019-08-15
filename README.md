@@ -497,9 +497,9 @@ Contains a managed pointer to the sockets.
 
 `SetDebugCallback(DebugType detailLevel, DebugCallback callback)` sets a callback for debug output.
 
-`SetConfiguratioValue(ConfigurationValue configurationValue, ConfigurationScope configurationScope, IntPtr scopeObject, ConfigurationDataType dataType, IntPtr value)` 
+`SetConfiguratioValue(ConfigurationValue configurationValue, ConfigurationScope configurationScope, IntPtr scopeObject, ConfigurationDataType dataType, IntPtr value)` sets a configuration value according to `ConfigurationValue`, `ConfigurationScope`, and `ConfigurationDataType` enumerations.
 
-`GetConfigurationValue(ConfigurationValue configurationValue, ConfigurationScope configurationScope, IntPtr scopeObject, out ConfigurationDataType dataType, out IntPtr result, out IntPtr resultLength)` 
+`GetConfigurationValue(ConfigurationValue configurationValue, ConfigurationScope configurationScope, IntPtr scopeObject, out ConfigurationDataType dataType, out IntPtr result, out IntPtr resultLength)` gets a configuration value according to `ConfigurationValue`, `ConfigurationScope`, and `ConfigurationDataType` enumerations.
 
 #### Library
 Contains constant fields.
