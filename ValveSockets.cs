@@ -445,7 +445,7 @@ namespace Valve.Sockets {
 		}
 
 		public Result SendMessageToConnection(Connection connection, IntPtr data, uint length, SendType flags) {
-			return SendMessageToConnection(connection, data, length, SendType.Unreliable);
+			return SendMessageToConnection(connection, data, length, flags);
 		}
 
 		public Result SendMessageToConnection(Connection connection, IntPtr data, int length, SendType flags) {
@@ -457,7 +457,7 @@ namespace Valve.Sockets {
 		}
 
 		public Result SendMessageToConnection(Connection connection, byte[] data, SendType flags) {
-			return SendMessageToConnection(connection, data, data.Length, SendType.Unreliable);
+			return SendMessageToConnection(connection, data, data.Length, flags);
 		}
 
 		public Result SendMessageToConnection(Connection connection, byte[] data, int length, SendType flags) {
