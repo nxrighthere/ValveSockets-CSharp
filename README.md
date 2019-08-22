@@ -335,12 +335,12 @@ Definitions of operation result:
 #### Socket callbacks
 Provides per socket events.
 
-`StatusCallback(StatusInfo info, IntPtr context)` notifies when dispatch mechanism on the listen socket returns a connection state.
+`StatusCallback(StatusInfo info, IntPtr context)` notifies when dispatch mechanism on the listen socket returns a connection state. A reference to the delegate should be preserved from being garbage collected.
 
 #### Library callbacks
 Provides per application events.
 
-`DebugCallback(DebugType type, string message)` notifies when debug information with the desired verbosity come up.
+`DebugCallback(DebugType type, string message)` notifies when debug information with the desired verbosity come up. A reference to the delegate should be preserved from being garbage collected.
 
 ### Structures
 #### Address
