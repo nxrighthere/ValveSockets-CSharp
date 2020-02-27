@@ -556,8 +556,8 @@ namespace Valve.Sockets {
 			return Native.SteamAPI_ISteamNetworkingSockets_GetConnectionInfo(nativeSockets, connection, ref info);
 		}
 
-		public bool GetQuickConnectionStatus(Connection connection, ConnectionStatus status) {
-			return Native.SteamAPI_ISteamNetworkingSockets_GetQuickConnectionStatus(nativeSockets, connection, status);
+		public bool GetQuickConnectionStatus(Connection connection, ref ConnectionStatus status) {
+			return Native.SteamAPI_ISteamNetworkingSockets_GetQuickConnectionStatus(nativeSockets, connection, ref status);
 		}
 
 		public int GetDetailedConnectionStatus(Connection connection, StringBuilder status, int statusLength) {
@@ -749,7 +749,7 @@ namespace Valve.Sockets {
 		internal static extern bool SteamAPI_ISteamNetworkingSockets_GetConnectionInfo(IntPtr sockets, Connection connection, ref ConnectionInfo info);
 
 		[DllImport(nativeLibrary, CallingConvention = CallingConvention.Cdecl)]
-		internal static extern bool SteamAPI_ISteamNetworkingSockets_GetQuickConnectionStatus(IntPtr sockets, Connection connection, ConnectionStatus status);
+		internal static extern bool SteamAPI_ISteamNetworkingSockets_GetQuickConnectionStatus(IntPtr sockets, Connection connection, ref ConnectionStatus status);
 
 		[DllImport(nativeLibrary, CallingConvention = CallingConvention.Cdecl)]
 		internal static extern int SteamAPI_ISteamNetworkingSockets_GetDetailedConnectionStatus(IntPtr sockets, Connection connection, StringBuilder status, int statusLength);
