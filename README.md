@@ -481,7 +481,7 @@ Contains a managed pointer to the sockets.
 
 `NetworkingSockets.GetConnectionInfo(Connection connection, ref ConnectionInfo info)` gets information about the specified connection. Returns true on success or false on failure.
 
-`NetworkingSockets.GetQuickConnectionStatus(Connection connection, ConnectionStatus status)` gets a brief set of connection status that can be displayed to the user in-game. Returns true on success or false on failure.
+`NetworkingSockets.GetQuickConnectionStatus(Connection connection, ref ConnectionStatus status)` gets a brief set of connection status that can be displayed to the user in-game. Returns true on success or false on failure.
 
 `NetworkingSockets.GetDetailedConnectionStatus(Connection connection, StringBuilder status, int statusLength)` gets detailed connection stats in a printable form. Returns 0 on success, -1 on failure, or > 0 if a capacity of the mutable string is not enough.
 
