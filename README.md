@@ -6,7 +6,7 @@
 
 This repository provides a managed C# wrapper for [GameNetworkingSockets](https://github.com/ValveSoftware/GameNetworkingSockets) library which is created and maintained by [Valve Software](https://www.valvesoftware.com). You will need to [build](https://github.com/ValveSoftware/GameNetworkingSockets#building) the native library with all required dependencies before you get started.
 
-The wrapper is updated in accordance with the [releases](https://github.com/ValveSoftware/GameNetworkingSockets/releases) of the native library.
+The wrapper is updating in accordance with the [releases](https://github.com/ValveSoftware/GameNetworkingSockets/releases) of the native library.
 
 Building
 --------
@@ -32,6 +32,7 @@ Address address = new Address();
 address.SetAddress("::0", port);
 
 uint listenSocket = server.CreateListenSocket(ref address);
+uint pollGroup = server.CreatePollGroup();
 
 StatusCallback status = (info, context) => {
 	switch (info.connectionInfo.state) {
@@ -40,6 +41,7 @@ StatusCallback status = (info, context) => {
 
 		case ConnectionState.Connecting:
 			server.AcceptConnection(info.connection);
+			server.SetConnectionPollGroup(pollGroup, info.connection);
 			break;
 
 		case ConnectionState.Connected:
@@ -67,9 +69,9 @@ while (!Console.KeyAvailable) {
 	server.DispatchCallback(status);
 
 	#if VALVESOCKETS_SPAN
-		server.ReceiveMessagesOnListenSocket(listenSocket, message, 20);
+		server.ReceiveMessagesOnPollGroup(pollGroup, message, 20);
 	#else
-		int netMessagesCount = server.ReceiveMessagesOnListenSocket(listenSocket, netMessages, maxMessages);
+		int netMessagesCount = server.ReceiveMessagesOnPollGroup(pollGroup, netMessages, maxMessages);
 
 		if (netMessagesCount > 0) {
 			for (int i = 0; i < netMessagesCount; i++) {
@@ -84,6 +86,8 @@ while (!Console.KeyAvailable) {
 
 	Thread.Sleep(15);
 }
+
+server.DestroyPollGroup(pollGroup);
 ```
 
 ##### Start a new client:
@@ -180,25 +184,25 @@ Usage is almost the same as in the .NET environment, except that the console fun
 API reference
 --------
 ### Enumerations
-#### SendType
+#### SendFlags
 Definitions of a flags for `NetworkingSockets.SendMessageToConnection()` function:
 
-`SendType.Unreliable` unreliable, delivery of message is not guaranteed, the message may be delivered out of order.
+`SendFlags.Unreliable` unreliable, delivery of message is not guaranteed, the message may be delivered out of order.
 
-`SendType.Reliable` reliable ordered, a message must be received by the target connection and resend attempts should be made until the message is delivered.
+`SendFlags.Reliable` reliable ordered, a message must be received by the target connection and resend attempts should be made until the message is delivered.
 
-`SendType.NoNagle` a message will not be grouped with other messages within a timer.
+`SendFlags.NoNagle` a message will not be grouped with other messages within a timer.
 
-`SendType.NoDelay` a message will not be buffered if it can't be sent relatively quickly.
+`SendFlags.NoDelay` a message will not be buffered if it can't be sent relatively quickly.
 
 #### IdentityType
 Definitions of identity type for `NetworkingIdentity` structure:
 
 `IdentityType.Invalid` unknown or invalid.
 
-`IdentityType.IPAddress` IPv4/IPv6 address.
-
 `IdentityType.SteamID` Steam identifier.
+
+`IdentityType.IPAddress` IPv4/IPv6 address.
 
 #### ConnectionState
 Definitions of connection states for `ConnectionInfo.state` field:
@@ -242,47 +246,77 @@ Definitions of configuration data types:
 #### ConfigurationValue
 Definitions of configuration values: 
 
-`FakePacketLossSend` 
+`Invalid`
 
-`FakePacketLossRecv` 
+`FakePacketLossSend`
 
-`FakePacketLagSend` 
+`FakePacketLossRecv`
 
-`FakePacketLagRecv` 
+`FakePacketLagSend`
 
-`FakePacketReorderSend` 
+`FakePacketLagRecv`
 
-`FakePacketReorderRecv` 
+`FakePacketReorderSend`
 
-`FakePacketReorderTime` 
+`FakePacketReorderRecv`
 
-`FakePacketDupSend` 
+`FakePacketReorderTime`
 
-`FakePacketDupRecv` 
+`FakePacketDupSend`
 
-`FakePacketDupTimeMax` 
+`FakePacketDupRecv`
 
-`TimeoutInitial` 
+`FakePacketDupTimeMax`
 
-`TimeoutConnected` 
+`TimeoutInitial`
 
-`SendBufferSize` 
+`TimeoutConnected`
 
-`SendRateMin` 
+`SendBufferSize`
 
-`SendRateMax` 
+`SendRateMin`
 
-`NagleTime` 
+`SendRateMax`
 
-`IPAllowWithoutAuth` 
+`NagleTime`
 
-`LogLevelAckRTT` 
+`IPAllowWithoutAuth`
 
-`LogLevelPacketDecode` 
+`MTUPacketSize`
 
-`LogLevelMessage` 
+`MTUDataSize`
 
-`LogLevelPacketGaps` 
+`Unencrypted`
+
+`EnumerateDevVars`
+
+`SDRClientConsecutitivePingTimeoutsFailInitial`
+
+`SDRClientConsecutitivePingTimeoutsFail`
+
+`SDRClientMinPingsBeforePingAccurate`
+
+`SDRClientSingleSocket`
+
+`SDRClientForceRelayCluster`
+
+`SDRClientDebugTicketAddress`
+
+`SDRClientForceProxyAddr`
+
+`SDRClientFakeClusterPing`
+
+`LogLevelAckRTT`
+
+`LogLevelPacketDecode`
+
+`LogLevelMessage`
+
+`LogLevelPacketGaps`
+
+`LogLevelP2PRendezvous`
+
+`LogLevelSDRRelayPings`
 
 #### ConfigurationValueResult
 Definitions of configuration value results: 
@@ -346,7 +380,7 @@ Provides per application events.
 
 ### Structures
 #### Address
-Contains marshalled structure with an IP address and port number.
+Contains marshalled data with an IP address and port number.
 
 `Address.ip` IP address in bytes.
 
@@ -360,6 +394,15 @@ Contains marshalled structure with an IP address and port number.
 
 `Address.SetAddress(string ip, ushort port)` sets an IP address (IPv4/IPv6) with a specified port.
 
+#### Configuration
+Contains marshalled data with configuration.
+
+`Configuration.value` a type of the value described in the `ConfigurationValue` enumeration.
+
+`Configuration.dataType` a type of data described in the `ConfigurationDataType` enumeration.
+
+`Configuration.data` a union of configuration data.
+
 #### StatusInfo
 Contains marshalled data with connection state.
 
@@ -372,7 +415,7 @@ Contains marshalled data with connection info.
 
 `ConnectionInfo.identity` identifier of an endpoint.
 
-`ConnectionInfo.userData` user-supplied data set using `NetworkingSockets.SetConnectionUserData()` function.
+`ConnectionInfo.userData` user-supplied data that set using `NetworkingSockets.SetConnectionUserData()` function.
 
 `ConnectionInfo.listenSocket` listen socket for this connection.
 
@@ -424,14 +467,12 @@ Contains marshalled data of networking identity.
 
 `NetworkingIdentity.SetSteamID(ulong steamID)` sets Steam ID.
 
-`NetworkingIdentity.EqualsTo(ref NetworkingIdentity identity)` checks if two identities are identical.
-
 #### NetworkingMessage
 Contains marshalled data of networking message.
 
 `NetworkingMessage.identity` identifier of a sender.
 
-`NetworkingMessage.userData` user-supplied data set using `NetworkingSockets.SetConnectionUserData()` function.
+`NetworkingMessage.connectionUserData` user-supplied connection data that set using `NetworkingSockets.SetConnectionUserData()` function.
 
 `NetworkingMessage.timeReceived` local timestamp when the message was received.
 
@@ -447,15 +488,15 @@ Contains marshalled data of networking message.
 
 `NetworkingMessage.CopyTo(byte[] destination)` copies payload from the message to the destination array.
 
-`NetworkingMessage.Destroy()` destroys the message. Should be called only when the message obtained using `NetworkingSockets.ReceiveMessagesOnListenSocket()` function.
+`NetworkingMessage.Destroy()` destroys the message. Should be called only when the messages are obtained from sockets.
 
 ### Classes
 #### NetworkingSockets
 Contains a managed pointer to the sockets.
 
-`NetworkingSockets.CreateListenSocket(ref Address address)` creates a socket and returns a socket ID that listens for incoming connections which initiated by `NetworkingSockets.Connect()` function.
+`NetworkingSockets.CreateListenSocket(ref Address address, Configuration[] configurations)` creates a socket with optional configurations and returns a socket ID that listens for incoming connections which initiated by `NetworkingSockets.Connect()` function.
 
-`NetworkingSockets.Connect(ref Address address)` initiates a connection to a foreign host. Returns a local connection ID.
+`NetworkingSockets.Connect(ref Address address, Configuration[] configurations)` initiates a connection to a foreign host with optional configurations. Returns a local connection ID.
 
 `NetworkingSockets.AcceptConnection(Connection connection)` accepts an incoming connection that has received on a listen socket. When a connection attempt is received (perhaps after a few basic handshake packets have been exchanged to prevent trivial spoofing), a connection interface object is created in the `ConnectionState.Connecting` state and a `StatusCallback()` is called. Returns a result described in the `Result` enumeration.
 
@@ -471,13 +512,11 @@ Contains a managed pointer to the sockets.
 
 `NetworkingSockets.GetConnectionName(Connection peer, StringBuilder name, int maxLength)` fetches connection name to the mutable string. Returns true on success or false on failure.
 
-`NetworkingSockets.SendMessageToConnection(Connection connection, byte[] data, int length, SendType flags)` sends a message to the host on the connected socket. The length and send type parameters are optional. Multiple flags can be specified at once. Returns a result described in the `Result` enumeration. Pointer `IntPtr` to a native buffer can be used instead of a reference to a byte array.
+`NetworkingSockets.SendMessageToConnection(Connection connection, byte[] data, int length, SendFlags flags)` sends a message to the host on the connected socket. The length and send type parameters are optional. Multiple flags can be specified at once. Returns a result described in the `Result` enumeration. Pointer `IntPtr` to a native buffer can be used instead of a reference to a byte array.
 
 `NetworkingSockets.FlushMessagesOnConnection(Connection connection)` if the Nagle is enabled (it's enabled by default) then the message will be queued up the Nagle time before being sent, to merge small messages into the same packet. Call this function to flush any queued messages and send them immediately on the next transmission time. Returns a result described in the `Result` enumeration.
 
 `NetworkingSockets.ReceiveMessagesOnConnection(Connection connection, NetworkingMessage[] messages, int maxMessages)` fetches the next available messages from the socket for a connection. Returns a number of messages or -1 if the connection handle is invalid. The order of the messages returned in the array is relevant. Reliable messages will be received in the order they were sent. If any messages are obtained, `message.Destroy()` should be called for each of them to free up resources.
-
-`NetworkingSockets.ReceiveMessagesOnListenSocket(ListenSocket socket, NetworkingMessage[] messages, int maxMessages)` fetches the next available messages from the socket. Returns a number of messages or -1 if the connection handle is invalid. Delivery order of messages among different clients is not defined. They may be returned in an order different from what they were actually received. Delivery order of messages from the same client is well defined, and thus the order of the messages is relevant. If any messages are obtained, `message.Destroy()` should be called for each of them to free up resources.
 
 `NetworkingSockets.GetConnectionInfo(Connection connection, ref ConnectionInfo info)` gets information about the specified connection. Returns true on success or false on failure.
 
@@ -487,7 +526,17 @@ Contains a managed pointer to the sockets.
 
 `NetworkingSockets.GetListenSocketAddress(ListenSocket socket, ref Address address)` gets local IP and port number of a listen socket. Returns true on success or false on failure.
 
-`NetworkingSockets.CreateSocketPair(Connection connectionOne, Connection connectionTwo, bool useNetworkLoopback)` creates a pair of connections that are talking to each other e.g. a loopback communication. The two connections will be immediately placed into the connected state, and no callbacks will be called. After this, if either connection is closed, the other connection will receive a callback, exactly as if they were communicating over the network. By default, internal buffers are used, completely bypassing the network, the chopping up of messages into packets, encryption, copying the payload, etc. This means that loopback packets, by default, will not simulate lag or loss. Enabled network loopback parameter will cause the socket pair to send packets through the local network loopback device on ephemeral ports. Fake lag and loss are supported in this case, and CPU time is expended to encrypt and decrypt.
+`NetworkingSockets.CreateSocketPair(Connection connectionLeft, Connection connectionRight, bool useNetworkLoopback, ref NetworkingIdentity identityLeft, ref NetworkingIdentity identityRight)` creates a pair of connections that are talking to each other e.g. a loopback communication. The two connections will be immediately placed into the connected state, and no callbacks will be called. After this, if either connection is closed, the other connection will receive a callback, exactly as if they were communicating over the network. By default, internal buffers are used, completely bypassing the network, the chopping up of messages into packets, encryption, copying the payload, etc. This means that loopback packets, by default, will not simulate lag or loss. Enabled network loopback parameter will cause the socket pair to send packets through the local network loopback device on ephemeral ports. Fake lag and loss are supported in this case, and CPU time is expended to encrypt and decrypt.
+
+`NetworkingSockets.GetIdentity()` gets an identity associated with sockets.
+
+`NetworkingSockets.CreatePollGroup()` creates a new poll group for connections. Returns the poll group handle.
+ 
+`NetworkingSockets.DestroyPollGroup(PollGroup pollGroup)` destroys a poll group. If there are any connections in the poll group, they are removed from the group and left in a state where they are not part of any poll group. Returns false if passed an invalid poll group handle.
+
+`NetworkingSockets.SetConnectionPollGroup(PollGroup pollGroup, Connection connection)` assigns a connection to a poll group. A connection may only belong to a single poll group. Adding a connection to a poll group implicitly removes it from any other poll group. You can pass zero value to the poll group parameter to remove a connection from its current poll group. If there are received messages currently pending on the connection, an attempt is made to add them to the queue of messages for the poll group in approximately the order that would have applied if the connection was already part of the poll group at the time that the messages were received. Returns false if the connection handle is invalid or if the poll group handle is invalid.
+
+`NetworkingSockets.ReceiveMessagesOnPollGroup()` fetches the next available messages from the socket on any connection in the poll group. Examine `NetworkingMessage.connection` to identify connection. Delivery order of messages among different connections will usually match the order that the last packet was received which completed the message. But this is not a strong guarantee, especially for packets received right as a connection is being assigned to poll group. Delivery order of messages on the same connection is well defined and the same guarantees are present. Messages are not grouped by connection, so they will not necessarily appear consecutively in the list, they may be interleaved with messages for other connections. Returns a number of messages or -1 if the connection handle is invalid.
 
 `NetworkingSockets.DispatchCallback(StatusCallback callback, IntPtr context)` dispatches one callback per call if available. Optional context parameter may be specified for `StatusCallback` delegate.
 
@@ -512,6 +561,6 @@ Contains constant fields.
 
 `Library.maxMessageSize` the maximum size of a single message that can be sent.
 
-`Library.Initialize(StringBuilder errorMessage)` initializes the native library. Error message parameter is optional and should be used to determine error during initialization. The capacity of a mutable string for an error message must be equal to `Library.maxErrorMessageLength`.
+`Library.Initialize(ref NetworkingIdentity identity, StringBuilder errorMessage)` initializes the native library with optional identity that will be associated with sockets. Error message parameter is optional and should be used to determine error during initialization. The capacity of a mutable string for an error message must be equal to `Library.maxErrorMessageLength`.
 
 `Library.Deinitialize()` deinitializes the native library. Should be called after the work is done.
