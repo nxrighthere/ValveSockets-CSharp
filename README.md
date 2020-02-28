@@ -394,6 +394,8 @@ Contains marshalled data with an IP address and port number.
 
 `Address.SetAddress(string ip, ushort port)` sets an IP address (IPv4/IPv6) with a specified port.
 
+`Address.Equals(Address other)` determines equality of addresses.
+
 #### Configuration
 Contains marshalled data with configuration.
 
