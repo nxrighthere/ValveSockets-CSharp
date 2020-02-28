@@ -488,6 +488,8 @@ Contains marshalled data of networking message.
 
 `NetworkingMessage.channel` channel number the message was received on.
 
+`NetworkingMessage.flags` flags that were used to send the message.
+
 `NetworkingMessage.CopyTo(byte[] destination)` copies payload from the message to the destination array.
 
 `NetworkingMessage.Destroy()` destroys the message. Should be called only when the messages are obtained from sockets.
