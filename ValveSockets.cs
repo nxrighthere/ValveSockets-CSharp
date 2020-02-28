@@ -377,7 +377,7 @@ namespace Valve.Sockets {
 		internal IntPtr freeData;
 		internal IntPtr release;
 		public int channel;
-		private int flags;
+		public int flags;
 		public long userData;
 
 		public void CopyTo(byte[] destination) {
