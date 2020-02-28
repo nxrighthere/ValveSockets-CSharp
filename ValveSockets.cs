@@ -247,7 +247,7 @@ namespace Valve.Sockets {
 	}
 
 	[StructLayout(LayoutKind.Sequential)]
-	public struct Address {
+	public struct Address : IEquatable<Address> {
 		[MarshalAs(UnmanagedType.ByValArray, SizeConst = 16)]
 		public byte[] ip;
 		public ushort port;
@@ -271,6 +271,10 @@ namespace Valve.Sockets {
 				Native.SteamAPI_SteamNetworkingIPAddr_SetIPv4(ref this, ip.ParseIPv4(), port);
 			else
 				Native.SteamAPI_SteamNetworkingIPAddr_SetIPv6(ref this, ip.ParseIPv6(), port);
+		}
+
+		public bool Equals(Address other) {
+			return Native.SteamAPI_SteamNetworkingIPAddr_IsEqualTo(ref this, ref other);
 		}
 	}
 
@@ -864,6 +868,9 @@ namespace Valve.Sockets {
 
 		[DllImport(nativeLibrary, CallingConvention = CallingConvention.Cdecl)]
 		internal static extern bool SteamAPI_SteamNetworkingIPAddr_IsLocalHost(ref Address address);
+
+		[DllImport(nativeLibrary, CallingConvention = CallingConvention.Cdecl)]
+		internal static extern bool SteamAPI_SteamNetworkingIPAddr_IsEqualTo(ref Address address, ref Address other);
 
 		[DllImport(nativeLibrary, CallingConvention = CallingConvention.Cdecl)]
 		internal static extern bool SteamAPI_SteamNetworkingIdentity_IsInvalid(ref NetworkingIdentity identity);
