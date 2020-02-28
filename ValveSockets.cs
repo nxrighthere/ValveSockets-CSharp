@@ -414,7 +414,6 @@ namespace Valve.Sockets {
 
 	public class NetworkingSockets {
 		private IntPtr nativeSockets;
-		private readonly int nativeMessageSize = Marshal.SizeOf(typeof(NetworkingMessage));
 
 		public NetworkingSockets() {
 			nativeSockets = Native.SteamAPI_SteamNetworkingSockets_v008();
