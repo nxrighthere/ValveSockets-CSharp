@@ -54,7 +54,7 @@ StatusCallback status = (info, context) => {
 			break;
 
 		case ConnectionState.ProblemDetectedLocally:
-			server.CloseConnection(connection);
+			server.CloseConnection(info.connection);
 			Console.WriteLine("Client unable to connect");
 			break;
 	}
