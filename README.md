@@ -49,13 +49,9 @@ StatusCallback status = (info, context) => {
 			break;
 
 		case ConnectionState.ClosedByPeer:
-			server.CloseConnection(info.connection);
-			Console.WriteLine("Client disconnected - ID: " + info.connection + ", IP: " + info.connectionInfo.address.GetIP());
-			break;
-
 		case ConnectionState.ProblemDetectedLocally:
 			server.CloseConnection(info.connection);
-			Console.WriteLine("Client unable to connect");
+			Console.WriteLine("Client disconnected - ID: " + info.connection + ", IP: " + info.connectionInfo.address.GetIP());
 			break;
 	}
 };
@@ -114,13 +110,11 @@ StatusCallback status = (info, context) => {
 			break;
 
 		case ConnectionState.ClosedByPeer:
+		case ConnectionState.ProblemDetectedLocally:
 			client.CloseConnection(connection);
 			Console.WriteLine("Client disconnected from server");
 			break;
 
-		case ConnectionState.ProblemDetectedLocally:
-			client.CloseConnection(connection);
-			Console.WriteLine("Client unable to connect");
 			break;
 	}
 };
