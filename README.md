@@ -52,6 +52,11 @@ StatusCallback status = (info, context) => {
 			server.CloseConnection(info.connection);
 			Console.WriteLine("Client disconnected - ID: " + info.connection + ", IP: " + info.connectionInfo.address.GetIP());
 			break;
+
+		case ConnectionState.ProblemDetectedLocally:
+			client.CloseConnection(connection);
+			Console.WriteLine("Client unable to connect");
+			break;
 	}
 };
 
