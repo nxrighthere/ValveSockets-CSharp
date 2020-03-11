@@ -114,8 +114,6 @@ StatusCallback status = (info, context) => {
 			client.CloseConnection(connection);
 			Console.WriteLine("Client disconnected from server");
 			break;
-
-			break;
 	}
 };
 
