@@ -4,9 +4,9 @@
 
 [![GitHub release](https://img.shields.io/github/release/nxrighthere/ValveSockets-CSharp.svg)](https://github.com/nxrighthere/ValveSockets-CSharp/releases) [![PayPal](https://github.com/Rageware/Shields/blob/master/paypal.svg)](https://www.paypal.me/nxrighthere) [![Bountysource](https://github.com/Rageware/Shields/blob/master/bountysource.svg)](https://salt.bountysource.com/checkout/amount?team=nxrighthere) [![Coinbase](https://github.com/Rageware/Shields/blob/master/coinbase.svg)](https://commerce.coinbase.com/checkout/03e11816-b6fc-4e14-b974-29a1d0886697)
 
-This repository provides a managed C# wrapper for [GameNetworkingSockets](https://github.com/ValveSoftware/GameNetworkingSockets) library which is created and maintained by [Valve Software](https://www.valvesoftware.com). You will need to [build](https://github.com/ValveSoftware/GameNetworkingSockets#building) the native library with all required dependencies before you get started.
+This repository provides a managed C# abstraction of [GameNetworkingSockets](https://github.com/ValveSoftware/GameNetworkingSockets) library which is created and maintained by [Valve Software](https://www.valvesoftware.com). You will need to [build](https://github.com/ValveSoftware/GameNetworkingSockets#building) the native library with all required dependencies before you get started.
 
-The wrapper is updating in accordance with the [releases](https://github.com/ValveSoftware/GameNetworkingSockets/releases) of the native library.
+The project is updating in accordance with the [releases](https://github.com/ValveSoftware/GameNetworkingSockets/releases) of the native library.
 
 Building
 --------
