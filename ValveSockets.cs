@@ -431,6 +431,9 @@ namespace Valve.Sockets {
 		}
 
 		public ListenSocket CreateListenSocket(ref Address address, Configuration[] configurations) {
+			if (configurations == null)
+				throw new ArgumentNullException("configurations");
+
 			return Native.SteamAPI_ISteamNetworkingSockets_CreateListenSocketIP(nativeSockets, ref address, configurations.Length, configurations);
 		}
 
@@ -439,6 +442,9 @@ namespace Valve.Sockets {
 		}
 
 		public Connection Connect(ref Address address, Configuration[] configurations) {
+			if (configurations == null)
+				throw new ArgumentNullException("configurations");
+
 			return Native.SteamAPI_ISteamNetworkingSockets_ConnectByIPAddress(nativeSockets, ref address, configurations.Length, configurations);
 		}
 
@@ -493,14 +499,23 @@ namespace Valve.Sockets {
 		}
 
 		public Result SendMessageToConnection(Connection connection, byte[] data) {
+			if (data == null)
+				throw new ArgumentNullException("data");
+
 			return SendMessageToConnection(connection, data, data.Length, SendFlags.Unreliable);
 		}
 
 		public Result SendMessageToConnection(Connection connection, byte[] data, SendFlags flags) {
+			if (data == null)
+				throw new ArgumentNullException("data");
+
 			return SendMessageToConnection(connection, data, data.Length, flags);
 		}
 
 		public Result SendMessageToConnection(Connection connection, byte[] data, int length, SendFlags flags) {
+			if (data == null)
+				throw new ArgumentNullException("data");
+
 			return Native.SteamAPI_ISteamNetworkingSockets_SendMessageToConnection(nativeSockets, connection, data, (uint)length, flags, IntPtr.Zero);
 		}
 
@@ -603,6 +618,9 @@ namespace Valve.Sockets {
 				[MethodImpl(256)]
 			#endif
 			public int ReceiveMessagesOnConnection(Connection connection, NetworkingMessage[] messages, int maxMessages) {
+				if (messages == null)
+					throw new ArgumentNullException("messages");
+
 				if (maxMessages > Library.maxMessagesPerBatch)
 					throw new ArgumentOutOfRangeException("maxMessages");
 
@@ -621,6 +639,9 @@ namespace Valve.Sockets {
 				[MethodImpl(256)]
 			#endif
 			public int ReceiveMessagesOnPollGroup(PollGroup pollGroup, NetworkingMessage[] messages, int maxMessages) {
+				if (messages == null)
+					throw new ArgumentNullException("messages");
+
 				if (maxMessages > Library.maxMessagesPerBatch)
 					throw new ArgumentOutOfRangeException("maxMessages");
 
