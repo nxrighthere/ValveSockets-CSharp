@@ -34,7 +34,7 @@ address.SetAddress("::0", port);
 uint listenSocket = server.CreateListenSocket(ref address);
 uint pollGroup = server.CreatePollGroup();
 
-StatusCallback status = (info, context) => {
+StatusCallback status = (ref StatusInfo info, IntPtr context) => {
 	switch (info.connectionInfo.state) {
 		case ConnectionState.None:
 			break;
@@ -100,7 +100,7 @@ address.SetAddress("::1", port);
 
 uint connection = client.Connect(ref address);
 
-StatusCallback status = (info, context) => {
+StatusCallback status = (ref StatusInfo info, IntPtr context) => {
 	switch (info.connectionInfo.state) {
 		case ConnectionState.None:
 			break;
