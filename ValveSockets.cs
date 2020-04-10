@@ -397,7 +397,7 @@ namespace Valve.Sockets {
 		#endif
 	}
 
-	public delegate void StatusCallback(StatusInfo info, IntPtr context);
+	public delegate void StatusCallback(ref StatusInfo info, IntPtr context);
 	public delegate void DebugCallback(DebugType type, string message);
 
 	#if VALVESOCKETS_SPAN
