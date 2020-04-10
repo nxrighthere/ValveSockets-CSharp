@@ -368,7 +368,7 @@ Definitions of operation result:
 #### Socket callbacks
 Provides per socket events.
 
-`StatusCallback(StatusInfo info, IntPtr context)` notifies when dispatch mechanism on the listen socket returns a connection state. A reference to the delegate should be preserved from being garbage collected.
+`StatusCallback(ref StatusInfo info, IntPtr context)` notifies when dispatch mechanism on the listen socket returns a connection state. A reference to the delegate should be preserved from being garbage collected.
 
 #### Library callbacks
 Provides per application events.
