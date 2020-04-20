@@ -6,7 +6,7 @@
 
 This repository provides a managed C# abstraction of [GameNetworkingSockets](https://github.com/ValveSoftware/GameNetworkingSockets) library which is created and maintained by [Valve Software](https://www.valvesoftware.com). You will need to [build](https://github.com/ValveSoftware/GameNetworkingSockets#building) the native library with all required dependencies before you get started.
 
-The project is updating in accordance with the [releases](https://github.com/ValveSoftware/GameNetworkingSockets/releases) of the native library.
+The project is [updating](https://github.com/nxrighthere/ValveSockets-CSharp/issues/8#issuecomment-616596904) in accordance with the [releases](https://github.com/ValveSoftware/GameNetworkingSockets/releases) of the native library.
 
 Building
 --------
