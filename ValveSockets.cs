@@ -457,9 +457,6 @@ namespace Valve.Sockets {
 		}
 
 		public bool CloseConnection(Connection connection, int reason, string debug, bool enableLinger) {
-			if (reason > Library.maxCloseReasonValue)
-				throw new ArgumentOutOfRangeException("reason");
-
 			if (debug.Length > Library.maxCloseMessageLength)
 				throw new ArgumentOutOfRangeException("debug");
 
@@ -746,7 +743,6 @@ namespace Valve.Sockets {
 
 	public static class Library {
 		public const int maxCloseMessageLength = 128;
-		public const int maxCloseReasonValue = 999;
 		public const int maxErrorMessageLength = 1024;
 		public const int maxMessagesPerBatch = 256;
 		public const int maxMessageSize = 512 * 1024;
