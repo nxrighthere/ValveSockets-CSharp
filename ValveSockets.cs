@@ -681,11 +681,11 @@ namespace Valve.Sockets {
 			Native.SteamAPI_ISteamNetworkingUtils_SetDebugOutputFunction(nativeUtils, detailLevel, callback);
 		}
 
-		public bool SetConfiguratioValue(ConfigurationValue configurationValue, ConfigurationScope configurationScope, IntPtr scopeObject, ConfigurationDataType dataType, IntPtr value) {
+		public bool SetConfigurationValue(ConfigurationValue configurationValue, ConfigurationScope configurationScope, IntPtr scopeObject, ConfigurationDataType dataType, IntPtr value) {
 			return Native.SteamAPI_ISteamNetworkingUtils_SetConfigValue(nativeUtils, configurationValue, configurationScope, scopeObject, dataType, value);
 		}
 
-		public bool SetConfiguratioValue(Configuration configuration, ConfigurationScope configurationScope, IntPtr scopeObject) {
+		public bool SetConfigurationValue(Configuration configuration, ConfigurationScope configurationScope, IntPtr scopeObject) {
 			return Native.SteamAPI_ISteamNetworkingUtils_SetConfigValueStruct(nativeUtils, configuration, configurationScope, scopeObject);
 		}
 
