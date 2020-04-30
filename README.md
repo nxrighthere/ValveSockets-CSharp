@@ -551,7 +551,7 @@ Contains a managed pointer to the sockets.
 
 `SetConfigurationValue(ConfigurationValue configurationValue, ConfigurationScope configurationScope, IntPtr scopeObject, ConfigurationDataType dataType, IntPtr value)` sets a configuration value according to `ConfigurationValue`, `ConfigurationScope`, and `ConfigurationDataType` enumerations. The value parameter should be a reference to the actual value.
 
-`SetConfigurationValue(Configuration configuration, ConfigurationScope configurationScope, IntPtr scopeObject)` sets a configuration using `Configuration` structure according to `ConfigurationScope`, and `ConfigurationDataType` enumerations.
+`SetConfigurationValue(Configuration configuration, ConfigurationScope configurationScope, IntPtr scopeObject)` sets a configuration using `Configuration` structure according to `ConfigurationScope` enumeration.
 
 `GetConfigurationValue(ConfigurationValue configurationValue, ConfigurationScope configurationScope, IntPtr scopeObject, ref ConfigurationDataType dataType, ref IntPtr result, ref IntPtr resultLength)` gets a configuration value according to `ConfigurationValue`, `ConfigurationScope`, and `ConfigurationDataType` enumerations.
 
