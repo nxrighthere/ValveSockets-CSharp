@@ -293,7 +293,7 @@ namespace Valve.Sockets {
 			[FieldOffset(0)]
 			public float Float;
 			[FieldOffset(0)]
-			public string String;
+			public IntPtr String;
 			[FieldOffset(0)]
 			public IntPtr FunctionPtr;
 		}
