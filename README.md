@@ -13,8 +13,6 @@ Building
 
 A managed assembly can be built using any available compiling platform that supports C# 3.0 or higher.
 
-Define `VALVESOCKETS_INLINING` to enable aggressive inlining for performance critical functionality.
-
 Define `VALVESOCKETS_SPAN` to enable support for Span. Please, follow [these steps](https://github.com/nxrighthere/ValveSockets-CSharp/issues/3#issuecomment-491916163) to enable fast access to native memory blocks and improve performance.
 
 Usage
