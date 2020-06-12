@@ -565,9 +565,7 @@ namespace Valve.Sockets {
 		}
 
 		#if VALVESOCKETS_SPAN
-			#if VALVESOCKETS_INLINING
-				[MethodImpl(256)]
-			#endif
+			[MethodImpl(256)]
 			public void ReceiveMessagesOnConnection(Connection connection, MessageCallback callback, int maxMessages) {
 				if (maxMessages > Library.maxMessagesPerBatch)
 					throw new ArgumentOutOfRangeException("maxMessages");
@@ -588,9 +586,7 @@ namespace Valve.Sockets {
 				}
 			}
 
-			#if VALVESOCKETS_INLINING
-				[MethodImpl(256)]
-			#endif
+			[MethodImpl(256)]
 			public void ReceiveMessagesOnPollGroup(PollGroup pollGroup, MessageCallback callback, int maxMessages) {
 				if (maxMessages > Library.maxMessagesPerBatch)
 					throw new ArgumentOutOfRangeException("maxMessages");
@@ -611,9 +607,7 @@ namespace Valve.Sockets {
 				}
 			}
 		#else
-			#if VALVESOCKETS_INLINING
-				[MethodImpl(256)]
-			#endif
+			[MethodImpl(256)]
 			public int ReceiveMessagesOnConnection(Connection connection, NetworkingMessage[] messages, int maxMessages) {
 				if (messages == null)
 					throw new ArgumentNullException("messages");
@@ -632,9 +626,7 @@ namespace Valve.Sockets {
 				return messagesCount;
 			}
 
-			#if VALVESOCKETS_INLINING
-				[MethodImpl(256)]
-			#endif
+			[MethodImpl(256)]
 			public int ReceiveMessagesOnPollGroup(PollGroup pollGroup, NetworkingMessage[] messages, int maxMessages) {
 				if (messages == null)
 					throw new ArgumentNullException("messages");
