@@ -122,7 +122,7 @@ Address address = new Address();
 
 address.SetAddress("::1", port);
 
-connection.Connect(ref address);
+connection = client.Connect(ref address);
 
 #if VALVESOCKETS_SPAN
 	MessageCallback message = (in NetworkingMessage netMessage) => {
