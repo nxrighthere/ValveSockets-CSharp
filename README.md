@@ -294,6 +294,28 @@ Definitions of configuration values:
 
 `EnumerateDevVars`
 
+`SymmetricConnect`
+
+`LocalVirtualPort`
+
+`ConnectionStatusChanged`
+
+`AuthStatusChanged`
+
+`RelayNetworkStatusChanged`
+
+`MessagesSessionRequest`
+
+`MessagesSessionFailed`
+
+`P2PSTUNServerList`
+
+`P2PTransportICEEnable`
+
+`P2PTransportICEPenalty`
+
+`P2PTransportSDRPenalty`
+
 `SDRClientConsecutitivePingTimeoutsFailInitial`
 
 `SDRClientConsecutitivePingTimeoutsFail`
