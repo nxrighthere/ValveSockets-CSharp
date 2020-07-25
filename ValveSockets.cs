@@ -98,6 +98,17 @@ namespace Valve.Sockets {
 		MTUDataSize = 33,
 		Unencrypted = 34,
 		EnumerateDevVars = 35,
+		SymmetricConnect = 37,
+		LocalVirtualPort = 38,
+		ConnectionStatusChanged = 201,
+		AuthStatusChanged = 202,
+		RelayNetworkStatusChanged = 203,
+		MessagesSessionRequest = 204,
+		MessagesSessionFailed = 205,
+		P2PSTUNServerList = 103,
+		P2PTransportICEEnable = 104,
+		P2PTransportICEPenalty = 105,
+		P2PTransportSDRPenalty = 106,
 		SDRClientConsecutitivePingTimeoutsFailInitial = 19,
 		SDRClientConsecutitivePingTimeoutsFail = 20,
 		SDRClientMinPingsBeforePingAccurate = 21,
@@ -397,7 +408,7 @@ namespace Valve.Sockets {
 		#endif
 	}
 
-	public delegate void StatusCallback(ref StatusInfo info, IntPtr context);
+	public delegate void StatusCallback(ref StatusInfo info);
 	public delegate void DebugCallback(DebugType type, string message);
 
 	#if VALVESOCKETS_SPAN
@@ -420,7 +431,7 @@ namespace Valve.Sockets {
 		private IntPtr nativeSockets;
 
 		public NetworkingSockets() {
-			nativeSockets = Native.SteamAPI_SteamNetworkingSockets_v008();
+			nativeSockets = Native.SteamAPI_SteamNetworkingSockets_v009();
 
 			if (nativeSockets == IntPtr.Zero)
 				throw new InvalidOperationException("Networking sockets not created");
@@ -556,12 +567,8 @@ namespace Valve.Sockets {
 			return Native.SteamAPI_ISteamNetworkingSockets_SetConnectionPollGroup(nativeSockets, connection, pollGroup);
 		}
 
-		public void DispatchCallback(StatusCallback callback) {
-			DispatchCallback(callback, IntPtr.Zero);
-		}
-
-		public void DispatchCallback(StatusCallback callback, IntPtr context) {
-			Native.SteamAPI_ISteamNetworkingSockets_RunConnectionStatusChangedCallbacks(nativeSockets, callback, context);
+		public void RunCallbacks() {
+			Native.SteamAPI_ISteamNetworkingSockets_RunCallbacks(nativeSockets);
 		}
 
 		#if VALVESOCKETS_SPAN
@@ -667,6 +674,10 @@ namespace Valve.Sockets {
 			get {
 				return Native.SteamAPI_ISteamNetworkingUtils_GetFirstConfigValue(nativeUtils);
 			}
+		}
+
+		public bool SetStatusCallback(StatusCallback callback) {
+			return Native.SteamAPI_ISteamNetworkingUtils_SetGlobalCallback_SteamNetConnectionStatusChanged(nativeUtils, callback);
 		}
 
 		public void SetDebugCallback(DebugType detailLevel, DebugCallback callback) {
@@ -780,7 +791,7 @@ namespace Valve.Sockets {
 		internal static extern void GameNetworkingSockets_Kill();
 
 		[DllImport(nativeLibrary, CallingConvention = CallingConvention.Cdecl)]
-		internal static extern IntPtr SteamAPI_SteamNetworkingSockets_v008();
+		internal static extern IntPtr SteamAPI_SteamNetworkingSockets_v009();
 
 		[DllImport(nativeLibrary, CallingConvention = CallingConvention.Cdecl)]
 		internal static extern IntPtr SteamAPI_SteamNetworkingUtils_v003();
@@ -843,7 +854,7 @@ namespace Valve.Sockets {
 		internal static extern bool SteamAPI_ISteamNetworkingSockets_GetListenSocketAddress(IntPtr sockets, ListenSocket socket, ref Address address);
 
 		[DllImport(nativeLibrary, CallingConvention = CallingConvention.Cdecl)]
-		internal static extern void SteamAPI_ISteamNetworkingSockets_RunConnectionStatusChangedCallbacks(IntPtr sockets, StatusCallback callback, IntPtr context);
+		internal static extern void SteamAPI_ISteamNetworkingSockets_RunCallbacks(IntPtr sockets);
 
 		[DllImport(nativeLibrary, CallingConvention = CallingConvention.Cdecl)]
 		internal static extern bool SteamAPI_ISteamNetworkingSockets_CreateSocketPair(IntPtr sockets, Connection connectionLeft, Connection connectionRight, bool useNetworkLoopback, ref NetworkingIdentity identityLeft, ref NetworkingIdentity identityRight);
@@ -892,6 +903,9 @@ namespace Valve.Sockets {
 
 		[DllImport(nativeLibrary, CallingConvention = CallingConvention.Cdecl)]
 		internal static extern Microseconds SteamAPI_ISteamNetworkingUtils_GetLocalTimestamp(IntPtr utils);
+
+		[DllImport(nativeLibrary, CallingConvention = CallingConvention.Cdecl)]
+		internal static extern bool SteamAPI_ISteamNetworkingUtils_SetGlobalCallback_SteamNetConnectionStatusChanged(IntPtr utils, StatusCallback callback);
 
 		[DllImport(nativeLibrary, CallingConvention = CallingConvention.Cdecl)]
 		internal static extern void SteamAPI_ISteamNetworkingUtils_SetDebugOutputFunction(IntPtr utils, DebugType detailLevel, DebugCallback callback);

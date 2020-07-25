@@ -1,4 +1,4 @@
-<p align="center"> 
+<p align="center">
   <img src="https://i.imgur.com/CS43fv4.png" alt="alt logo">
 </p>
 
@@ -25,14 +25,10 @@ After the work is done, deinitialize the library using `Valve.Sockets.Library.De
 ##### Start a new server:
 ```c#
 NetworkingSockets server = new NetworkingSockets();
-Address address = new Address();
 
-address.SetAddress("::0", port);
-
-uint listenSocket = server.CreateListenSocket(ref address);
 uint pollGroup = server.CreatePollGroup();
 
-StatusCallback status = (ref StatusInfo info, IntPtr context) => {
+StatusCallback status = (ref StatusInfo info) => {
 	switch (info.connectionInfo.state) {
 		case ConnectionState.None:
 			break;
@@ -54,6 +50,14 @@ StatusCallback status = (ref StatusInfo info, IntPtr context) => {
 	}
 };
 
+utils.SetStatusCallback(status);
+
+Address address = new Address();
+
+address.SetAddress("::0", port);
+
+uint listenSocket = server.CreateListenSocket(ref address);
+
 #if VALVESOCKETS_SPAN
 	MessageCallback message = (in NetworkingMessage netMessage) => {
 		Console.WriteLine("Message received from - ID: " + netMessage.connection + ", Channel ID: " + netMessage.channel + ", Data length: " + netMessage.length);
@@ -65,7 +69,7 @@ StatusCallback status = (ref StatusInfo info, IntPtr context) => {
 #endif
 
 while (!Console.KeyAvailable) {
-	server.DispatchCallback(status);
+	server.RunCallbacks();
 
 	#if VALVESOCKETS_SPAN
 		server.ReceiveMessagesOnPollGroup(pollGroup, message, 20);
@@ -92,13 +96,10 @@ server.DestroyPollGroup(pollGroup);
 ##### Start a new client:
 ```c#
 NetworkingSockets client = new NetworkingSockets();
-Address address = new Address();
 
-address.SetAddress("::1", port);
+uint connection = 0;
 
-uint connection = client.Connect(ref address);
-
-StatusCallback status = (ref StatusInfo info, IntPtr context) => {
+StatusCallback status = (ref StatusInfo info) => {
 	switch (info.connectionInfo.state) {
 		case ConnectionState.None:
 			break;
@@ -115,6 +116,14 @@ StatusCallback status = (ref StatusInfo info, IntPtr context) => {
 	}
 };
 
+utils.SetStatusCallback(status);
+
+Address address = new Address();
+
+address.SetAddress("::1", port);
+
+connection.Connect(ref address);
+
 #if VALVESOCKETS_SPAN
 	MessageCallback message = (in NetworkingMessage netMessage) => {
 		Console.WriteLine("Message received from server - Channel ID: " + netMessage.channel + ", Data length: " + netMessage.length);
@@ -126,7 +135,7 @@ StatusCallback status = (ref StatusInfo info, IntPtr context) => {
 #endif
 
 while (!Console.KeyAvailable) {
-	client.DispatchCallback(status);
+	client.RunCallbacks();
 
 	#if VALVESOCKETS_SPAN
 		client.ReceiveMessagesOnConnection(connection, message, 20);
@@ -215,31 +224,31 @@ Definitions of connection states for `ConnectionInfo.state` field:
 `ConnectionState.ProblemDetectedLocally` a disruption in the connection has been detected locally. Attempts to send further messages will fail. Any remaining received messages in the queue are available. The connection still exists from an API perspective and must be closed to free up resources.
 
 #### ConfigurationScope
-Definitions of configuration scopes: 
+Definitions of configuration scopes:
 
-`Global` 
+`Global`
 
-`SocketsInterface` 
+`SocketsInterface`
 
-`ListenSocket` 
+`ListenSocket`
 
-`Connection` 
+`Connection`
 
 #### ConfigurationDataType
-Definitions of configuration data types: 
+Definitions of configuration data types:
 
-`Int32` 
+`Int32`
 
-`Int64` 
+`Int64`
 
-`Float` 
+`Float`
 
-`String` 
+`String`
 
-`FunctionPtr` 
+`FunctionPtr`
 
 #### ConfigurationValue
-Definitions of configuration values: 
+Definitions of configuration values:
 
 `Invalid`
 
@@ -314,41 +323,41 @@ Definitions of configuration values:
 `LogLevelSDRRelayPings`
 
 #### ConfigurationValueResult
-Definitions of configuration value results: 
+Definitions of configuration value results:
 
-`BadValue` 
+`BadValue`
 
-`BadScopeObject` 
+`BadScopeObject`
 
-`BufferTooSmall` 
+`BufferTooSmall`
 
-`OK` 
+`OK`
 
-`OKInherited` 
+`OKInherited`
 
 #### DebugType
-Definitions of debug types: 
+Definitions of debug types:
 
-`None` 
+`None`
 
-`Bug` 
+`Bug`
 
-`Error` 
+`Error`
 
-`Important` 
+`Important`
 
-`Warning` 
+`Warning`
 
-`Message` 
+`Message`
 
-`Verbose` 
+`Verbose`
 
-`Debug` 
+`Debug`
 
-`Everything` 
+`Everything`
 
 #### Result
-Definitions of operation result: 
+Definitions of operation result:
 
 `Result.OK` success.
 
@@ -366,7 +375,7 @@ Definitions of operation result:
 #### Socket callbacks
 Provides per socket events.
 
-`StatusCallback(ref StatusInfo info, IntPtr context)` notifies when dispatch mechanism on the listen socket returns a connection state. A reference to the delegate should be preserved from being garbage collected.
+`StatusCallback(ref StatusInfo info)` notifies when dispatch mechanism on the listen socket returns a connection state. A reference to the delegate should be preserved from being garbage collected.
 
 #### Library callbacks
 Provides per application events.
@@ -530,20 +539,22 @@ Contains a managed pointer to the sockets.
 `NetworkingSockets.GetIdentity()` gets an identity associated with sockets.
 
 `NetworkingSockets.CreatePollGroup()` creates a new poll group for connections. Returns the poll group handle.
- 
+
 `NetworkingSockets.DestroyPollGroup(PollGroup pollGroup)` destroys a poll group. If there are any connections in the poll group, they are removed from the group and left in a state where they are not part of any poll group. Returns false if passed an invalid poll group handle.
 
 `NetworkingSockets.SetConnectionPollGroup(PollGroup pollGroup, Connection connection)` assigns a connection to a poll group. A connection may only belong to a single poll group. Adding a connection to a poll group implicitly removes it from any other poll group. You can pass zero value to the poll group parameter to remove a connection from its current poll group. If there are received messages currently pending on the connection, an attempt is made to add them to the queue of messages for the poll group in approximately the order that would have applied if the connection was already part of the poll group at the time that the messages were received. Returns false if the connection handle is invalid or if the poll group handle is invalid.
 
 `NetworkingSockets.ReceiveMessagesOnPollGroup()` fetches the next available messages from the socket on any connection in the poll group. Examine `NetworkingMessage.connection` to identify connection. Delivery order of messages among different connections will usually match the order that the last packet was received which completed the message. But this is not a strong guarantee, especially for packets received right as a connection is being assigned to poll group. Delivery order of messages on the same connection is well defined and the same guarantees are present. Messages are not grouped by connection, so they will not necessarily appear consecutively in the list, they may be interleaved with messages for other connections. Returns a number of messages or -1 if the poll group handle is invalid.
 
-`NetworkingSockets.DispatchCallback(StatusCallback callback, IntPtr context)` dispatches one callback per call if available. Optional context parameter may be specified for `StatusCallback` delegate.
+`NetworkingSockets.RunCallbacks()` dispatches callbacks if available.
 
 #### NetworkingUtils
 
 `Time` returns a current local monotonic time in microseconds. It never reset while the application remains alive.
 
 `FirstConfigurationValue` gets the lowest numbered configuration value available in the current environment.
+
+`SetStatusCallback(StatusCallback callback)` sets a callback for connection status updates. Returns true on success or false on failure. 
 
 `SetDebugCallback(DebugType detailLevel, DebugCallback callback)` sets a callback for debug output.
 
