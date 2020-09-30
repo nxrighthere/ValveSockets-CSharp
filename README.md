@@ -11,7 +11,7 @@ The project is [updating](https://github.com/nxrighthere/ValveSockets-CSharp/iss
 Building
 --------
 
-A managed assembly can be built using any available compiling platform that supports C# 3.0 or higher.
+A managed assembly can be built using any available compiling platform that supports C# 3.0 or Higher.
 
 Define `VALVESOCKETS_SPAN` to enable support for Span. Please, follow [these steps](https://github.com/nxrighthere/ValveSockets-CSharp/issues/3#issuecomment-491916163) to enable fast access to native memory blocks and improve performance.
 
@@ -164,14 +164,14 @@ byte[] data = new byte[64];
 sockets.SendMessageToConnection(connection, data);
 ```
 
-##### Copy payload from a message:
+##### Copy payload from a Message:
 ```c#
 byte[] buffer = new byte[1024];
 
 netMessage.CopyTo(buffer);
 ```
 
-##### Set a hook for debug information:
+##### Set a hook for d=Debug Information:
 ```c#
 DebugCallback debug = (type, message) => {
 	Console.WriteLine("Debug - Type: " + type + ", Message: " + message);
