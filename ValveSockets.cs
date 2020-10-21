@@ -654,7 +654,7 @@ namespace Valve.Sockets {
 		#endif
 	}
 
-	public class NetworkingUtils {
+	public class NetworkingUtils : IDisposable {
 		private IntPtr nativeUtils;
 
 		public NetworkingUtils() {
@@ -662,6 +662,23 @@ namespace Valve.Sockets {
 
 			if (nativeUtils == IntPtr.Zero)
 				throw new InvalidOperationException("Networking utils not created");
+		}
+
+		public void Dispose() {
+			Dispose(true);
+			GC.SuppressFinalize(this);
+		}
+
+		protected virtual void Dispose(bool disposing) {
+			if (nativeUtils != IntPtr.Zero) {
+				Native.SteamAPI_ISteamNetworkingUtils_SetGlobalCallback_SteamNetConnectionStatusChanged(nativeUtils, IntPtr.Zero);
+				Native.SteamAPI_ISteamNetworkingUtils_SetDebugOutputFunction(nativeUtils, DebugType.None, IntPtr.Zero);
+				nativeUtils = IntPtr.Zero;
+			}
+		}
+
+		~NetworkingUtils() {
+			Dispose(false);
 		}
 
 		public Microseconds Time {
@@ -905,7 +922,13 @@ namespace Valve.Sockets {
 		internal static extern Microseconds SteamAPI_ISteamNetworkingUtils_GetLocalTimestamp(IntPtr utils);
 
 		[DllImport(nativeLibrary, CallingConvention = CallingConvention.Cdecl)]
+		internal static extern bool SteamAPI_ISteamNetworkingUtils_SetGlobalCallback_SteamNetConnectionStatusChanged(IntPtr utils, IntPtr callback);
+
+		[DllImport(nativeLibrary, CallingConvention = CallingConvention.Cdecl)]
 		internal static extern bool SteamAPI_ISteamNetworkingUtils_SetGlobalCallback_SteamNetConnectionStatusChanged(IntPtr utils, StatusCallback callback);
+
+		[DllImport(nativeLibrary, CallingConvention = CallingConvention.Cdecl)]
+		internal static extern void SteamAPI_ISteamNetworkingUtils_SetDebugOutputFunction(IntPtr utils, DebugType detailLevel, IntPtr callback);
 
 		[DllImport(nativeLibrary, CallingConvention = CallingConvention.Cdecl)]
 		internal static extern void SteamAPI_ISteamNetworkingUtils_SetDebugOutputFunction(IntPtr utils, DebugType detailLevel, DebugCallback callback);
