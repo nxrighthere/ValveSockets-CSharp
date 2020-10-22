@@ -226,157 +226,157 @@ Definitions of connection states for `ConnectionInfo.state` field:
 #### ConfigurationScope
 Definitions of configuration scopes:
 
-`Global`
+`ConfigurationScope.Global`
 
-`SocketsInterface`
+`ConfigurationScope.SocketsInterface`
 
-`ListenSocket`
+`ConfigurationScope.ListenSocket`
 
-`Connection`
+`ConfigurationScope.Connection`
 
 #### ConfigurationDataType
 Definitions of configuration data types:
 
-`Int32`
+`ConfigurationDataType.Int32`
 
-`Int64`
+`ConfigurationDataType.Int64`
 
-`Float`
+`ConfigurationDataType.Float`
 
-`String`
+`ConfigurationDataType.String`
 
-`FunctionPtr`
+`ConfigurationDataType.FunctionPtr`
 
 #### ConfigurationValue
 Definitions of configuration values:
 
-`Invalid`
+`ConfigurationValue.Invalid`
 
-`FakePacketLossSend`
+`ConfigurationValue.FakePacketLossSend`
 
-`FakePacketLossRecv`
+`ConfigurationValue.FakePacketLossRecv`
 
-`FakePacketLagSend`
+`ConfigurationValue.FakePacketLagSend`
 
-`FakePacketLagRecv`
+`ConfigurationValue.FakePacketLagRecv`
 
-`FakePacketReorderSend`
+`ConfigurationValue.FakePacketReorderSend`
 
-`FakePacketReorderRecv`
+`ConfigurationValue.FakePacketReorderRecv`
 
-`FakePacketReorderTime`
+`ConfigurationValue.FakePacketReorderTime`
 
-`FakePacketDupSend`
+`ConfigurationValue.FakePacketDupSend`
 
-`FakePacketDupRecv`
+`ConfigurationValue.FakePacketDupRecv`
 
-`FakePacketDupTimeMax`
+`ConfigurationValue.FakePacketDupTimeMax`
 
-`TimeoutInitial`
+`ConfigurationValue.TimeoutInitial`
 
-`TimeoutConnected`
+`ConfigurationValue.TimeoutConnected`
 
-`SendBufferSize`
+`ConfigurationValue.SendBufferSize`
 
-`SendRateMin`
+`ConfigurationValue.SendRateMin`
 
-`SendRateMax`
+`ConfigurationValue.SendRateMax`
 
-`NagleTime`
+`ConfigurationValue.NagleTime`
 
-`IPAllowWithoutAuth`
+`ConfigurationValue.IPAllowWithoutAuth`
 
-`MTUPacketSize`
+`ConfigurationValue.MTUPacketSize`
 
-`MTUDataSize`
+`ConfigurationValue.MTUDataSize`
 
-`Unencrypted`
+`ConfigurationValue.Unencrypted`
 
-`EnumerateDevVars`
+`ConfigurationValue.EnumerateDevVars`
 
-`SymmetricConnect`
+`ConfigurationValue.SymmetricConnect`
 
-`LocalVirtualPort`
+`ConfigurationValue.LocalVirtualPort`
 
-`ConnectionStatusChanged`
+`ConfigurationValue.ConnectionStatusChanged`
 
-`AuthStatusChanged`
+`ConfigurationValue.AuthStatusChanged`
 
-`RelayNetworkStatusChanged`
+`ConfigurationValue.RelayNetworkStatusChanged`
 
-`MessagesSessionRequest`
+`ConfigurationValue.MessagesSessionRequest`
 
-`MessagesSessionFailed`
+`ConfigurationValue.MessagesSessionFailed`
 
-`P2PSTUNServerList`
+`ConfigurationValue.P2PSTUNServerList`
 
-`P2PTransportICEEnable`
+`ConfigurationValue.P2PTransportICEEnable`
 
-`P2PTransportICEPenalty`
+`ConfigurationValue.P2PTransportICEPenalty`
 
-`P2PTransportSDRPenalty`
+`ConfigurationValue.P2PTransportSDRPenalty`
 
-`SDRClientConsecutitivePingTimeoutsFailInitial`
+`ConfigurationValue.SDRClientConsecutitivePingTimeoutsFailInitial`
 
-`SDRClientConsecutitivePingTimeoutsFail`
+`ConfigurationValue.SDRClientConsecutitivePingTimeoutsFail`
 
-`SDRClientMinPingsBeforePingAccurate`
+`ConfigurationValue.SDRClientMinPingsBeforePingAccurate`
 
-`SDRClientSingleSocket`
+`ConfigurationValue.SDRClientSingleSocket`
 
-`SDRClientForceRelayCluster`
+`ConfigurationValue.SDRClientForceRelayCluster`
 
-`SDRClientDebugTicketAddress`
+`ConfigurationValue.SDRClientDebugTicketAddress`
 
-`SDRClientForceProxyAddr`
+`ConfigurationValue.SDRClientForceProxyAddr`
 
-`SDRClientFakeClusterPing`
+`ConfigurationValue.SDRClientFakeClusterPing`
 
-`LogLevelAckRTT`
+`ConfigurationValue.LogLevelAckRTT`
 
-`LogLevelPacketDecode`
+`ConfigurationValue.LogLevelPacketDecode`
 
-`LogLevelMessage`
+`ConfigurationValue.LogLevelMessage`
 
-`LogLevelPacketGaps`
+`ConfigurationValue.LogLevelPacketGaps`
 
-`LogLevelP2PRendezvous`
+`ConfigurationValue.LogLevelP2PRendezvous`
 
-`LogLevelSDRRelayPings`
+`ConfigurationValue.LogLevelSDRRelayPings`
 
 #### ConfigurationValueResult
 Definitions of configuration value results:
 
-`BadValue`
+`ConfigurationValueResult.BadValue`
 
-`BadScopeObject`
+`ConfigurationValueResult.BadScopeObject`
 
-`BufferTooSmall`
+`ConfigurationValueResult.BufferTooSmall`
 
-`OK`
+`ConfigurationValueResult.OK`
 
-`OKInherited`
+`ConfigurationValueResult.OKInherited`
 
 #### DebugType
 Definitions of debug types:
 
-`None`
+`DebugType.None`
 
-`Bug`
+`DebugType.Bug`
 
-`Error`
+`DebugType.Error`
 
-`Important`
+`DebugType.Important`
 
-`Warning`
+`DebugType.Warning`
 
-`Message`
+`DebugType.Message`
 
-`Verbose`
+`DebugType.Verbose`
 
-`Debug`
+`DebugType.Debug`
 
-`Everything`
+`DebugType.Everything`
 
 #### Result
 Definitions of operation result:
@@ -572,19 +572,21 @@ Contains a managed pointer to the sockets.
 
 #### NetworkingUtils
 
-`Time` returns a current local monotonic time in microseconds. It never reset while the application remains alive.
+`NetworkingUtils.Dispose()` destroys the networking utils and cleanups unmanaged resources.
 
-`FirstConfigurationValue` gets the lowest numbered configuration value available in the current environment.
+`NetworkingUtils.Time` returns a current local monotonic time in microseconds. It never reset while the application remains alive.
 
-`SetStatusCallback(StatusCallback callback)` sets a callback for connection status updates. Returns true on success or false on failure. 
+`NetworkingUtils.FirstConfigurationValue` gets the lowest numbered configuration value available in the current environment.
 
-`SetDebugCallback(DebugType detailLevel, DebugCallback callback)` sets a callback for debug output.
+`NetworkingUtils.SetStatusCallback(StatusCallback callback)` sets a callback for connection status updates. Returns true on success or false on failure. 
 
-`SetConfigurationValue(ConfigurationValue configurationValue, ConfigurationScope configurationScope, IntPtr scopeObject, ConfigurationDataType dataType, IntPtr value)` sets a configuration value according to `ConfigurationValue`, `ConfigurationScope`, and `ConfigurationDataType` enumerations. The value parameter should be a reference to the actual value.
+`NetworkingUtils.SetDebugCallback(DebugType detailLevel, DebugCallback callback)` sets a callback for debug output.
 
-`SetConfigurationValue(Configuration configuration, ConfigurationScope configurationScope, IntPtr scopeObject)` sets a configuration using `Configuration` structure according to `ConfigurationScope` enumeration.
+`NetworkingUtils.SetConfigurationValue(ConfigurationValue configurationValue, ConfigurationScope configurationScope, IntPtr scopeObject, ConfigurationDataType dataType, IntPtr value)` sets a configuration value according to `ConfigurationValue`, `ConfigurationScope`, and `ConfigurationDataType` enumerations. The value parameter should be a reference to the actual value.
 
-`GetConfigurationValue(ConfigurationValue configurationValue, ConfigurationScope configurationScope, IntPtr scopeObject, ref ConfigurationDataType dataType, ref IntPtr result, ref IntPtr resultLength)` gets a configuration value according to `ConfigurationValue`, `ConfigurationScope`, and `ConfigurationDataType` enumerations.
+`NetworkingUtils.SetConfigurationValue(Configuration configuration, ConfigurationScope configurationScope, IntPtr scopeObject)` sets a configuration using `Configuration` structure according to `ConfigurationScope` enumeration.
+
+`NetworkingUtils.GetConfigurationValue(ConfigurationValue configurationValue, ConfigurationScope configurationScope, IntPtr scopeObject, ref ConfigurationDataType dataType, ref IntPtr result, ref IntPtr resultLength)` gets a configuration value according to `ConfigurationValue`, `ConfigurationScope`, and `ConfigurationDataType` enumerations.
 
 #### Library
 Contains constant fields.
