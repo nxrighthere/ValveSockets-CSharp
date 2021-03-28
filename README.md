@@ -22,7 +22,7 @@ Before starting to work, the library should be initialized using `Valve.Sockets.
 After the work is done, deinitialize the library using `Valve.Sockets.Library.Deinitialize();` function.
 
 ### .NET environment
-##### Start a new server:
+##### Start a new server
 ```c#
 NetworkingSockets server = new NetworkingSockets();
 
@@ -93,7 +93,7 @@ while (!Console.KeyAvailable) {
 server.DestroyPollGroup(pollGroup);
 ```
 
-##### Start a new client:
+##### Start a new client
 ```c#
 NetworkingSockets client = new NetworkingSockets();
 
@@ -157,21 +157,21 @@ while (!Console.KeyAvailable) {
 }
 ```
 
-##### Create and send a new message:
+##### Create and send a new message
 ```c#
 byte[] data = new byte[64];
 
 sockets.SendMessageToConnection(connection, data);
 ```
 
-##### Copy payload from a message:
+##### Copy payload from a message
 ```c#
 byte[] buffer = new byte[1024];
 
 netMessage.CopyTo(buffer);
 ```
 
-##### Set a hook for debug information:
+##### Set a hook for debug information
 ```c#
 DebugCallback debug = (type, message) => {
 	Console.WriteLine("Debug - Type: " + type + ", Message: " + message);
