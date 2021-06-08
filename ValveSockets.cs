@@ -499,11 +499,11 @@ namespace Valve.Sockets {
 		}
 
 		public Result SendMessageToConnection(Connection connection, IntPtr data, uint length, SendFlags flags) {
-			return SendMessageToConnection(connection, data, length, flags);
+			return Native.SteamAPI_ISteamNetworkingSockets_SendMessageToConnection(nativeSockets, connection, data, length, flags, IntPtr.Zero);
 		}
 
 		public Result SendMessageToConnection(Connection connection, IntPtr data, int length, SendFlags flags) {
-			return Native.SteamAPI_ISteamNetworkingSockets_SendMessageToConnection(nativeSockets, connection, data, (uint)length, flags, IntPtr.Zero);
+			return SendMessageToConnection(connection, data, (uint)length, flags);
 		}
 
 		public Result SendMessageToConnection(Connection connection, byte[] data) {
