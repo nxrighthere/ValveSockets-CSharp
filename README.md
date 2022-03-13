@@ -2,7 +2,7 @@
   <img src="https://i.imgur.com/CS43fv4.png" alt="alt logo">
 </p>
 
-[![GitHub release](https://img.shields.io/github/release/nxrighthere/ValveSockets-CSharp.svg?style=flat-square)](https://github.com/nxrighthere/ValveSockets-CSharp/releases) [![PayPal](https://github.com/Rageware/Shields/blob/master/paypal.svg)](https://www.paypal.me/nxrighthere) [![Coinbase](https://github.com/Rageware/Shields/blob/master/coinbase.svg)](https://commerce.coinbase.com/checkout/03e11816-b6fc-4e14-b974-29a1d0886697)
+[![GitHub release](https://img.shields.io/github/release/nxrighthere/ValveSockets-CSharp.svg?style=flat-square)](https://github.com/nxrighthere/ValveSockets-CSharp/releases)
 
 This repository provides a managed C# abstraction of [GameNetworkingSockets](https://github.com/ValveSoftware/GameNetworkingSockets) library which is created and maintained by [Valve Software](https://www.valvesoftware.com). You will need to [build](https://github.com/ValveSoftware/GameNetworkingSockets#building) the native library with all required dependencies before you get started.
 
