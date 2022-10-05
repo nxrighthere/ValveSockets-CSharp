@@ -310,7 +310,7 @@ namespace Valve.Sockets {
 		}
 	}
 
-	[StructLayout(LayoutKind.Sequential)]
+	[StructLayout(LayoutKind.Sequential, Pack=1)]
 	public struct StatusInfo {
 		private const int callback = Library.socketsCallbacks + 1;
 		public Connection connection;
@@ -333,7 +333,8 @@ namespace Valve.Sockets {
 		public string endDebug;
 		[MarshalAs(UnmanagedType.ByValTStr, SizeConst = 128)]
 		public string connectionDescription;
-		[MarshalAs(UnmanagedType.ByValArray, SizeConst = 64)]
+		public int flags;
+		[MarshalAs(UnmanagedType.ByValArray, SizeConst = 63)]
 		private uint[] reserved;
 	}
 
@@ -390,6 +391,8 @@ namespace Valve.Sockets {
 		public int channel;
 		public int flags;
 		public long userData;
+		public ushort idxLane;
+		public ushort pad1__;
 
 		public void CopyTo(byte[] destination) {
 			if (destination == null)
