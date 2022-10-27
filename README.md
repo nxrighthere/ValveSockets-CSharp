@@ -13,6 +13,8 @@ Building
 
 A managed assembly can be built using any available compiling platform that supports C# 3.0 or higher.
 
+Must define `VALVE_CALLBACK_PACK_SMALL` on Linux/Apple/FreeBSD, or `VALVE_CALLBACK_PACK_LARGE` on other platforms.
+
 Define `VALVESOCKETS_SPAN` to enable support for Span. Please, follow [these steps](https://github.com/nxrighthere/ValveSockets-CSharp/issues/3#issuecomment-491916163) to enable fast access to native memory blocks and improve performance.
 
 Usage
