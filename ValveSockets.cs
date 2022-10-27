@@ -257,7 +257,7 @@ namespace Valve.Sockets {
 		WGNetworkSendExceeded = 110
 	}
 
-	[StructLayout(LayoutKind.Sequential)]
+	[StructLayout(LayoutKind.Sequential, Pack = 1)]
 	public struct Address : IEquatable<Address> {
 		[MarshalAs(UnmanagedType.ByValArray, SizeConst = 16)]
 		public byte[] ip;
@@ -289,7 +289,7 @@ namespace Valve.Sockets {
 		}
 	}
 
-	[StructLayout(LayoutKind.Sequential)]
+	[StructLayout(LayoutKind.Sequential, Pack = 8)]
 	public struct Configuration {
 		public ConfigurationValue value;
 		public ConfigurationDataType dataType;
@@ -310,7 +310,18 @@ namespace Valve.Sockets {
 		}
 	}
 
-	[StructLayout(LayoutKind.Sequential)]
+	static class StructConst
+	{
+#if VALVE_CALLBACK_PACK_SMALL
+		public const int PACK_SIZE = 4;
+#elif VALVE_CALLBACK_PACK_LARGE
+		public const int PACK_SIZE = 8;
+#else
+		#error "Not define VALVE_CALLBACK_PACK_SMALL(Linux/Apple/FreeBSD) or VALVE_CALLBACK_PACK_LARGE(Anything else.)"
+#endif
+	}
+	
+	[StructLayout(LayoutKind.Sequential, Pack = StructConst.PACK_SIZE)]
 	public struct StatusInfo {
 		private const int callback = Library.socketsCallbacks + 1;
 		public Connection connection;
@@ -318,7 +329,7 @@ namespace Valve.Sockets {
 		private ConnectionState oldState;
 	}
 
-	[StructLayout(LayoutKind.Sequential)]
+	[StructLayout(LayoutKind.Sequential, Pack = StructConst.PACK_SIZE)]
 	public struct ConnectionInfo {
 		public NetworkingIdentity identity;
 		public long userData;
@@ -333,11 +344,12 @@ namespace Valve.Sockets {
 		public string endDebug;
 		[MarshalAs(UnmanagedType.ByValTStr, SizeConst = 128)]
 		public string connectionDescription;
-		[MarshalAs(UnmanagedType.ByValArray, SizeConst = 64)]
+		public int flags;
+		[MarshalAs(UnmanagedType.ByValArray, SizeConst = 63)]
 		private uint[] reserved;
 	}
 
-	[StructLayout(LayoutKind.Sequential)]
+	[StructLayout(LayoutKind.Sequential, Pack = StructConst.PACK_SIZE)]
 	public struct ConnectionStatus {
 		public ConnectionState state;
 		public int ping;
@@ -356,7 +368,7 @@ namespace Valve.Sockets {
 		private uint[] reserved;
 	}
 
-	[StructLayout(LayoutKind.Explicit, Size = 136)]
+	[StructLayout(LayoutKind.Explicit, Size = 136, Pack = 1)]
 	public struct NetworkingIdentity {
 		[FieldOffset(0)]
 		public IdentityType type;
@@ -376,7 +388,7 @@ namespace Valve.Sockets {
 		}
 	}
 
-	[StructLayout(LayoutKind.Sequential)]
+	[StructLayout(LayoutKind.Sequential, Pack = 8)]
 	public struct NetworkingMessage {
 		public IntPtr data;
 		public int length;
@@ -390,6 +402,8 @@ namespace Valve.Sockets {
 		public int channel;
 		public int flags;
 		public long userData;
+		public ushort idxLane;
+		public ushort pad1__;
 
 		public void CopyTo(byte[] destination) {
 			if (destination == null)
